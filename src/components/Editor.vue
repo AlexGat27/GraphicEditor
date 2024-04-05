@@ -17,8 +17,7 @@ export default {
   },
   data() {
     return {
-      actionBlocks: [],
-      conditionBlocks: []
+      editorBlocks: [],
     };
   },
   methods: {

@@ -15,9 +15,11 @@
         conditional: false
       }
     },
-    toggleCondition() {
-      this.conditional = !this.conditional;
-      this.$emit('toggleCondition', this.conditional);
+    methods: {
+      toggleCondition() {
+        this.conditional = !this.conditional;
+        this.$emit('toggleCondition', this.conditional);
+      }
     }
   }
   </script>
@@ -25,10 +27,6 @@
   <style>
   .conditional-block {
     /* Специфичные стили для блока условия */
-  }
-  button{
-    /* width:90%;
-    height: 20%; */
   }
   </style>
   

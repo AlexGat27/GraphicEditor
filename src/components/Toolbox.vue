@@ -20,7 +20,7 @@ export default {
     return {
       blocks: [
         { id: -1, type: "time-trigger", position: {x: 0, y: 0} },
-        { id: -1, type: "send-message", position: {x: 0, y: 0} },
+        { id: -1, type: "send-message", position: {x: 0, y: 0}, isActivate: false },
         { id: -1, type: "time-trigger", position: {x: 0, y: 0} },
       ]
     };

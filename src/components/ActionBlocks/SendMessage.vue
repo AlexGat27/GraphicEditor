@@ -15,7 +15,7 @@
     },
     data(){
       return {
-        message: "default message",
+        message: "Сообщение отправлено",
       }
     },
     methods: {

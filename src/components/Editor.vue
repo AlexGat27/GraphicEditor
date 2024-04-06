@@ -1,7 +1,12 @@
 <template>
   <div class="editor" @drop="onDrop" @dragover.prevent>
-    <component v-for="(block, index) in editorBlocks" 
-    :key="index" @dragstart="onDragStart(index)" :is="getBlockComponent(block.type)"
+    <!-- <SendMessage :condition="condition" :position="{x: 100, y: 150}" :style="{left: '100px', top: '300px'}"/>
+    <TimeTrigger @toggleCondition="toggleCondition" :position="{x: 300, y: 300}" :style="{left: '100px', top: '300px'}"/> -->
+    <component v-for="(block, index) in actionBlocks" 
+    :key="index" @dragstart="onDragStart(block)" :is="getBlockComponent(block)" :condition="block.isActive"
+    :position="block.position" :style="{left: block.position.x + 'px', top: block.position.y +'px'}"/>
+    <component v-for="(block, index) in conditionBlocks" 
+    :key="index" @dragstart="onDragStart(block)" :is="getBlockComponent(block)" @toggleCondition="toggleCondition"
     :position="block.position" :style="{left: block.position.x + 'px', top: block.position.y +'px'}"/>
   </div>
 </template>
@@ -9,20 +14,33 @@
 <script>
 import SendMessage from './ActionBlocks/SendMessage.vue';
 import TimeTrigger from './ConditionalBlocks/TimeTrigger.vue';
+import Connection from './Connection.vue';
 
 export default {
   components: {
     SendMessage,
-    TimeTrigger
+    TimeTrigger,
+    Connection
   },
   data() {
     return {
-      editorBlocks: [],
+      actionBlocks: [],
+      conditionBlocks: []
     };
   },
   methods: {
-    onDragStart(index) {
-      const data = JSON.stringify(this.editorBlocks[index]);
+    toggleCondition(event){
+      this.actionBlocks.forEach(block => {
+        block.isActive = event;
+      });
+    },
+    onDragStart(block) {
+      var data;
+      if (block.type === "send-message"){
+        data = JSON.stringify(this.actionBlocks[block.id]);
+      }else if (block.type === "time-trigger"){
+        data = JSON.stringify(this.conditionBlocks[block.id]);
+      }
       event.dataTransfer.setData('application/json', data);
     },
     onDrop(event) {
@@ -36,26 +54,29 @@ export default {
     },
     addNewBlock(dropBlockInfo){
       const droppedBlock = {
-        id: this.editorBlocks.length + 1, 
+        id: dropBlockInfo.id + 1, 
         type: dropBlockInfo.type,
         position: {x: event.clientX, y: event.clientY}
       };
-      this.editorBlocks.push(droppedBlock);
+      if (dropBlockInfo.type === "send-message"){
+        this.actionBlocks.push(droppedBlock);
+      }else if (dropBlockInfo.type === "time-trigger"){
+        this.conditionBlocks.push(droppedBlock);
+      }
     },
     moveTargetBlock(dropBlockInfo){
-      this.editorBlocks.splice(dropBlockInfo.id - 1, 1);
-      const droppedBlock = {
-        id: dropBlockInfo.id, 
-        type: dropBlockInfo.type,
-        position: {x: event.clientX, y: event.clientY}
-      };
-      this.editorBlocks.splice(droppedBlock.id - 1, 0, droppedBlock);
+      console.log(dropBlockInfo)
+      if (dropBlockInfo.type === "send-message"){
+        this.actionBlocks[dropBlockInfo.id].position = {x: event.clientX, y: event.clientY};
+      }else if (dropBlockInfo.type === "time-trigger"){
+        this.conditionBlocks[dropBlockInfo.id].position = {x: event.clientX, y: event.clientY};
+      }
     },
-    getBlockComponent(type) {
-      if (type === 'send-message') {
-        return SendMessage;
-      } else if (type === 'time-trigger') {
-        return TimeTrigger;
+    getBlockComponent(block) {
+      if (block.type === 'send-message') {
+        return SendMessage
+      } else if (block.type === 'time-trigger') {
+        return TimeTrigger
       } else {
         return null; // Обработка других типов блоков, если нужно
       }

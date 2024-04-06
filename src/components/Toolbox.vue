@@ -2,26 +2,25 @@
     <div class="toolbox">
       <component v-for="(block, index) in blocks"
       :key="index" @dragstart="onDragStart(index)" :is="getBlockComponent(block.type)"
-      :position="block.position" class="listBlock"/>
+      :position="block.position" :id="block.id" class="listBlock"/>
     </div>
 </template>
 
 <script>
 import SendMessage from './ActionBlocks/SendMessage.vue';
-import TimeTrigger from './ConditionalBlocks/TimeTrigger.vue';
+import ButtonTrigger from './ConditionalBlocks/ButtonTrigger.vue';
 
 
 export default {
   components: {
     SendMessage,
-    TimeTrigger
+    ButtonTrigger
   },
   data() {
     return {
       blocks: [
-        { id: -1, type: "time-trigger", position: {x: 0, y: 0} },
-        { id: -1, type: "send-message", position: {x: 0, y: 0}, isActivate: false },
-        { id: -1, type: "time-trigger", position: {x: 0, y: 0} },
+        { id: -1, type: "time-trigger", position: {x: 0, y: 0}},
+        { id: -1, type: "send-message", position: {x: 0, y: 0}},
       ]
     };
   },
@@ -34,7 +33,7 @@ export default {
       if (type === 'send-message') {
         return SendMessage;
       } else if (type === 'time-trigger') {
-        return TimeTrigger;
+        return ButtonTrigger;
       } else {
         return null; // Обработка других типов блоков, если нужно
       }

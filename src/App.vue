@@ -3,7 +3,6 @@
   import Toolbox from './components/Toolbox.vue';
   export default {
     components: {
-      // Регистрируем компоненты
       Toolbox,
       Editor
     }

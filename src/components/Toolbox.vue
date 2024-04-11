@@ -1,42 +1,29 @@
 <template>
     <div class="toolbox">
-      <component v-for="(block, index) in blocks"
-      :key="index" @dragstart="onDragStart(index)" :is="getBlockComponent(block.type)"
-      :position="block.position" :id="block.id" class="listBlock"/>
+      <ActionBlock :containerID="-1" draggable="true" @dragstart="onDragstart($event, 'action')"/>
+      <ConditionalBlock :containerID="-1" draggable="true" @dragstart="onDragstart($event, 'condition')"/>
+      <EventBlock :containerID="-1" draggable="true" @dragstart="onDragstart($event, 'event')"/>
+      <ParamsBlock :containerID="-1" draggable="true" @dragstart="onDragstart($event, 'param')"/>
     </div>
 </template>
 
 <script>
-import SendMessage from './ActionBlocks/SendMessage.vue';
-import ButtonTrigger from './ConditionalBlocks/ButtonTrigger.vue';
+import ActionBlock from './blocks/ActionBlock.vue';
+import ConditionalBlock from './blocks/ConditionalBlock.vue';
+import EventBlock from './blocks/EventBlock.vue';
+import ParamsBlock from './blocks/ParamsBlock.vue';
 
 
 export default {
   components: {
-    SendMessage,
-    ButtonTrigger
-  },
-  data() {
-    return {
-      blocks: [
-        { id: -1, type: "time-trigger", position: {x: 0, y: 0}},
-        { id: -1, type: "send-message", position: {x: 0, y: 0}},
-      ]
-    };
+    ActionBlock,
+    ConditionalBlock,
+    ParamsBlock,
+    EventBlock
   },
   methods: {
-    onDragStart(index) {
-      const data = JSON.stringify(this.blocks[index]);
-      event.dataTransfer.setData('application/json', data);
-    },
-    getBlockComponent(type) {
-      if (type === 'send-message') {
-        return SendMessage;
-      } else if (type === 'time-trigger') {
-        return ButtonTrigger;
-      } else {
-        return null; // Обработка других типов блоков, если нужно
-      }
+    onDragstart(event, type){
+      event.dataTransfer.setData('text/plain', type);
     }
   }
 }
@@ -49,10 +36,5 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.listBlock{
-  position: relative;
-  margin: 3%;
-  transform: translate(0, 0);
 }
 </style>

@@ -47,6 +47,10 @@ import ParamsBlock from './blocks/ParamsBlock.vue';
         type: Number,
         required: true
       },
+      contourID:{
+        type: Number,
+        required: true
+      }
     },
     methods: {
       onDrop(event) {
@@ -70,16 +74,20 @@ import ParamsBlock from './blocks/ParamsBlock.vue';
     width: 100%;
     height: 100%;
     display: flex;
+    overflow: hidden;
+    overflow-y: scroll;
     border: 1px solid black;
   }
   .blocktype{
     width: 25%;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    display: block;
+    /* flex-direction: column; */
+    margin-top: 1%;
+    margin-bottom: 1%;
   }
   button{
-    width: 100%;
+    width: 95%;
   }
 </style>
   

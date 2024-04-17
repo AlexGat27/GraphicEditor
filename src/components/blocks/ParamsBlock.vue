@@ -3,7 +3,7 @@
   </template>
   
   <script>
-  import BaseBlock from '../BaseBlock.vue'; 
+  import BaseBlock from './BaseBlock.vue'; 
   
   export default {
     components: {BaseBlock},

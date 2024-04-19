@@ -1,19 +1,27 @@
 <template>
     <div class="container" @drop="onDrop" @dragover.prevent>
       <div class="blocktype">
-        <EventBlock v-for="(block, index) in blocks.event" :key="index" :containerID="containerID" @attribute="updateAttribute(index, 'event', $event)"/>
+        <EventBlock v-for="(block, index) in blocks.event" :key="index" 
+        :containerID="containerID" @attribute="updateAttribute(index, 'event', $event)"
+        :events="model.events"/>
         <button @click="removeBlock('event')" v-if="blocks.event.length > 0">Удалить</button>
       </div>
       <div class="blocktype">
-        <ConditionalBlock v-for="(block, index) in blocks.condition":key="index" :containerID="containerID" @attribute="updateAttribute(index, 'condition', $event)"/>
+        <ConditionalBlock v-for="(block, index) in blocks.condition":key="index" 
+        :containerID="containerID" @attribute="updateAttribute(index, 'condition', $event)"
+        :conditions="model.conditions"/>
         <button @click="removeBlock('condition')" v-if="blocks.condition.length > 0">Удалить</button>
       </div>
       <div class="blocktype">
-        <ActionBlock v-for="(block, index) in blocks.action" :key="index" :containerID="containerID" @attribute="updateAttribute(index, 'action', $event)"/>
+        <ActionBlock v-for="(block, index) in blocks.action" :key="index" 
+        :containerID="containerID" @attribute="updateAttribute(index, 'action', $event)"
+        :actions="model.actions"/>
         <button @click="removeBlock('action')" v-if="blocks.action.length > 0">Удалить</button>
       </div>
       <div class="blocktype">
-        <ParamsBlock v-for="(block, index) in blocks.param" :key="index" :containerID="containerID" @attribute="updateAttribute(index, 'param', $event)"/>
+        <ParamsBlock v-for="(block, index) in blocks.param" :key="index" 
+        :containerID="containerID" @attribute="updateAttribute(index, 'param', $event)"
+        :params="model.params"/>
         <button @click="removeBlock('param')" v-if="blocks.param.length > 0">Удалить</button>
       </div>
     </div>
@@ -34,12 +42,7 @@ import ParamsBlock from './blocks/ParamsBlock.vue';
     },
     data(){
       return {
-        blocks: {
-          action: [],
-          event: [],
-          condition: [],
-          param: []
-        }
+        model: null
       }
     },
     props:{
@@ -50,13 +53,22 @@ import ParamsBlock from './blocks/ParamsBlock.vue';
       contourID:{
         type: Number,
         required: true
+      },
+      blocks:{
+        type: Object,
+        required: true
       }
+    },
+    created(){
+      console.log(this.blocks)
     },
     methods: {
       onDrop(event) {
         // Увеличиваем количество блоков в зависимости от типа блока
-        let type = event.dataTransfer.getData('text/plain')
-        this.blocks[type].push('');
+        let parseData = JSON.parse(event.dataTransfer.getData('model/attributes'))
+        this.model = parseData.attributes;
+        console.log(this.model)
+        this.blocks[parseData.type].push('');
       },
       removeBlock(type){
         this.blocks[type].pop();
@@ -82,7 +94,7 @@ import ParamsBlock from './blocks/ParamsBlock.vue';
     width: 25%;
     height: 100%;
     display: block;
-    /* flex-direction: column; */
+    text-align: center;
     margin-top: 1%;
     margin-bottom: 1%;
   }

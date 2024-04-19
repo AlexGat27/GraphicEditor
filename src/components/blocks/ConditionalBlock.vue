@@ -10,12 +10,15 @@ export default {
   data() {
     return {
       blockType: "Условие",
-      conditions: ['День', 'Ночь', 'Ближний свет', '12В', "Нет питания"] 
     };
   },
   props: {
     containerID:{
       type: Number,
+      required: true
+    },
+    conditions:{
+      type: Array,
       required: true
     }
   }

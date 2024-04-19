@@ -3,9 +3,10 @@
     <div class="editor">
       <div class="counterItem">
         <div v-for="n in currentContour.containers.length" class="containerItem">
-          <BlockContainer :contourID="currentContour.contourID" :containerID="n" @containerData="updateDataContour($event, n - 1)"/>
+          <BlockContainer :contourID="currentContour.contourID" :containerID="n - 1" 
+          @containerData="updateDataContour($event, n - 1)" :blocks="currentContour.containers[n - 1]"/>
         </div>
-        <button @click="currentContour.containers.push({})">Добавить контейнер</button>
+        <button @click="addContainer()">Добавить контейнер</button>
         <button @click="currentContour.containers.pop()">Удалить контейнер</button>
         <button @click="exportData()">Экспорт в json</button>
       </div>
@@ -46,17 +47,21 @@ export default {
       const blob = new Blob([jsonData], { type: 'application/json' });
       saveAs(blob, 'export.json');
     },
+    addContainer(){
+      this.currentContour.containers.push({action: [], condition: [], event: [], param: []})
+    },
     switchContour(step){
       if (this.currentContour.contourID + step < this.contours.length && step > 0 || this.currentContour.contourID > 0 && step < 0){
         this.currentContour = this.contours[this.currentContour.contourID + step];
+        console.log(this.currentContour)
       }
     },
     addContour(){
-      this.contours.push({id: this.contours.length, containers: []})
+      this.contours.push({contourID: this.contours.length, containers: []})
     },
     popContour(){
       if (this.contours.length > 1){
-        if (this.contours.length - 1 === this.currentContour.contourID) this.currentContour = this.contours[this.contours.length - 2];
+        if (this.contours.length - 1 === this.currentContour.contourID) this.currentContour = this.contours[this.currentContour.contourID - 1];
         this.contours.pop();
       }
     }
@@ -93,8 +98,9 @@ export default {
   min-height: 20%;
   height: auto;
 }
-button{
+.counterItem button{
   width: 90%;
+
   height: 30px;
   margin-top: 2%;
 }

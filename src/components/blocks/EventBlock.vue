@@ -10,12 +10,15 @@ export default {
   data() {
     return {
       blockType: "Событие",
-      events: ['Мокрый контакт 1', 'Мокрый контакт 2'] 
     };
   },
   props: {
     containerID:{
       type: Number,
+      required: true
+    },
+    events:{
+      type: Array,
       required: true
     }
   }

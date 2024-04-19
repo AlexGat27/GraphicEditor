@@ -5,6 +5,11 @@
     components: {
       Toolbox,
       Editor
+    },
+    data(){
+      return {
+        model: {}
+      }
     }
   }
 </script>

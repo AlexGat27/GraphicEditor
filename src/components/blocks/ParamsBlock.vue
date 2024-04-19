@@ -10,7 +10,6 @@
     data() {
       return {
         blockType: "Параметры",
-        params: ['10%', '25%', '50%', '100%'] 
       };
     },
     props: {
@@ -18,10 +17,10 @@
         type: Number,
         required: true
       },
-      // model:{
-      //   type: String,
-      //   required: true
-      // }
+      params:{
+        type: Array,
+        required: true
+      }
     }
   }
   </script>

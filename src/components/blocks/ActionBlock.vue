@@ -10,12 +10,15 @@
     data() {
       return {
         blockType: "Действие",
-        actions: ['Включить', 'Выключить'] 
       };
     },
     props: {
       containerID:{
         type: Number,
+        required: true
+      },
+      actions:{
+        type: Array,
         required: true
       }
     }

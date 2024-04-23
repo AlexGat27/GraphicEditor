@@ -1,7 +1,7 @@
 <template>
     <div class="block">
       <label>Выбор модели</label>
-      <select v-model="currentModel" @change="updateModel">
+      <select v-model="currentModel" @change="$emit('model', currentModel)">
         <option v-for="model in models" :value="model">{{ model.name }}</option>
       </select>
     </div>
@@ -11,7 +11,7 @@
   export default {
     data(){
       return {
-        currentModel: {name: '', actions: [], conditions: [], events: [], params: []},
+        currentModel: {name: '', conditionAttributes: [], actionAttributes: {}, paramAttributes: {}},
         models: null,
       }
     },
@@ -23,18 +23,13 @@
       .then(data => {
         this.models = data;
         this.currentModel = data[0];
-        this.updateModel();
+        this.$emit("model", this.currentModel);
       }).catch(er => console.error(er))
     },
-    methods: {
-      updateModel() {
-        this.$emit('model', this.currentModel);
-      }
-    }
   }
   </script>
   
-  <style>
+  <style scoped>
     .block{
       width: 80%;
       height: 50px;
@@ -44,7 +39,6 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: space-center;
       justify-content: center;
       overflow: hidden;
       padding: 10px;

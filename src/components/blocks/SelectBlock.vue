@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <label>{{ blockType }}</label>
+    <label>{{ blockTitle }}</label>
     <select v-model="currentAttribute" @change="updateAttribute">
       <option v-for="attribute in attributes" :value="attribute">{{ attribute }}</option>
     </select>
@@ -10,46 +10,50 @@
 <script>
 export default {
   props: {
-    blockType: {
+    blockTitle: {
       type: String,
-      required: true
-    },
-    containerID: {
-      type: Number,
       required: true
     },
     attributes:{
       type: Array,
       required: true
     },
+    current: {
+      type: String,
+      required: true,
+    }
   },
-  data(){
-    return {
-      currentAttribute: ''
+  computed: {
+    currentAttribute: {
+      get(){
+        return this.current;
+      },
+      set(value){
+        this.$emit('attribute', value.toString());
+      }
     }
   },
   methods: {
     updateAttribute() {
-      this.$emit('attribute', this.currentAttribute);
+      this.$emit('attribute', this.currentAttribute.toString());
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
   .block{
-    width: 80%;
-    height: 50px;
+    min-width: 150px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    align-items: space-center;
     justify-content: center;
-    overflow: hidden;
     padding: 10px;
+    background-color: white;
+
   }
   p{
     margin:0;

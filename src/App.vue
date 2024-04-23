@@ -8,23 +8,21 @@
     },
     data(){
       return {
-        model: {}
+        model: {},
       }
-    }
+    },
+
   }
 </script>
 
 <template>
-  <div class="appview">
-    <Toolbox />
-    <Editor />
-  </div>
+  <Toolbox @model="model = $event"/>
+  <div class="editor"><Editor :model="model"/></div>
 </template>
 
 <style>
-  .appview{
-    width: 90%;
-    height: 90%;
-    display: flex;
+  .editor{
+    width:85%;
+    height: 95%;
   }
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div style="width: 100%; height: 100%;">
-    <div class="editor">
+    <div class="editorfield">
       <div class="counterItem">
-        <div v-for="n in currentContour.containers.length" class="containerItem">
-          <BlockContainer :contourID="currentContour.contourID" :containerID="n - 1" 
-          @containerData="updateDataContour($event, n - 1)" :blocks="currentContour.containers[n - 1]"/>
+        <div v-for="container in currentContour.containers" class="containerItem">
+          <BlockContainer @containerData="updateDataContour($event, container)" :model="model" :blocks="container"/>
         </div>
-        <button @click="addContainer()">Добавить контейнер</button>
-        <button @click="currentContour.containers.pop()">Удалить контейнер</button>
-        <button @click="exportData()">Экспорт в json</button>
+        <div class="containerButtons">
+          <button @click="addContainer()">&plus;</button>
+          <button @click="currentContour.containers.pop()">&minus;</button>
+        </div>
       </div>
     </div>
     <div class="contoursButtons">
@@ -17,6 +17,7 @@
       <p class="countContours">{{ currentContour.contourID + 1 }} / {{ contours.length }}</p>
       <button @click="popContour()">Удалить контур</button>
       <button @click="switchContour(1)" class="icon-btn arrow-forward"></button>
+      <button @click="exportData()">Экспорт в json</button>
     </div>
   </div>
 </template>
@@ -29,32 +30,47 @@ export default {
   components: {
     BlockContainer
   },
+  props:{
+    model: {
+      type: Object,
+      required: true
+    },
+  },
   data() {
     return {
       contours: [{contourID: 0, containers: []}],
-      currentContour: null
+      currentContour: {},
+      defaultContainer: {
+        conditionAttributes: {condition: '', value: '', inputSignal: '', readingPeriod: 0},
+        actionAttributes: {action: '', actionType: ''},
+        paramAttributes: {interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''}
+      }
     };
   },
   created(){
+    let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
+    this.contours.containers = [newContainer];
     this.currentContour = this.contours[0];
   },
   methods: {
-    updateDataContour(event, index){
-      this.currentContour.containers[index] = event;
+    updateDataContour(event, container){
+      container = event;
     },
     exportData(){
-      const jsonData = JSON.stringify(this.contours);
+      let modelData = {name: this.model.name, contours: this.contours};
+      const jsonData = JSON.stringify(modelData);
       const blob = new Blob([jsonData], { type: 'application/json' });
       saveAs(blob, 'export.json');
     },
     addContainer(){
-      this.currentContour.containers.push({action: [], condition: [], event: [], param: []})
+      let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
+      this.currentContour.containers.push(newContainer)
     },
     switchContour(step){
       if (this.currentContour.contourID + step < this.contours.length && step > 0 || this.currentContour.contourID > 0 && step < 0){
         this.currentContour = this.contours[this.currentContour.contourID + step];
-        console.log(this.currentContour)
       }
+      console.log(this.currentContour);
     },
     addContour(){
       this.contours.push({contourID: this.contours.length, containers: []})
@@ -70,22 +86,19 @@ export default {
 </script>
 
 <style scoped>
-.editor {
+.editorfield {
   border: 2px dashed #848484; /* Границы области редактирования */
   width: 100%;
-  height: 85%;
+  height: 90%;
   overflow: hidden;
-  /* overflow-y: scroll; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 3%;
-  padding-bottom: 3%;
 }
 .counterItem{
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
   overflow-y: scroll;
   display: flex;
   align-items: center;
@@ -94,15 +107,26 @@ export default {
 .containerItem{
   margin-bottom: 2%;
   margin-top: 2%;
-  width: 95%;
+  overflow: hidden;
   min-height: 20%;
-  height: auto;
+  width: 100%;
 }
-.counterItem button{
-  width: 90%;
-
-  height: 30px;
-  margin-top: 2%;
+.containerButtons{
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  justify-content: center;
+}
+.containerButtons button{
+  font-size: 30px;
+  text-align: center;
+  padding: 0px;
+  min-width: 50px;
+  min-height: 50px;
+  margin: 1%;
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(212, 212, 255);
 }
 
 .contoursButtons{

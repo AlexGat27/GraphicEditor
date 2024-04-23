@@ -1,26 +1,51 @@
 <template>
-    <BaseBlock :containerID="containerID" :blockType="blockType" :attributes="actions"/>
+  <div class="case">
+    <SelectBlock :blockTitle="title1" :attributes="actionAttributes.action" 
+    @attribute="updateAttribute('action', $event)" :current="current.action"/>
+    <SelectBlock :blockTitle="title2" :attributes="actionAttributes.actionType" 
+    @attribute="updateAttribute('actionType', $event)" :current="current.actionType"/>
+  </div>
 </template>
   
 <script>
-  import BaseBlock from './BaseBlock.vue';
-  
+  import SelectBlock from "./SelectBlock.vue";
+
   export default {
-    components: {BaseBlock},
-    data() {
+    components: {SelectBlock},
+    data(){
       return {
-        blockType: "Действие",
-      };
+        title1: 'Действие',
+        title2: 'Тип',
+      }
+    },
+    computed: {
+      currentAction(){
+      return this.current
+    }
     },
     props: {
-      containerID:{
-        type: Number,
+      actionAttributes:{
+        type: Object,
         required: true
       },
-      actions:{
-        type: Array,
-        required: true
+      current: {
+        type: Object,
+        required: true,
+      }
+    },
+    methods: {
+      updateAttribute(type, event){
+        this.currentAction[type] = event;
+        this.$emit("attribute", this.currentAction);
       }
     }
   }
 </script>
+
+<style scoped>
+  .case{
+    display: flex;
+    align-items: center;
+    background-color: rgb(236, 252, 255);
+  }
+</style>

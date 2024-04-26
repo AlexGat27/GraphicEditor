@@ -101,7 +101,7 @@ export default {
 .editorfield {
   border: 2px dashed #848484; /* Границы области редактирования */
   width: 100%;
-  height: 90%;
+  height: 95%;
   overflow: hidden;
   display: flex;
   flex-direction: column;

@@ -22,11 +22,13 @@
 
 <style>
   .editor{
-    width:85%;
-    height: 95%;
+    width:83%;
+    height: 98%;
+    padding: 1%;
   }
   .toolbox{
-    width:14%;
-    height: 95%;
+    width:13%;
+    height: 98%;
+    padding: 1%;
   }
 </style>

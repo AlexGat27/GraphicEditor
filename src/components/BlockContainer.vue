@@ -76,6 +76,7 @@ export default {
   .cases{
     display: block;
     height: 100%;
+    max-height: 150px;
   }
   .сaseBtnBlock{
     width: 100%;

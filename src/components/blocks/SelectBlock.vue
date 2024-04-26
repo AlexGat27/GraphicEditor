@@ -44,6 +44,7 @@ export default {
 <style scoped>
   .block{
     min-width: 150px;
+    height: 60%;
     margin: 5px;
     border: 1px solid black;
     border-radius: 10px;
@@ -55,8 +56,7 @@ export default {
     background-color: white;
 
   }
-  p{
-    margin:0;
-    text-align: center;
+  label{
+    margin-bottom:5%;
   }
 </style>

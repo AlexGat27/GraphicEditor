@@ -41,9 +41,8 @@ export default {
       contours: [{contourID: 0, containers: []}],
       currentContour: {},
       defaultContainer: {
-        conditionAttributes: {condition: '', value: '', inputSignal: '', readingPeriod: 0},
-        actionAttributes: {action: '', actionType: ''},
-        paramAttributes: {interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''}
+        conditionAttributes: [{condition: '', value: '', inputSignal: '', readingPeriod: 0}],
+        actionAttributes: [{action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''}],
       }
     };
   },
@@ -51,6 +50,19 @@ export default {
     let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
     this.contours.containers = [newContainer];
     this.currentContour = this.contours[0];
+  },
+  watch: {
+    model: {
+      deep: true, // следить за изменениями вложенных свойств
+      handler(newVal, oldVal) {
+        // Выполните здесь необходимые действия в ответ на изменение модели
+        console.log('Модель была изменена', newVal, oldVal);
+        let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
+        this.contours = [{contourID: 0, containers: []}],
+        this.contours.containers = [newContainer];
+        this.currentContour = this.contours[0];
+      }
+    }
   },
   methods: {
     updateDataContour(event, container){
@@ -105,10 +117,11 @@ export default {
   flex-direction: column;
 }
 .containerItem{
-  margin-bottom: 2%;
-  margin-top: 2%;
+  margin-top: 10px;
+  margin-bottom: 10px;
   overflow: hidden;
-  min-height: 20%;
+  min-height: 150px;
+  max-height: 300px;
   width: 100%;
 }
 .containerButtons{

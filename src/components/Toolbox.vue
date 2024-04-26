@@ -27,8 +27,8 @@ export default {
 
 <style scoped>
 .toolbox {
-  height: 95%;
-  width: 10%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

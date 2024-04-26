@@ -39,7 +39,8 @@ export default {
 
 <style scoped>
   .block{
-    width: 100%;
+    min-width: 150px;
+    height: 60%;
     border: 1px solid black;
     border-radius: 10px;
     cursor: pointer;

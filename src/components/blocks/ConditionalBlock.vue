@@ -1,5 +1,5 @@
 <template>
-  <div class="case">
+  <div class="conditionCase">
     <SelectBlock :blockTitle="title1" :attributes="mapCondition" 
     @attribute="updateConditionParams('condition', $event)" :current="currentCondition.condition"/>
     <SelectBlock :blockTitle="title2" :attributes="filterCondition.value" 
@@ -22,14 +22,16 @@ export default {
       title2: "Значение",
       title3: "Количество входящих сигналов",
       title4: "Период считывания (сек)",
-      bufCondition: {}
     }
   },
   computed:{
     filterCondition(){
-      if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition))
+      if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition)){
         return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
-      else { return {value: [], inputSignal: [], readingPeriod: []} }
+      }
+      else {
+        return {value: [], inputSignal: [], readingPeriod: []} 
+      }
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);
@@ -51,20 +53,20 @@ export default {
   methods: {
     updateConditionParams(type, event){
       if (type == 'condition'){
-        console.log({condition: event, value: '', inputSignal: '', readingPeriod: 0})
         this.$emit("attribute", {condition: event, value: '', inputSignal: '', readingPeriod: 0})
       }else {
         this.currentCondition[type] = event;
         this.$emit("attribute", this.currentCondition);
       }
-    }
+    },
   }
 }
 </script>
   
 <style scoped>
-  .case{
+  .conditionCase{
     display: flex;
+    height: 80%;
     align-items: center;
     border-right: 2px dashed rgb(52, 52, 52);
     background-color: rgb(222, 222, 222);

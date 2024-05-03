@@ -16,7 +16,7 @@
       }
     },
     created(){
-      fetch('src/config/models.json')
+      fetch('src/models/models.json')
       .then(response => {
         return response.json()
       })

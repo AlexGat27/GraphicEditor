@@ -21,7 +21,7 @@ export default {
     current: {
       type: String,
       required: true,
-    }
+    },
   },
   computed: {
     currentAttribute: {

@@ -34,7 +34,7 @@ export default {
     return {
       startAttributes: {
         actionAttributes: {action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''},
-        conditionAttributes: {condition: '', value: '', inputSignal: '', readingPeriod: 0}
+        conditionAttributes: {condition: '', value: '', inputSignal: '', spCanInterval: 0}
       }
     }
   },

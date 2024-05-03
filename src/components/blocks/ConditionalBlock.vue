@@ -6,7 +6,7 @@
     @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
     <SelectBlock :blockTitle="title3" :attributes="filterCondition.inputSignal" 
     @attribute="updateConditionParams('inputSignal', $event)" :current="currentCondition.inputSignal"/>
-    <InputBlock :blockTitle="title4" @attribute="updateConditionParams('readingPeriod', $event)" :current="currentCondition.readingPeriod"/>
+    <InputBlock :blockTitle="title4" @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/>
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
         return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
       }
       else {
-        return {value: [], inputSignal: [], readingPeriod: []} 
+        return {value: [], inputSignal: [], spCanInterval: []} 
       }
     },
     mapCondition(){
@@ -53,7 +53,7 @@ export default {
   methods: {
     updateConditionParams(type, event){
       if (type == 'condition'){
-        this.$emit("attribute", {condition: event, value: '', inputSignal: '', readingPeriod: 0})
+        this.$emit("attribute", {condition: event, value: '', inputSignal: '', spCanInterval: 0})
       }else {
         this.currentCondition[type] = event;
         this.$emit("attribute", this.currentCondition);

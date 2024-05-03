@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <label>{{ blockTitle }}</label>
-    <input type="text" @keyup="emitInt($event.target.value)" v-model="currentAttribute">
+    <input type="number" @change="updateCurrentAttribute()" v-model="reactiveCurrent">
   </div>
 </template>
 
@@ -15,23 +15,27 @@ export default {
     current: {
       type: Number,
       required: true,
+    },
+    defaultValue: {
+      required: false
     }
   },
-  computed: {
-    currentAttribute: {
-      get(){
-        return this.current;
-      },
-      set(value){
-        let intValue = parseInt(value);
-        if (intValue) this.$emit('attribute', intValue);
+  data(){
+    return {
+      reactiveCurrent: this.current // Создаем реактивное свойство на основе пропса
+    }
+  },
+  methods:{
+    async updateCurrentAttribute() {
+      if (this.defaultValue !== null && this.defaultValue !== undefined){
+        await this.$emit('attribute', this.defaultValue);
+        this.reactiveCurrent = this.defaultValue;
       }
-    }
-  },
-  methods: {
-    emitInt(value){
-      let intValue = parseInt(value);
-      if (intValue) this.$emit('attribute', intValue);
+      else {
+        let intValue = parseInt(this.reactiveCurrent);
+        await this.$emit('attribute', intValue >= 0 && !isNaN(intValue) ? intValue : 0);
+        this.reactiveCurrent = this.current;
+      }
     }
   }
 }

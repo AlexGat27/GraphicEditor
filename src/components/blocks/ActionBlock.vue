@@ -4,12 +4,10 @@
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
     <SelectBlock :blockTitle="title2" :attributes="actionAttributes.actionType" 
     @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/>
-    <InputBlock :blockTitle="title3" @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime"/>
+    <InputBlock :blockTitle="title3" @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime" 
+    :defaultValue="defaultValue"/>
     <InputBlock :blockTitle="title4" @attribute="updateAttribute('cyclePeriod', $event)" :current="currentAction.cyclePeriod"/>
     <InputBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"/>
-    <SelectBlock :blockTitle="title6" :attributes="actionsAfterCycle" 
-    @attribute="updateAttribute('actionAfterCycle', $event)" 
-    :current="currentAction.actionAfterCycle"/>
   </div>
 </template>
   
@@ -27,12 +25,14 @@
         title4: "Период цикла (сек)",
         title5: "Мощность контура (%)",
         title6: "Остановка после завершения",
-        actionsAfterCycle: ["Ничего", "Зациклить", "Отключить", "Не отключать контур"],
       }
     },
     computed: {
       currentAction(){
         return this.current
+      },
+      defaultValue(){
+        return this.currentAction.actionType === "Без мерцания" ? 0 : null
       }
     },
     props: {
@@ -49,6 +49,7 @@
       updateAttribute(type, event){
         if (type == 'power'){
           this.currentAction[type] = event >= 0 && event <= 100 ? event : 0;
+          console.log(this.currentAction[type])
           this.$emit("attribute", this.currentAction);
         }else {
           this.currentAction[type] = event;

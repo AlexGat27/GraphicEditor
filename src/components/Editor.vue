@@ -41,8 +41,8 @@ export default {
       contours: [{contourID: 0, containers: []}],
       currentContour: {},
       defaultContainer: {
-        conditionAttributes: [{condition: '', value: '', inputSignal: '', readingPeriod: 0}],
-        actionAttributes: [{action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''}],
+        conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: 0}],
+        actionAttributes: [{action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0}],
       }
     };
   },
@@ -101,7 +101,7 @@ export default {
 .editorfield {
   border: 2px dashed #848484; /* Границы области редактирования */
   width: 100%;
-  height: 95%;
+  height: 90%;
   overflow: hidden;
   display: flex;
   flex-direction: column;

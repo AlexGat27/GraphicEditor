@@ -18,17 +18,25 @@
       <button @click="popContour()">Удалить контур</button>
       <button @click="switchContour(1)" class="icon-btn arrow-forward"></button>
       <button @click="exportData()">Экспорт в json</button>
+
+      <div class="digitalPin">
+        <label>Digital pin</label>
+        <select v-model="currentContour.digitalPin">
+          <option v-for="digitalPin in filterDigitalPins" :value="digitalPin">{{ digitalPin }}</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import BlockContainer from './BlockContainer.vue';
+import SelectBlock from './blocks/SelectBlock.vue';
 import { saveAs } from 'file-saver';
 
 export default {
   components: {
-    BlockContainer
+    BlockContainer, SelectBlock
   },
   props:{
     model: {
@@ -38,13 +46,21 @@ export default {
   },
   data() {
     return {
-      contours: [{contourID: 0, containers: []}],
-      currentContour: {},
+      digitalPins: [1,2,3,4,5,6,7,8],
+      contours: [{contourID: 0, digitalPin: 0, containers: []}],
+      currentContour: {contourID: 0, digitalPin: 0, containers: []},
       defaultContainer: {
         conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: 0}],
         actionAttributes: [{action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0}],
       }
     };
+  },
+  computed:{
+    filterDigitalPins(){
+      return this.digitalPins.filter(
+        pin => !this.contours.some(contour => contour.digitalPin === pin && contour.contourID !== this.currentContour.contourID)
+      )
+    }
   },
   created(){
     let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
@@ -85,7 +101,7 @@ export default {
       console.log(this.currentContour);
     },
     addContour(){
-      this.contours.push({contourID: this.contours.length, containers: []})
+      if (this.contours.length < 8) this.contours.push({contourID: this.contours.length,digitalPin: 0, containers: []})
     },
     popContour(){
       if (this.contours.length > 1){
@@ -144,11 +160,12 @@ export default {
 
 .contoursButtons{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
   bottom: 10%;
   width: 100%;
 }
-.contoursButtons button{
+.contoursButtons button, .contoursButtons div{
   margin: 2%;
 }
 .contoursButtons p{
@@ -168,4 +185,15 @@ export default {
   content: '\2192';
 }
 
+.digitalPin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 15%;
+}
+.digitalPin select{
+  margin-top: 5%;
+  width: 90%;
+}
 </style>

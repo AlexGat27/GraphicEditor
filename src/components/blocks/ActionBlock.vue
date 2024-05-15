@@ -4,9 +4,10 @@
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
     <SelectBlock :blockTitle="title2" :attributes="actionAttributes.actionType" 
     @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/>
-    <InputBlock :blockTitle="title3" @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime" 
-    :defaultValue="defaultValue"/>
-    <InputBlock :blockTitle="title4" @attribute="updateAttribute('cyclePeriod', $event)" :current="currentAction.cyclePeriod"/>
+    <SelectBlock :blockTitle="title3" :attributes="actionAttributes.interrupedTime"
+    @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime"/>
+    <SelectBlock :blockTitle="title4" :attributes="actionAttributes.cyclePeriod"
+    @attribute="updateAttribute('cyclePeriod', $event)" :current="currentAction.cyclePeriod"/>
     <InputBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"/>
   </div>
 </template>
@@ -24,7 +25,6 @@
         title3: "Прерывание (ms)",
         title4: "Период цикла (сек)",
         title5: "Мощность контура (%)",
-        title6: "Остановка после завершения",
       }
     },
     computed: {

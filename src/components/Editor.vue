@@ -20,7 +20,7 @@
       <button @click="exportData()">Экспорт в json</button>
 
       <div class="digitalPin">
-        <label>Digital pin</label>
+        <label>Номер цифрового пина</label>
         <select v-model="currentContour.digitalPin">
           <option v-for="digitalPin in filterDigitalPins" :value="digitalPin">{{ digitalPin }}</option>
         </select>
@@ -46,12 +46,12 @@ export default {
   },
   data() {
     return {
-      digitalPins: [1,2,3,4,5,6,7,8],
+      digitalPins: [4, 5, 6, 7, 8, 9, 10, 11],
       contours: [{contourID: 0, digitalPin: 0, containers: []}],
       currentContour: {contourID: 0, digitalPin: 0, containers: []},
       defaultContainer: {
         conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: 0}],
-        actionAttributes: [{action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0}],
+        actionAttributes: [{action: '', actionType: '', interrupedTime: '', cyclePeriod: '', power: 0}],
       }
     };
   },
@@ -71,7 +71,6 @@ export default {
     model: {
       deep: true, // следить за изменениями вложенных свойств
       handler(newVal, oldVal) {
-        // Выполните здесь необходимые действия в ответ на изменение модели
         console.log('Модель была изменена', newVal, oldVal);
         let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
         this.contours = [{contourID: 0, containers: []}],
@@ -85,7 +84,20 @@ export default {
       container = event;
     },
     exportData(){
-      let modelData = {name: this.model.name, contours: this.contours};
+      let modelData = {name: this.model.name, contours: JSON.parse(JSON.stringify(this.contours))};
+      modelData.contours.forEach(contour => {
+        contour.digitalPin = parseInt(contour.digitalPin);
+        contour.containers.forEach(container => {
+          container.conditionAttributes.forEach(attribute => {
+            if (parseInt(attribute.value)) attribute.value = parseInt(attribute.value)
+            if (parseInt(attribute.inputSignal)) attribute.inputSignal = parseInt(attribute.inputSignal)
+          })
+          container.actionAttributes.forEach(attribute => {
+            if (parseInt(attribute.interrupedTime)) attribute.interrupedTime = parseInt(attribute.interrupedTime)
+            if (parseInt(attribute.cyclePeriod)) attribute.cyclePeriod = parseInt(attribute.cyclePeriod)
+          })
+        });
+      });
       const jsonData = JSON.stringify(modelData);
       const blob = new Blob([jsonData], { type: 'application/json' });
       saveAs(blob, 'export.json');

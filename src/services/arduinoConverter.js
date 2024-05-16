@@ -88,12 +88,17 @@ export class ArduinoConverter{
                         console.error("Нет условий вообще")
                         break;
                 }
+                updatedLoopContent += ` if (con[${conIndex+1}].getKontState() == KONT_ON){
+                    Serial.println("${conIndex+1}_on");
+                  }else if (con[${conIndex+1}].getKontState() == KONT_OFF) {
+                    Serial.println("${conIndex+1}_off");
+                  }\n\n`
                 conIndex += 1;
             })
         });
-        const match = fileString.match(/void loop\(\) \{([\s\S]*?)for/);
+        const match = fileString.match(/void loop\(\) \{([\s\S]*?)newUpdate\(\);/);
         if (match) {
-            return fileString.replace(/void loop\(\) \{([\s\S]*?)for/, `void loop() {\n${updatedLoopContent}\n  for`);
+            return fileString.replace(/void loop\(\) \{([\s\S]*?)newUpdate\(\);/, `void loop() {\n${updatedLoopContent}\n  newUpdate();`);
         }
         return fileString;
     }

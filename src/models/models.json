@@ -3,19 +3,16 @@
         "name": "Model 1",
         "conditionAttributes": [
             {
-                "condition": "Can Сигнал",
-                "value": ["Дальний свет", "Аварийка", "Ближний свет"],
-                "inputSignal": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Постоянно"]
-            },
-            {
                 "condition": "Фоторезистор",
                 "value": ["Вечер", "День"],
-                "inputSignal": ["Постоянно"]
+                "inputSignal": ["Постоянно"],
+                "spCanInterval": [1, 5, 10, 50, 100]
             },
             {
                 "condition": "Сухой контакт",
                 "value": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-                "inputSignal": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Постоянно"]
+                "inputSignal": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Постоянно"],
+                "spCanInterval": [1, 5, 10, 50, 100]
             }
         ],
         "actionAttributes": {

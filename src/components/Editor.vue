@@ -17,7 +17,7 @@
       <p class="countContours">{{ currentContour.contourID + 1 }} / {{ contours.length }}</p>
       <button @click="popContour()">Удалить контур</button>
       <button @click="switchContour(1)" class="icon-btn arrow-forward"></button>
-      <button @click="exportData()">Экспорт в json</button>
+      <button @click="exportData()">Компиляция</button>
 
       <div class="digitalPin">
         <label>Номер цифрового пина</label>
@@ -32,7 +32,8 @@
 <script>
 import BlockContainer from './BlockContainer.vue';
 import SelectBlock from './blocks/SelectBlock.vue';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
+import { ArduinoConverter } from '@/services/arduinoConverter';
 
 export default {
   components: {
@@ -50,9 +51,9 @@ export default {
       contours: [{contourID: 0, digitalPin: 0, containers: []}],
       currentContour: {contourID: 0, digitalPin: 0, containers: []},
       defaultContainer: {
-        conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: 0}],
+        conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: ''}],
         actionAttributes: [{action: '', actionType: '', interrupedTime: '', cyclePeriod: '', power: 0}],
-      }
+      },
     };
   },
   computed:{
@@ -85,9 +86,11 @@ export default {
     },
     exportData(){
       let modelData = {name: this.model.name, contours: JSON.parse(JSON.stringify(this.contours))};
+      let countContainers = 0;
       modelData.contours.forEach(contour => {
         contour.digitalPin = parseInt(contour.digitalPin);
         contour.containers.forEach(container => {
+          container.countConditions = container.conditionAttributes.length;
           container.conditionAttributes.forEach(attribute => {
             if (parseInt(attribute.value)) attribute.value = parseInt(attribute.value)
             if (parseInt(attribute.inputSignal)) attribute.inputSignal = parseInt(attribute.inputSignal)
@@ -96,11 +99,12 @@ export default {
             if (parseInt(attribute.interrupedTime)) attribute.interrupedTime = parseInt(attribute.interrupedTime)
             if (parseInt(attribute.cyclePeriod)) attribute.cyclePeriod = parseInt(attribute.cyclePeriod)
           })
+          countContainers+=1;
         });
       });
-      const jsonData = JSON.stringify(modelData);
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      saveAs(blob, 'export.json');
+      const arduinoConverter = new ArduinoConverter('compile.txt')
+      modelData.countContainers = countContainers;
+      arduinoConverter.saveTxtFile(modelData);
     },
     addContainer(){
       let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))

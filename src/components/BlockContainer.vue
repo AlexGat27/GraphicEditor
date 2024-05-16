@@ -33,8 +33,8 @@ export default {
   data(){
     return {
       startAttributes: {
-        actionAttributes: {action: '', actionType: '', interrupedTime: 0, cyclePeriod: 0, power: 0, actionAfterCycle: ''},
-        conditionAttributes: {condition: '', value: '', inputSignal: '', spCanInterval: 0}
+        actionAttributes: {action: '', actionType: '', interrupedTime: '', cyclePeriod: '', power: 0},
+        conditionAttributes: {condition: '', value: '', inputSignal: '', spCanInterval: ''}
       }
     }
   },

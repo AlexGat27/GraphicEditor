@@ -78,9 +78,10 @@ export class ArduinoConverter{
         data.contours.forEach(contour => {
             contour.containers.forEach(container => {
                 this._createConditionStringRecord(container);
-                this.updatedLoopContent += `   if (con[${this.conIndex+1}].getKontState() == KONT_ON){\n`;
+                this.updatedLoopContent += `   if (con[${this.conIndex}].getKontState() == KONT_ON){\n`;
                 this._createActionStringRecord(container, contour.contourID);
-                this.updatedLoopContent += '   }\n\n';
+                this.updatedLoopContent += `   }else if (con[${this.conIndex}].getKontState() == KONT_OFF) {
+      kontours[${contour.contourID}].turnOFF();\n   }\n\n`;
                 this.conIndex += 1;
             })
         });

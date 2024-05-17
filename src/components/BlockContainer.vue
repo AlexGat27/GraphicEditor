@@ -13,10 +13,10 @@
           <ActionBlock v-for="(block, index) in blocks.actionAttributes" :key="index"
           @attribute="updateAttribute('actionAttributes', index, $event)" 
           :current="block" :actionAttributes="model.actionAttributes"/>
-          <div class="сaseBtnBlock">
+          <!-- <div class="сaseBtnBlock">
             <button class="сaseBtn" @click="addCase('actionAttributes')">Добавить действие</button>
             <button class="сaseBtn" @click="removeCase('actionAttributes')">Удалить действие</button>
-          </div>
+          </div> -->
         </div>
     </div>
   </template>
@@ -33,7 +33,7 @@ export default {
   data(){
     return {
       startAttributes: {
-        actionAttributes: {action: '', actionType: '', interrupedTime: '', cyclePeriod: '', power: 0},
+        actionAttributes: {action: '', interrupedTime: '', cyclePeriod: '', power: 0},
         conditionAttributes: {condition: '', value: '', inputSignal: '', spCanInterval: ''}
       }
     }

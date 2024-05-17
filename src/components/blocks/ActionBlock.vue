@@ -2,8 +2,8 @@
   <div class="actionCase">
     <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.action" 
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-    <SelectBlock :blockTitle="title2" :attributes="filterActionAttributes.actionType" 
-    @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/>
+    <!-- <SelectBlock :blockTitle="title2" :attributes="filterActionAttributes.actionType" 
+    @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/> -->
     <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interrupedTime"
     @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime"/>
     <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.cyclePeriod"
@@ -32,10 +32,8 @@
         return this.current
       },
       filterActionAttributes(){
-        if (this.currentAction.action === "Выключить" || this.currentAction.action === ''){
-          return {action: this.actionAttributes.action, actionType: [], interrupedTime: [], cyclePeriod: []} 
-        }else if (this.currentAction.actionType === "Без мерцания"){
-          return {action: this.actionAttributes.action, actionType: this.actionAttributes.actionType, interrupedTime: [], cyclePeriod: []}
+        if (this.currentAction.action === "Включить" || this.currentAction.action === ''){
+          return {action: this.actionAttributes.action, interrupedTime: [], cyclePeriod: []} 
         }
         return this.actionAttributes;
       }

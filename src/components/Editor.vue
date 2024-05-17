@@ -51,7 +51,7 @@ export default {
       currentContour: {contourID: 0, digitalPin: 0, containers: []},
       defaultContainer: {
         conditionAttributes: [{condition: '', value: '', inputSignal: '', spCanInterval: ''}],
-        actionAttributes: [{action: '', actionType: '', interrupedTime: '', cyclePeriod: '', power: 0}],
+        actionAttributes: [{action: '', interrupedTime: '', cyclePeriod: '', power: 0}],
       },
     };
   },
@@ -101,8 +101,7 @@ export default {
             if (parseInt(attr.inputSignal)) attr.inputSignal = parseInt(attr.inputSignal)
           })
           container.actionAttributes.forEach(attr => {
-            if (attr.action === '' || (attr.action === 'Включить' && (attr.actionType === '' || 
-            (attr.actionType === 'Мигание' && (attr.interrupedTime === '' || attr.cyclePeriod === ''))))){
+            if (attr.action === '' || (attr.action === 'Мигание' && (attr.interrupedTime === '' || attr.cyclePeriod === ''))){
               console.error("Не все поля действия заполнены");
               isNullValues = true;
               return;

@@ -19,12 +19,12 @@
       <button @click="switchContour(1)" class="icon-btn arrow-forward"></button>
       <button @click="exportData()">Компиляция</button>
 
-      <div class="digitalPin">
+      <!-- <div class="digitalPin">
         <label>Номер цифрового пина</label>
         <select v-model="currentContour.digitalPin">
           <option v-for="digitalPin in filterDigitalPins" :value="digitalPin">{{ digitalPin }}</option>
         </select>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -32,8 +32,7 @@
 <script>
 import BlockContainer from './BlockContainer.vue';
 import SelectBlock from './blocks/SelectBlock.vue';
-// import { saveAs } from 'file-saver';
-import { ArduinoConverter } from '@/services/arduinoConverter';
+import { FileCreator } from '@/services/fileCreator';
 
 export default {
   components: {
@@ -47,7 +46,7 @@ export default {
   },
   data() {
     return {
-      digitalPins: [4, 5, 6, 7, 8, 9, 10, 11],
+      // digitalPins: [4, 5, 6, 7, 8, 9, 10, 11],
       contours: [{contourID: 0, digitalPin: 0, containers: []}],
       currentContour: {contourID: 0, digitalPin: 0, containers: []},
       defaultContainer: {
@@ -87,24 +86,39 @@ export default {
     exportData(){
       let modelData = {name: this.model.name, contours: JSON.parse(JSON.stringify(this.contours))};
       let countContainers = 0;
+      let isNullValues = false;
       modelData.contours.forEach(contour => {
-        contour.digitalPin = parseInt(contour.digitalPin);
+        // contour.digitalPin = parseInt(contour.digitalPin);
         contour.containers.forEach(container => {
           container.countConditions = container.conditionAttributes.length;
-          container.conditionAttributes.forEach(attribute => {
-            if (parseInt(attribute.value)) attribute.value = parseInt(attribute.value)
-            if (parseInt(attribute.inputSignal)) attribute.inputSignal = parseInt(attribute.inputSignal)
+          container.conditionAttributes.forEach(attr => {
+            if (attr.condition === '' || attr.value === '' || attr.inputSignal === '' || attr.spCanInterval === ''){
+              console.error("Не все поля условия заполнены");
+              isNullValues = true;
+              return;
+            }
+            if (parseInt(attr.value)) attr.value = parseInt(attr.value)
+            if (parseInt(attr.inputSignal)) attr.inputSignal = parseInt(attr.inputSignal)
           })
-          container.actionAttributes.forEach(attribute => {
-            if (parseInt(attribute.interrupedTime)) attribute.interrupedTime = parseInt(attribute.interrupedTime)
-            if (parseInt(attribute.cyclePeriod)) attribute.cyclePeriod = parseInt(attribute.cyclePeriod)
+          container.actionAttributes.forEach(attr => {
+            if (attr.action === '' || (attr.action === 'Включить' && (attr.actionType === '' || 
+            (attr.actionType === 'Мигание' && (attr.interrupedTime === '' || attr.cyclePeriod === ''))))){
+              console.error("Не все поля действия заполнены");
+              isNullValues = true;
+              return;
+            }
+            if (parseInt(attr.interrupedTime)) attr.interrupedTime = parseInt(attr.interrupedTime)
+            if (parseInt(attr.cyclePeriod)) attr.cyclePeriod = parseInt(attr.cyclePeriod)
           })
+          if (isNullValues) return;
           countContainers+=1;
         });
+        if (isNullValues) return;
       });
-      const arduinoConverter = new ArduinoConverter('compile.txt')
+      if (isNullValues) return;
+      const fileCreator = new FileCreator('compile.txt')
       modelData.countContainers = countContainers;
-      arduinoConverter.saveTxtFile(modelData);
+      fileCreator.saveTxtFile(modelData);
     },
     addContainer(){
       let newContainer = JSON.parse(JSON.stringify(this.defaultContainer))
@@ -114,7 +128,6 @@ export default {
       if (this.currentContour.contourID + step < this.contours.length && step > 0 || this.currentContour.contourID > 0 && step < 0){
         this.currentContour = this.contours[this.currentContour.contourID + step];
       }
-      console.log(this.currentContour);
     },
     addContour(){
       if (this.contours.length < 8) this.contours.push({contourID: this.contours.length,digitalPin: 0, containers: []})

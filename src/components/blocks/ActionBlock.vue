@@ -1,12 +1,12 @@
 <template>
   <div class="actionCase">
-    <SelectBlock :blockTitle="title1" :attributes="actionAttributes.action" 
+    <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.action" 
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-    <SelectBlock :blockTitle="title2" :attributes="actionAttributes.actionType" 
+    <SelectBlock :blockTitle="title2" :attributes="filterActionAttributes.actionType" 
     @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/>
-    <SelectBlock :blockTitle="title3" :attributes="actionAttributes.interrupedTime"
+    <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interrupedTime"
     @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime"/>
-    <SelectBlock :blockTitle="title4" :attributes="actionAttributes.cyclePeriod"
+    <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.cyclePeriod"
     @attribute="updateAttribute('cyclePeriod', $event)" :current="currentAction.cyclePeriod"/>
     <InputBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"/>
   </div>
@@ -31,8 +31,13 @@
       currentAction(){
         return this.current
       },
-      defaultValue(){
-        return this.currentAction.actionType === "Без мерцания" ? 0 : null
+      filterActionAttributes(){
+        if (this.currentAction.action === "Выключить" || this.currentAction.action === ''){
+          return {action: this.actionAttributes.action, actionType: [], interrupedTime: [], cyclePeriod: []} 
+        }else if (this.currentAction.actionType === "Без мерцания"){
+          return {action: this.actionAttributes.action, actionType: this.actionAttributes.actionType, interrupedTime: [], cyclePeriod: []}
+        }
+        return this.actionAttributes;
       }
     },
     props: {

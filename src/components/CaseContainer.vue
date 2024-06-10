@@ -4,26 +4,22 @@
           <ConditionalBlock  v-for="(block, index) in blocks.conditionAttributes" :key="index"
           @attribute="updateAttribute('conditionAttributes', index, $event)" 
           :current="block" :conditionAttributes="model.conditionAttributes"/>
-          <div class="сaseBtnBlock">
+          <!-- <div class="сaseBtnBlock">
             <button class="сaseBtn" @click="addCase('conditionAttributes')">Добавить условие</button>
             <button class="сaseBtn" @click="removeCase('conditionAttributes')">Удалить условие</button>
-          </div>
+          </div> -->
         </div>
         <div class="cases">
           <ActionBlock v-for="(block, index) in blocks.actionAttributes" :key="index"
           @attribute="updateAttribute('actionAttributes', index, $event)" 
           :current="block" :actionAttributes="model.actionAttributes"/>
-          <!-- <div class="сaseBtnBlock">
-            <button class="сaseBtn" @click="addCase('actionAttributes')">Добавить действие</button>
-            <button class="сaseBtn" @click="removeCase('actionAttributes')">Удалить действие</button>
-          </div> -->
         </div>
     </div>
   </template>
   
 <script>
-import ActionBlock from './blocks/ActionBlock.vue';
-import ConditionalBlock from './blocks/ConditionalBlock.vue';
+import ActionBlock from './Cases/ActionCase.vue';
+import ConditionalBlock from './Cases/ConditionalCase.vue';
   
 export default {
   components: {
@@ -71,7 +67,7 @@ export default {
     height: 100%;
     display: flex;
     overflow: scroll;
-    border: 1px solid black;
+    background-color: var(--background-case-container);
   }
   .cases{
     display: block;

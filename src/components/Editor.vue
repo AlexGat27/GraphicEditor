@@ -3,7 +3,7 @@
     <div class="editorfield">
       <div class="counterItem">
         <div v-for="container in currentContour.containers" class="containerItem">
-          <BlockContainer @containerData="updateDataContour($event, container)" :model="model" :blocks="container"/>
+          <CaseContainer @containerData="updateDataContour($event, container)" :model="model" :blocks="container"/>
         </div>
         <div class="containerButtons">
           <button @click="addContainer()">&plus;</button>
@@ -18,25 +18,17 @@
       <button @click="popContour()">Удалить контур</button>
       <button @click="switchContour(1)" class="icon-btn arrow-forward"></button>
       <button @click="exportData()">Компиляция</button>
-
-      <!-- <div class="digitalPin">
-        <label>Номер цифрового пина</label>
-        <select v-model="currentContour.digitalPin">
-          <option v-for="digitalPin in filterDigitalPins" :value="digitalPin">{{ digitalPin }}</option>
-        </select>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import BlockContainer from './BlockContainer.vue';
-import SelectBlock from './blocks/SelectBlock.vue';
+import CaseContainer from './CaseContainer.vue';
 import { FileCreator } from '@/services/fileCreator';
 
 export default {
   components: {
-    BlockContainer, SelectBlock
+    CaseContainer
   },
   props:{
     model: {

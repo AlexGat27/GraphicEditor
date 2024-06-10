@@ -26,25 +26,29 @@
         this.$emit("model", this.currentModel);
       }).catch(er => console.error(er))
     },
+    
   }
   </script>
   
   <style scoped>
+    .block select{
+      border: 1px solid white;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+    }
     .block{
       width: 80%;
       height: 50px;
       margin: 5px;
-      border: 1px solid black;
-      border-radius: 10px;
-      cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: center;
       overflow: hidden;
-      padding: 10px;
+      background-color: none;
     }
-    p{
-      margin:0;
-      text-align: center;
+    label{
+      margin-bottom:5%;
+      color: white;
     }
   </style>

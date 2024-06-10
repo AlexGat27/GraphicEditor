@@ -2,8 +2,6 @@
   <div class="actionCase">
     <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.action" 
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-    <!-- <SelectBlock :blockTitle="title2" :attributes="filterActionAttributes.actionType" 
-    @attribute="updateAttribute('actionType', $event)" :current="currentAction.actionType"/> -->
     <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interrupedTime"
     @attribute="updateAttribute('interrupedTime', $event)" :current="currentAction.interrupedTime"/>
     <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.cyclePeriod"
@@ -13,8 +11,8 @@
 </template>
   
 <script>
-  import SelectBlock from "./SelectBlock.vue";
-  import InputBlock from "./InputBlock.vue";
+  import SelectBlock from "../blocks/SelectBlock.vue";
+  import InputBlock from "../blocks/InputBlock.vue";
 
   export default {
     components: {SelectBlock, InputBlock},
@@ -69,6 +67,6 @@
     align-items: center;
     height: 80%;
     width: 100%;
-    background-color: rgb(236, 252, 255);
+    background-color: var(--background-cases);
   }
 </style>

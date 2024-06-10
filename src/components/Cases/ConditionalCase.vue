@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import InputBlock from './InputBlock.vue';
-import SelectBlock from './SelectBlock.vue'
+import InputBlock from '../blocks/InputBlock.vue';
+import SelectBlock from '../blocks/SelectBlock.vue'
 
 export default {
   components: {SelectBlock, InputBlock},
@@ -70,6 +70,6 @@ export default {
     height: 80%;
     align-items: center;
     border-right: 2px dashed rgb(52, 52, 52);
-    background-color: rgb(222, 222, 222);
+    background-color: var(--background-cases);
   }
 </style>

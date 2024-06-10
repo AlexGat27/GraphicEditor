@@ -20,15 +20,16 @@
   <div class="editor"><Editor :model="model"/></div>
 </template>
 
-<style>
+<style scoped>
   .editor{
-    width:83%;
-    height: 98%;
-    padding: 1%;
+    width:95%;
+    height: 80%;
+    padding: 0;
+    margin-top: 1%;
   }
   .toolbox{
-    width:13%;
-    height: 98%;
-    padding: 1%;
+    width:100%;
+    height: 20%;
+    padding: 0;
   }
 </style>

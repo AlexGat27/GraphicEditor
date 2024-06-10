@@ -42,21 +42,25 @@ export default {
 </script>
 
 <style scoped>
-  .block{
-    min-width: 150px;
-    height: 60%;
-    margin: 5px;
-    border: 1px solid black;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 10px;
-    background-color: white;
-
-  }
+  .block select{
+      border: 1px solid var(--blocks-contours);
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: black;
+      color: var(--blocks-contours);
+    }
+    .block{
+      width: 80%;
+      height: 50px;
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      background-color: none;
+    }
   label{
     margin-bottom:5%;
+    color: var(--blocks-contours);
   }
 </style>

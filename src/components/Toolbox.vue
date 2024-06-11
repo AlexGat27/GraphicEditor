@@ -1,37 +1,19 @@
 <template>
-    <div class="titleBar">
-      <h3>MotoCan</h3>
-      <!-- <ChangeModel @model="updateModel($event)" id="changeModel"/> -->
-    </div>
-    <div class="contourBar">
-      <h3>Контуры</h3>
-      <button>Фара левая</button>
-      <button>Фара правая</button>
-      <button>Желтый левый</button>
-      <button>Желтый правый</button>
-      <button>Гудок</button>
-      <button>Подогрев сидения</button>
-      <button style="background-color: white; color: black; margin-left: auto;">SaveScenario</button>
-    </div>
+    <ContourBar></ContourBar>
+    <ScenarioBar></ScenarioBar>
+    <TitleBar></TitleBar>
 </template>
 
 <script>
-import ContourBar from './bars/'
+import ContourBar from './bars/ContourBar.vue';
+import ScenarioBar from './bars/ScenarioBar.vue';
+import TitleBar from './bars/TitleBar.vue';
 
 export default {
   components: {
-    ChangeModel
-  },
-  data(){
-    return {
-      model: {}
-    }
-  },
-  methods: {
-    updateModel(event){
-      this.model = event;
-      this.$emit("model", this.model);
-    }
+    ContourBar,
+    ScenarioBar,
+    TitleBar
   }
 }
 </script>

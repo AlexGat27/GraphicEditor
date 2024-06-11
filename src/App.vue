@@ -1,23 +1,29 @@
 <script>
-  import Editor from './components/Editor.vue';
-  import Toolbox from './components/Toolbox.vue';
+  import { modelAttributes } from './models/objects/modelsAttributes';
+  import defaultModel from './models/objects/defaultModel';
+  import Toolbox from './components/Toolbox.vue'; // Явный импорт компонента Toolbox
+  import Editor from './components/Editor.vue'; 
+
   export default {
+    name: 'App',
     components: {
       Toolbox,
       Editor
     },
-    data(){
+    // Предоставление текущей модели в приложении
+    provide() {
       return {
-        model: {},
-      }
-    },
-
+        currentModel: defaultModel,
+        modelAttributes: modelAttributes,
+        activeContourID: 0
+      };
+    }
   }
 </script>
 
 <template>
-  <div class="toolbox"><Toolbox @model="model = $event"/></div>
-  <div class="editor"><Editor :model="model"/></div>
+  <div class="toolbox"><Toolbox/></div>
+  <div class="editor"><Editor/></div>
 </template>
 
 <style scoped>

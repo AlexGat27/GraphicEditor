@@ -11,11 +11,12 @@
       <button>Желтый правый</button>
       <button>Гудок</button>
       <button>Подогрев сидения</button>
+      <button style="background-color: white; color: black; margin-left: auto;">SaveScenario</button>
     </div>
 </template>
 
 <script>
-import ChangeModel from './blocks/ChangeModelBlock.vue';
+import ContourBar from './bars/'
 
 export default {
   components: {
@@ -46,9 +47,11 @@ export default {
 }
 .contourBar{
   background-color: var(--background-toolbox-contourbar);
+  color: var(--blocks-contours);
 }
 .titleBar{
   background-color: var(--background-toolbox-titlebar);
+  color: yellow;
 }
 h3{
   margin: 0;
@@ -56,13 +59,24 @@ h3{
 
 .contourBar button{
   height: 90%;
-  width: 150px;
+  width: 100px;
   margin: 0;
   margin-left: 1%;
-  font-family: ;
+  font-size: 12px;
   color: var(--blocks-contours);
   background-color: var(--background-toolbox-contourbar);
   border: 1px solid var(--blocks-contours);
   border-radius: 5px;
+}
+
+
+.dashes3, .dots3{
+  color: yellow;
+}
+.dashes3::after{
+  content: '\2014\2014\2014';
+}
+.dots3::after{
+  content: '\2026';
 }
 </style>

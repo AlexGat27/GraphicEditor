@@ -11,7 +11,7 @@
 </template>
   
 <script>
-  import SelectBlock from "../blocks/SelectBlock.vue";
+  import SelectBlock from "../blocks/DropdownBlock.vue";
   import InputBlock from "../blocks/InputBlock.vue";
 
   export default {

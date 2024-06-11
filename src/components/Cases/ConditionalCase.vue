@@ -13,7 +13,7 @@
 
 <script>
 import InputBlock from '../blocks/InputBlock.vue';
-import SelectBlock from '../blocks/SelectBlock.vue'
+import SelectBlock from '../blocks/DropdownBlock.vue'
 
 export default {
   components: {SelectBlock, InputBlock},

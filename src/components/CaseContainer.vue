@@ -1,18 +1,10 @@
 <template>
     <div class="container">
         <div class="cases">
-          <ConditionalBlock  v-for="(block, index) in blocks.conditionAttributes" :key="index"
-          @attribute="updateAttribute('conditionAttributes', index, $event)" 
-          :current="block" :conditionAttributes="model.conditionAttributes"/>
-          <!-- <div class="сaseBtnBlock">
-            <button class="сaseBtn" @click="addCase('conditionAttributes')">Добавить условие</button>
-            <button class="сaseBtn" @click="removeCase('conditionAttributes')">Удалить условие</button>
-          </div> -->
+          <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index"/>
         </div>
         <div class="cases">
-          <ActionBlock v-for="(block, index) in blocks.actionAttributes" :key="index"
-          @attribute="updateAttribute('actionAttributes', index, $event)" 
-          :current="block" :actionAttributes="model.actionAttributes"/>
+          <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index"/>
         </div>
     </div>
   </template>
@@ -20,42 +12,68 @@
 <script>
 import ActionBlock from './Cases/ActionCase.vue';
 import ConditionalBlock from './Cases/ConditionalCase.vue';
+import {ActionCase, ConditionCase} from '../models/interfaces/compileModel';
+import { useMainStore } from '@/store';
   
 export default {
   components: {
     ActionBlock,
     ConditionalBlock,
   },
-  data(){
+  data() {
     return {
-      startAttributes: {
-        actionAttributes: {action: '', interrupedTime: '', cyclePeriod: '', power: 0},
-        conditionAttributes: {condition: '', value: '', inputSignal: '', spCanInterval: ''}
-      }
-    }
+      store: null
+    };
+  },
+  created(){
+    this.store = useMainStore();
   },
   props:{
-    model:{
-      type: Object,
+    containerID:{
+      type: Number,
       required: true
+    }
+  },
+  computed:{
+    currentModel: {
+      get(){
+          return this.store.currentModel;
+      },
+      set(value){
+          this.store.setCurrentModel(value);
+      }
     },
-    blocks:{
-      type: Object,
-      required: true
+    actionCases(){
+      return currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases;
+    },
+    conditionCases(){
+      return currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases
     }
   },
   methods: {
-    updateAttribute(type,index, event){
-      this.blocks[type][index] = event;
-      this.$emit('containerData', this.blocks);
-    },
     addCase(type){
-      let attributes = JSON.parse(JSON.stringify(this.startAttributes[type]))
-      this.blocks[type].push(attributes)
+      const currentModel = this.store.currentModel;
+      const selectedContour = currentModel.contours.find(contour => contour.selected);
+      if (type === "actionAttributes") {
+        selectedContour.containers[this.containerID].actionCases.push(new ActionCase());
+      } else if (type === "conditionAttributes") {
+        selectedContour.containers[this.containerID].conditionCases.push(new ConditionCase());
+      } else {
+        console.error("Произошла ошибка в добавлении кейса");
+      }
     },
     removeCase(type){
-      if (this.blocks[type].length > 1)
-        this.blocks[type].pop()
+      const currentModel = this.store.currentModel;
+      const selectedContour = currentModel.contours.find(contour => contour.selected);
+      const actionCases = selectedContour.containers[this.containerID].actionCases;
+      const conditionCases = selectedContour.containers[this.containerID].conditionCases;
+      if (type === "actionAttributes" && actionCases.length > 1) {
+        actionCases.pop();
+      } else if (type === "conditionAttributes" && conditionCases.length > 1) {
+        conditionCases.pop();
+      } else {
+        console.error("Произошла ошибка в удалении кейса");
+      }
     }
   }
 };

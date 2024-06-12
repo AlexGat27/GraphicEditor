@@ -1,15 +1,67 @@
 <template>
-    <div>
-      <!-- ваш шаблон компонента -->
+    <div class="scenarioBar">
+      <div class="leftPart">
+        <div style="width: 15px;"></div>
+        <h3>MotoCan</h3>
+        <div>Сценарий</div>
+      </div>
+      <div class="rightPart">
+        <button style="background-color: white; color: black;" @click="addContainer()">Добавить правило</button>
+        <button style="background-color: white; color: black;">SaveScenario</button>
+      </div>
     </div>
   </template>
   
-  <script>
-  export default {
-    // ваше определение компонента
+<script>
+import { Container } from '@/models/interfaces/compileModel';
+import { useMainStore } from '@/store';
+
+export default {
+  created(){
+    this.store = useMainStore();
+  },
+  computed:{
+    currentModel: {
+      get(){
+        return this.store.currentModel;
+      },
+      set(value){
+        this.store.setCurrentModel(value);
+      }
+    }
+  },
+  methods:{
+    addContainer(){
+      const currentModel = this.currentModel;
+      currentModel.contours.find(contour => contour.selected).containers.push(new Container())
+      this.currentModel = currentModel;
+    }
   }
-  </script>
+}
+</script>
   
-  <style scoped>
-  /* ваши стили компонента */
-  </style>
+<style scoped>
+.scenarioBar{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--background-toolbox-scenario);
+}
+.leftPart{
+  width: 20%;
+  justify-content: space-around;
+  display: inherit;
+  align-items: center;
+  position: relative;
+}
+.rightPart{
+  width: 30%;
+  justify-content: space-around;
+  display: inherit;
+  align-items: center;
+}
+
+</style>

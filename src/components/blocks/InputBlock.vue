@@ -1,7 +1,14 @@
 <template>
-  <div class="block">
-    <label>{{ blockTitle }}</label>
-    <input type="number" @change="updateCurrentAttribute()" v-model="reactiveCurrent">
+  <div class="block" @click="handleClick" @dblclick="handleDoubleClick">
+    <label v-if="blockTitle">{{ blockTitle }}</label>
+    <input type="text" 
+           v-model="reactiveCurrent" 
+           :readonly="!isEditable"
+           :class="{ editable: isEditable }"
+           @blur="isEditable = false"
+           @input="updateCurrentAttribute"
+           ref="input">
+    <!-- {{ isSelected }} -->
   </div>
 </template>
 
@@ -10,57 +17,94 @@ export default {
   props: {
     blockTitle: {
       type: String,
-      required: true
+      required: false
     },
     current: {
-      type: Number,
+      type: String,
       required: true,
     },
-    defaultValue: {
-      required: false
+    isSelected: {
+      type: Boolean,
+      required: true
     }
   },
-  data(){
+  data() {
     return {
-      reactiveCurrent: this.current // Создаем реактивное свойство на основе пропса
+      reactiveCurrent: this.current,
+      isEditable: false // Управляет режимом редактирования input
+    };
+  },
+  methods: {
+    updateCurrentAttribute() {
+      this.$emit('attribute', this.reactiveCurrent);
+      this.adjustWidth();
+    },
+    handleClick() {
+      // Если input не в режиме редактирования, добавляем класс selected
+      if (!this.isEditable) {
+        this.$emit('selected', true); // сначала сбросить выбранное состояние для всех блоков
+        this.$refs.input.classList.add('selected');
+      }
+    },
+    handleDoubleClick() {
+      this.isEditable = true;
+      this.$nextTick(() => {
+        this.$refs.input.focus();
+        this.$refs.input.classList.remove('selected');
+      });
+    },
+    adjustWidth() {
+      const input = this.$refs.input;
+      if (input) {
+        const minWidth = 50; // Минимальная ширина в пикселях
+        input.style.width = 'auto';
+        input.style.width = `${Math.max(input.scrollWidth, minWidth)}px`;
+      }
+    },
+  },
+  watch: {
+    reactiveCurrent() {
+      this.adjustWidth();
+    },
+    isSelected(newValue, oldValue) {
+      if (!newValue) {
+        this.$refs.input.classList.remove('selected');
+      }
     }
   },
-  methods:{
-    async updateCurrentAttribute() {
-      if (this.defaultValue !== null && this.defaultValue !== undefined){
-        await this.$emit('attribute', this.defaultValue);
-        this.reactiveCurrent = this.defaultValue;
-      }
-      else {
-        let intValue = parseInt(this.reactiveCurrent);
-        await this.$emit('attribute', intValue >= 0 && !isNaN(intValue) ? intValue : 0);
-        this.reactiveCurrent = this.current;
-      }
-    }
-  }
-}
+  mounted() {
+    this.adjustWidth();
+  },
+};
 </script>
 
 <style scoped>
-  .block input{
-      border: 1px solid var(--blocks-contours);
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: none;
-      color: var(--blocks-contours);
-    }
-    .block{
-      width: 80%;
-      height: 50px;
-      margin: 5px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow: hidden;
-      background-color: none;
-    }
-  label{
-    margin-bottom:5%;
+  .block input {
+    border: 1px solid var(--blocks-contours);
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: inherit;
+    color: var(--blocks-contours);
+    text-align: center;
+  }
+  .block {
+    min-width: 50px;
+    height: 100%;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: inherit;
+  }
+  .block input.editable {
+    cursor: text;
+    background-color: var(--selected-block);
+  }
+  .block input.selected {
+    background-color: var(--selected-block);
+  }
+  label {
+    margin: 0;
     color: var(--blocks-contours);
   }
 </style>

@@ -1,22 +1,24 @@
 <template>
   <div class="conditionCase">
-    <SelectBlock :blockTitle="title1" :attributes="mapCondition" 
+    <DropdownBlock :blockTitle="title1" :attributes="mapCondition" 
     @attribute="updateConditionParams('condition', $event)" :current="currentCondition.condition"/>
-    <SelectBlock :blockTitle="title2" :attributes="filterCondition.value" 
+    <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
     @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
-    <SelectBlock :blockTitle="title3" :attributes="filterCondition.inputSignal" 
-    @attribute="updateConditionParams('inputSignal', $event)" :current="currentCondition.inputSignal"/>
-    <SelectBlock :blockTitle="title4" :attributes="filterCondition.spCanInterval"
-    @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/>
+    <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
+    @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignal"/>
+    <!-- <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delays"
+    @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/> -->
   </div>
 </template>
 
 <script>
-import InputBlock from '../blocks/InputBlock.vue';
-import SelectBlock from '../blocks/DropdownBlock.vue'
+import DropdownBlock from '../blocks/DropdownBlock.vue';
+// import CompositeBlock from '../blocks/CompositeBlock.vue';
+import { useMainStore } from '@/store';
+import { ConditionCase } from '@/models/interfaces/compileModel';
 
 export default {
-  components: {SelectBlock, InputBlock},
+  components: {DropdownBlock},
   data(){
     return {
       title1: "Условие",
@@ -25,40 +27,56 @@ export default {
       title4: "Период считывания (сек)",
     }
   },
+  created() {
+    this.store = useMainStore(); // Используйте хранилище Pinia
+  },
   computed:{
+    currentModel: {
+      get(){
+          return this.store.currentModel;
+      },
+      set(value){
+          this.store.setCurrentModel(value);
+      }
+    },
+    conditionAttributes(){
+      return this.store.modelAttributes.conditionAttributes;
+    },
+    currentCondition(){
+      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
+    },
     filterCondition(){
       if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition)){
         return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
       }
       else {
-        return {value: [], inputSignal: [], spCanInterval: []} 
+        return {values: [], countSignals: [], delays: {}} 
       }
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);
     },
-    currentCondition(){
-      return this.current
-    }
   },
   props: {
-    conditionAttributes:{
-      type: Array,
+    caseID:{
+      type: Number,
       required: true
     },
-    current: {
-      type: Object,
-      required: true,
+    containerID:{
+      type: Number,
+      required: true
     }
   },
   methods: {
     updateConditionParams(type, event){
+      const currentModel = this.currentModel;
+      const currentCondition = currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
       if (type == 'condition'){
-        this.$emit("attribute", {condition: event, value: '', inputSignal: '', spCanInterval: ''})
+        currentCondition = new ConditionCase({condition: event});
       }else {
-        this.currentCondition[type] = event;
-        this.$emit("attribute", this.currentCondition);
+        currentCondition[type] = event;
       }
+      this.currentModel = currentModel;
     },
   }
 }

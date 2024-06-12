@@ -1,7 +1,6 @@
 export class ActionCase {
-    constructor(action, type, interruption, workingPeriod, power) {
+    constructor(action='', interruption='', workingPeriod='', power='') {
         this.action = action;
-        this.type = type;
         this.interruption = interruption;
         this.workingPeriod = workingPeriod;
         this.power = power;
@@ -9,33 +8,32 @@ export class ActionCase {
 }
 
 export class ConditionCase {
-    constructor(condition, value, countSignals, delayType, delayValue) {
+    constructor(condition='', value='', countSignals='', delay={delayType: '', delayValue: ''}) {
         this.condition = condition;
         this.value = value;
         this.countSignals = countSignals;
-        this.delay = {
-            type: delayType,
-            value: delayValue
-        };
+        this.delay = delay
     }
 }
 
 export class Container {
-    constructor(actionCase, conditionCase) {
-        this.actionCase = actionCase;
-        this.conditionCase = conditionCase;
+    constructor(actionCases=[], conditionCases=[]) {
+        this.actionCases = actionCases;
+        this.conditionCases = conditionCases;
     }
 }
 
 export class Contour {
-    constructor(contourID, rules) {
+    constructor(contourID, name=[], containers=[]) {
         this.contourID = contourID;
-        this.rules = rules;
+        this.name = name;
+        this.selected = false;
+        this.containers = containers;
     }
 }
 
 export class CompileModel {
-    constructor(scenario, contours) {
+    constructor(scenario, contours=[]) {
         this.scenario = scenario;
         this.contours = contours;
     }

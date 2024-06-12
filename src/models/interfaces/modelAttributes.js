@@ -18,9 +18,9 @@ export class ActionAttribute{
 }
 
 export class ModelAttributes {
-    constructor(scenario, conditionAttributes, actionAttribute) {
+    constructor(scenario, conditionAttributes, actionAttributes) {
         this.scenario = scenario;
         this.conditionAttributes = conditionAttributes;
-        this.actionAttribute = actionAttribute;
+        this.actionAttributes = actionAttributes;
     }
 }

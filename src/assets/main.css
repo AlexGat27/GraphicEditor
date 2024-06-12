@@ -1,10 +1,10 @@
 :root{
-  --blocks-contours: #868686;
-  --lines-cases: #424242;
+  --blocks-contours: #d7d7d7;
   --background-cases: #7f7f7f;
   --background-case-container: #17181A;
-  --background-toolbox-titlebar: #191919;
-  --background-toolbox-contourbar: #232527;
+  --background-toolbox-scenario: #191919;
+  --background-toolbox-contourbar: #1b1d20;
+  --selected-block: #454F58;
 }
 
 html, body{
@@ -20,7 +20,7 @@ html, body{
   width: 100%;
   height: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   background-color: black;
   color: white;
 }

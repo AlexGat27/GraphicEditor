@@ -2,8 +2,8 @@ import { ConditionAttribute, ModelAttributes, ActionAttribute } from "../interfa
 
 export const modelAttributes = [
     new ModelAttributes(
-        scenario = 'Model1',
-        conditionAttributes = [
+        'Model1',
+        [
             new ConditionAttribute("Фоторезистор", ["Вечер", "День"], ["Постоянно"], ["более", "менее", "равно"]),
             new ConditionAttribute(
                 "Сухой контакт", 
@@ -12,7 +12,7 @@ export const modelAttributes = [
                 ["более", "менее", "равно"]
             ),
         ],
-        actionAttribute = new ActionAttribute(
+        new ActionAttribute(
             ["Включить", "Мигать"], 
             ["Мигание", "Без мерцания"], 
             [100, 200, 300, 400, 500, 600], 

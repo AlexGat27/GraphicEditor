@@ -1,6 +1,4 @@
 <script>
-  import { modelAttributes } from './models/objects/modelsAttributes';
-  import defaultModel from './models/objects/defaultModel';
   import Toolbox from './components/Toolbox.vue'; // Явный импорт компонента Toolbox
   import Editor from './components/Editor.vue'; 
 
@@ -10,14 +8,6 @@
       Toolbox,
       Editor
     },
-    // Предоставление текущей модели в приложении
-    provide() {
-      return {
-        currentModel: defaultModel,
-        modelAttributes: modelAttributes,
-        activeContourID: 0
-      };
-    }
   }
 </script>
 
@@ -35,7 +25,7 @@
   }
   .toolbox{
     width:100%;
-    height: 20%;
+    height: 100px;
     padding: 0;
   }
 </style>

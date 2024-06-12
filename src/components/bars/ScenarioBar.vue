@@ -33,7 +33,9 @@ export default {
   methods:{
     addContainer(){
       const currentModel = this.currentModel;
-      currentModel.contours.find(contour => contour.selected).containers.push(new Container())
+      if (currentModel.contours.find(contour => contour.selected && contour.name !== '')){
+        currentModel.contours.find(contour => contour.selected && contour.name !== '').containers.push(new Container())
+      }
       this.currentModel = currentModel;
     }
   }

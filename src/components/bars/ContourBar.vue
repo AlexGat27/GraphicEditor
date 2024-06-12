@@ -29,7 +29,6 @@ export default {
     computed:{
         currentModel: {
             get(){
-                console.log(this.store.currentModel)
                 return this.store.currentModel;
             },
             set(value){

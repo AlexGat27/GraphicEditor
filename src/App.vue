@@ -18,10 +18,12 @@
 
 <style scoped>
   .editor{
-    width:95%;
-    height: 80%;
-    padding: 0;
-    margin-top: 1%;
+    width:calc(100vw - 40px);
+    height: calc(100vh - 100px);
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    padding: 20px;
   }
   .toolbox{
     width:100%;

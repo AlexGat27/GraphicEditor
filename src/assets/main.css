@@ -1,7 +1,7 @@
 :root{
   --blocks-contours: #d7d7d7;
-  --background-cases: #7f7f7f;
-  --background-case-container: #17181A;
+  --background-container: #525E7A;
+  --background-editorfield: #17181A;
   --background-toolbox-scenario: #191919;
   --background-toolbox-contourbar: #1b1d20;
   --selected-block: #454F58;

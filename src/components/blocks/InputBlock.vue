@@ -4,11 +4,10 @@
     <input type="text" 
            v-model="reactiveCurrent" 
            :readonly="!isEditable"
-           :class="{ editable: isEditable }"
+           :class="{ selected: isSelected, editable: isEditable }"
            @blur="isEditable = false"
            @input="updateCurrentAttribute"
            ref="input">
-    <!-- {{ isSelected }} -->
   </div>
 </template>
 
@@ -40,18 +39,13 @@ export default {
       this.adjustWidth();
     },
     handleClick() {
-      // Если input не в режиме редактирования, добавляем класс selected
-      if (!this.isEditable) {
-        this.$emit('selected', true); // сначала сбросить выбранное состояние для всех блоков
+      if (!this.isSelected) {
+        this.$emit('selected', true); 
         this.$refs.input.classList.add('selected');
       }
     },
     handleDoubleClick() {
       this.isEditable = true;
-      this.$nextTick(() => {
-        this.$refs.input.focus();
-        this.$refs.input.classList.remove('selected');
-      });
     },
     adjustWidth() {
       const input = this.$refs.input;
@@ -98,7 +92,6 @@ export default {
   }
   .block input.editable {
     cursor: text;
-    background-color: var(--selected-block);
   }
   .block input.selected {
     background-color: var(--selected-block);

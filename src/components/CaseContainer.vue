@@ -1,11 +1,17 @@
 <template>
-    <div class="container">
-        <div class="cases">
-          <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index"/>
-        </div>
-        <div class="cases">
-          <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index"/>
-        </div>
+    <div style="width: 100%; display: block;">
+      <div class="container">
+          <div class="cases">
+            <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index"/>
+          </div>
+          <div class="cases">
+            <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index"/>
+          </div>
+      </div>
+      <div class="addButtons">
+        <button style="background-color: none; border: none;">Добавить условие</button>
+        <button>Добавить действие</button>
+      </div>
     </div>
   </template>
   
@@ -44,10 +50,10 @@ export default {
       }
     },
     actionCases(){
-      return currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases;
+      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases;
     },
     conditionCases(){
-      return currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases
+      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases
     }
   },
   methods: {
@@ -82,9 +88,11 @@ export default {
 <style scoped>
   .container{
     width: 100%;
-    height: 100%;
+    margin:15px;
+    margin-bottom: 20px;
+    height: fit-content;
     display: flex;
-    overflow: scroll;
+    overflow: hidden;
     background-color: var(--background-case-container);
   }
   .cases{
@@ -92,14 +100,9 @@ export default {
     height: 100%;
     max-height: 150px;
   }
-  .сaseBtnBlock{
-    width: 100%;
-    height: 20%;
+  .addButtons{
     display: flex;
-  }
-  .сaseBtn{
-    width: 50%;
-    height: 100%;
+    justify-content: space-around;
   }
 </style>
   

@@ -24,7 +24,7 @@ export class Container {
 }
 
 export class Contour {
-    constructor(contourID, name=[], containers=[]) {
+    constructor(contourID, name='', containers=[]) {
         this.contourID = contourID;
         this.name = name;
         this.selected = false;

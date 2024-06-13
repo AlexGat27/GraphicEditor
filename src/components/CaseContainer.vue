@@ -1,12 +1,12 @@
 <template>
     <div class="containerItem">
-      <h3 style="position: absolute; top: 15px; left: 15px; margin: 0;">Правило {{ containerID + 1 }}</h3>
+      <h3 style="margin: 15px; margin-bottom: 10px;">Правило {{ containerID + 1 }}</h3>
       <div class="container">
           <div class="cases">
-            <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index" :containerID="containerID"/>
+            <ConditionCase  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index" :containerID="containerID"/>
           </div>
           <div class="cases">
-            <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index" :containerID="containerID"/>
+            <ActionCase v-for="(actionCase, index) in actionCases" :key="index" :caseID="index" :containerID="containerID"/>
           </div>
       </div>
       <div class="addButtons">
@@ -17,15 +17,15 @@
   </template>
   
 <script>
-import ActionBlock from './Cases/ActionCase.vue';
-import ConditionalBlock from './Cases/ConditionalCase.vue';
-import {ActionCase, ConditionCase} from '../models/interfaces/compileModel';
+import ActionCase from './Cases/ActionCase.vue';
+import ConditionCase from './Cases/ConditionCase.vue';
+import {ActionCaseModel, ConditionCaseModel} from '../models/interfaces/compileModel';
 import { useMainStore } from '@/store';
   
 export default {
   components: {
-    ActionBlock,
-    ConditionalBlock,
+    ActionCase,
+    ConditionCase,
   },
   data() {
     return {
@@ -62,9 +62,9 @@ export default {
       const currentModel = this.store.currentModel;
       const selectedContour = currentModel.contours.find(contour => contour.selected);
       if (type === "actionAttributes") {
-        selectedContour.containers[this.containerID].actionCases.push(new ActionCase());
+        selectedContour.containers[this.containerID].actionCases.push(new ActionCaseModel());
       } else if (type === "conditionAttributes") {
-        selectedContour.containers[this.containerID].conditionCases.push(new ConditionCase());
+        selectedContour.containers[this.containerID].conditionCases.push(new ConditionCaseModel());
       } else {
         console.error("Произошла ошибка в добавлении кейса");
       }
@@ -88,27 +88,32 @@ export default {
   
 <style scoped>
 .containerItem{
-  min-height: 150px;
-  height: fit-content;
   width: calc(100% - 4px);
   margin-bottom: 45px;
+  padding-bottom: 20px;
   border-radius: 10px;
   border: 2px solid var(--contour-container);
   position: relative;
 }
   .container{
-    position: absolute;
-    left: 15px;
-    top: 30px;
+    width: var(100% - 30px);
+    margin-left: 15px;
+    margin-right: 15px;
     height: fit-content;
     display: flex;
+    justify-content: space-between;
     overflow: hidden;
     background-color: var(--background-case-container);
   }
   .cases{
     display: block;
     height: 100%;
-    max-height: 150px;
+    padding-right: 20px;
+    width: 50%;
+  }
+  .cases:first-child{
+    border-right: 1px solid var(--contour-elements); 
+    margin-right: 20px;
   }
   .addButtons{
     display: flex;

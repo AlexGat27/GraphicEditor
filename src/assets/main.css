@@ -1,5 +1,4 @@
 :root{
-  --blocks-contours: #d7d7d7;
   --contour-elements: #7f7f7f;
   --contour-container: #525E7A;
   --background-editorfield: #17181A;
@@ -23,5 +22,5 @@ html, body{
   align-items: center;
   justify-content: start;
   background-color: black;
-  color: white;
+  color: var(--contour-elements);
 }

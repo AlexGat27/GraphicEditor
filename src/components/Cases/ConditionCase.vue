@@ -6,6 +6,7 @@
     @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
     <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
     @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignal"/>
+    <div class="closeIcon"></div>
     <!-- <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delays"
     @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/> -->
   </div>
@@ -15,7 +16,7 @@
 import DropdownBlock from '../blocks/DropdownBlock.vue';
 // import CompositeBlock from '../blocks/CompositeBlock.vue';
 import { useMainStore } from '@/store';
-import { ConditionCase } from '@/models/interfaces/compileModel';
+import { ConditionCaseModel } from '@/models/interfaces/compileModel';
 
 export default {
   components: {DropdownBlock},
@@ -23,8 +24,8 @@ export default {
     return {
       title1: "Условие",
       title2: "Значение",
-      title3: "Количество входящих сигналов",
-      title4: "Период считывания (сек)",
+      title3: "Кол-во входящих сигналов",
+      title4: "Период считывания (delay)",
     }
   },
   created() {
@@ -48,6 +49,7 @@ export default {
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
     },
     filterCondition(){
+      console.log(this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition))
       if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition)){
         return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
       }
@@ -74,7 +76,7 @@ export default {
       const currentModel = this.currentModel;
       const currentCondition = currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
       if (type == 'condition'){
-        currentCondition = new ConditionCase({condition: event});
+        currentCondition = new ConditionCaseModel({condition: event});
       }else {
         currentCondition[type] = event;
       }
@@ -87,9 +89,39 @@ export default {
 <style scoped>
   .conditionCase{
     display: flex;
-    height: 80%;
+    height: 60px;
     align-items: center;
-    border-right: 2px dashed rgb(52, 52, 52);
+    justify-content: space-between;
     background-color: var(--background-cases);
+  }
+
+  .closeIcon {
+    width: 30px; /* Ширина квадрата */
+    height: 30px; /* Высота квадрата */
+    background-color: transparent;
+    border: 1px solid var(--contour-elements); /* Цвет рамки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: translateY(10px);
+    border-radius: 5px;
+  }
+
+.closeIcon::before,
+.closeIcon::after {
+  content: '';
+  position: absolute;
+  width: 20px; /* Ширина палочек крестика */
+  height: 1px; /* Высота палочек крестика */
+  background-color: var(--contour-elements); /* Цвет палочек крестика */
+}
+
+  .closeIcon::before {
+    transform: rotate(45deg); /* Первая палочка крестика */
+  }
+
+  .closeIcon::after {
+    transform: rotate(-45deg); /* Вторая палочка крестика */
   }
 </style>

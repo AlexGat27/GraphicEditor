@@ -1,4 +1,4 @@
-export class ActionCase {
+export class ActionCaseModel {
     constructor(action='', interruption='', workingPeriod='', power='') {
         this.action = action;
         this.interruption = interruption;
@@ -7,7 +7,7 @@ export class ActionCase {
     }
 }
 
-export class ConditionCase {
+export class ConditionCaseModel {
     constructor(condition='', value='', countSignals='', delay={delayType: '', delayValue: ''}) {
         this.condition = condition;
         this.value = value;
@@ -16,14 +16,14 @@ export class ConditionCase {
     }
 }
 
-export class Container {
-    constructor(actionCases=[new ActionCase()], conditionCases=[new ConditionCase()]) {
+export class ContainerModel {
+    constructor(actionCases=[new ActionCaseModel()], conditionCases=[new ConditionCaseModel()]) {
         this.actionCases = actionCases;
         this.conditionCases = conditionCases;
     }
 }
 
-export class Contour {
+export class ContourModel {
     constructor(contourID, name='', containers=[]) {
         this.contourID = contourID;
         this.name = name;

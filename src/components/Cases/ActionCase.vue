@@ -8,6 +8,7 @@
     @attribute="updateAttribute('workingPeriod', $event)" :current="currentAction.workingPeriod"/>
     <SelectBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"
     :attributes="filterActionAttributes.power"/>
+    <div class="closeIcon"></div>
   </div>
 </template>
   
@@ -22,9 +23,9 @@
       return {
         title1: 'Действие',
         title2: 'Тип',
-        title3: "Прерывание (ms)",
-        title4: "Период цикла (сек)",
-        title5: "Мощность контура (%)",
+        title3: "Прерывание",
+        title4: "Период работы",
+        title5: "Мощность контура",
         store: null
       }
     },
@@ -80,8 +81,40 @@
   .actionCase{
     display: flex;
     align-items: center;
-    height: 80%;
+    justify-content: space-between;
+    height: 60px;
     width: 100%;
+    margin: 0;
     background-color: var(--background-cases);
+  }
+
+  .closeIcon {
+    width: 30px; /* Ширина квадрата */
+    height: 30px; /* Высота квадрата */
+    background-color: transparent;
+    border: 1px solid var(--contour-elements); /* Цвет рамки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: translateY(10px);
+    border-radius: 5px;
+  }
+
+.closeIcon::before,
+.closeIcon::after {
+  content: '';
+  position: absolute;
+  width: 20px; /* Ширина палочек крестика */
+  height: 1px; /* Высота палочек крестика */
+  background-color: var(--contour-elements); /* Цвет палочек крестика */
+}
+
+  .closeIcon::before {
+    transform: rotate(45deg); /* Первая палочка крестика */
+  }
+
+  .closeIcon::after {
+    transform: rotate(-45deg); /* Вторая палочка крестика */
   }
 </style>

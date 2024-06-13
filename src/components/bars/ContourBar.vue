@@ -63,7 +63,6 @@ export default {
         align-items: center;
         justify-content: start;
         background-color: var(--background-toolbox-contourbar);
-        color: var(--blocks-contours);
         overflow: hidden;
     }
     .contours{

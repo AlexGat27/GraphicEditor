@@ -1,6 +1,6 @@
 <template>
   <div class="editorfield">
-    <div class="counterItem" v-if="activeContour">
+    <div class="counterItem" v-if="activeContour && activeContour.containers.length > 0">
       <CaseContainer v-for="(container, index) in activeContour.containers" :key="index" :containerID="index"/>
     </div>
   </div>

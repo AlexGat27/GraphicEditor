@@ -13,7 +13,7 @@
   </template>
   
 <script>
-import { Container } from '@/models/interfaces/compileModel';
+import { ContainerModel } from '@/models/interfaces/compileModel';
 import { useMainStore } from '@/store';
 
 export default {
@@ -34,7 +34,7 @@ export default {
     addContainer(){
       const currentModel = this.currentModel;
       if (currentModel.contours.find(contour => contour.selected && contour.name !== '')){
-        currentModel.contours.find(contour => contour.selected && contour.name !== '').containers.push(new Container())
+        currentModel.contours.find(contour => contour.selected && contour.name !== '').containers.push(new ContainerModel())
       }
       this.currentModel = currentModel;
     }

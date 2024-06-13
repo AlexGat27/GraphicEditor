@@ -74,11 +74,11 @@ export default {
 
 <style scoped>
   .block input {
-    border: 1px solid var(--blocks-contours);
+    border: 1px solid var(--contour-elements);
     border-radius: 5px;
     cursor: pointer;
     background-color: inherit;
-    color: var(--blocks-contours);
+    color: var(--contour-elements);
     text-align: center;
   }
   .block {

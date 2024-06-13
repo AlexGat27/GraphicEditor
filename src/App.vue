@@ -28,6 +28,7 @@
     display: flex;
     align-items: start;
     justify-content: start;
+    overflow: hidden;
     overflow-y: scroll;
   }
   .toolbox{

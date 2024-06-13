@@ -40,10 +40,11 @@ export default {
       }
     },
     conditionAttributes(){
-      console.log(this.store.modelAttributes.conditionAttributes)
-      return this.store.modelAttributes.conditionAttributes;
+      return this.store.modelAttributes[0].conditionAttributes;
     },
     currentCondition(){
+      console.log(this.containerID)
+      console.log(this.currentModel.contours.find(contour => contour.selected).containers[this.containerID])
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
     },
     filterCondition(){

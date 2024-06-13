@@ -3,10 +3,10 @@
       <h3 style="position: absolute; top: 15px; left: 15px; margin: 0;">Правило {{ containerID + 1 }}</h3>
       <div class="container">
           <div class="cases">
-            <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index"/>
+            <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index" :containerID="containerID"/>
           </div>
           <div class="cases">
-            <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index"/>
+            <ActionBlock v-for="(actionCase, index) in actionCases" :key="index" :caseID="index" :containerID="containerID"/>
           </div>
       </div>
       <div class="addButtons">

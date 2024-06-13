@@ -13,17 +13,22 @@
 
 <template>
   <div class="toolbox"><Toolbox/></div>
-  <div class="editor"><Editor/></div>
+  <div style="overflow: hidden; width: 100%; height: 100%; position: relative;">
+    <div class="editor"><Editor/></div>
+  </div>
 </template>
 
 <style scoped>
   .editor{
-    width:calc(100vw - 40px);
-    height: calc(100vh - 100px);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    bottom: 0;
+    right: -17px;
     display: flex;
-    align-items: end;
-    justify-content: center;
-    padding: 20px;
+    align-items: start;
+    justify-content: start;
+    overflow-y: scroll;
   }
   .toolbox{
     width:100%;

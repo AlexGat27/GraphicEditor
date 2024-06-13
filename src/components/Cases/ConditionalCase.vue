@@ -40,6 +40,7 @@ export default {
       }
     },
     conditionAttributes(){
+      console.log(this.store.modelAttributes.conditionAttributes)
       return this.store.modelAttributes.conditionAttributes;
     },
     currentCondition(){

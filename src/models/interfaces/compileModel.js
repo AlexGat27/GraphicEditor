@@ -17,7 +17,7 @@ export class ConditionCase {
 }
 
 export class Container {
-    constructor(actionCases=[], conditionCases=[]) {
+    constructor(actionCases=[new ActionCase()], conditionCases=[new ConditionCase()]) {
         this.actionCases = actionCases;
         this.conditionCases = conditionCases;
     }

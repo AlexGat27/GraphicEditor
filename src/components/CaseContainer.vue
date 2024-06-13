@@ -1,5 +1,6 @@
 <template>
-    <div style="width: 100%; display: block;">
+    <div class="containerItem">
+      <h3 style="position: absolute; top: 15px; left: 15px; margin: 0;">Правило {{ containerID + 1 }}</h3>
       <div class="container">
           <div class="cases">
             <ConditionalBlock  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index"/>
@@ -86,10 +87,19 @@ export default {
 </script>
   
 <style scoped>
+.containerItem{
+  min-height: 150px;
+  height: fit-content;
+  width: calc(100% - 4px);
+  margin-bottom: 45px;
+  border-radius: 10px;
+  border: 2px solid var(--contour-container);
+  position: relative;
+}
   .container{
-    width: 100%;
-    margin:15px;
-    margin-bottom: 20px;
+    position: absolute;
+    left: 15px;
+    top: 30px;
     height: fit-content;
     display: flex;
     overflow: hidden;
@@ -103,6 +113,19 @@ export default {
   .addButtons{
     display: flex;
     justify-content: space-around;
+    position: absolute;
+    bottom: -15px;
+    width: 100%;
+    transform: translateY(50%);
+  }
+  .addButtons button{
+    color: var(--contour-elements);
+    border: none;           /* Убирает границу */
+    background: none;       /* Убирает фон */
+    color: inherit;         /* Устанавливает цвет текста, такой же как у родительского элемента */
+    padding: 0;             /* Убирает внутренние отступы */
+    font: inherit;          /* Устанавливает шрифт, такой же как у родительского элемента */
+    cursor: pointer; 
   }
 </style>
   

@@ -1,9 +1,7 @@
 <template>
   <div class="editorfield">
     <div class="counterItem" v-if="activeContour">
-      <div v-for="(container, index) in activeContour.containers" :key="index" class="containerItem">
-        <CaseContainer :containerID="index"/>
-      </div>
+      <CaseContainer v-for="(container, index) in activeContour.containers" :key="index" :containerID="index"/>
     </div>
   </div>
 </template>
@@ -35,8 +33,8 @@ export default {
 
 <style scoped>
 .editorfield {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 20px);
+  height: fit-content;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -54,12 +52,5 @@ export default {
   align-items: center;
   flex-direction: column;
 }
-.containerItem{
-  overflow: hidden;
-  min-height: 150px;
-  width: calc(100% - 4px);
-  margin-bottom: 30px;
-  border-radius: 10px;
-  border: 2px solid var(--background-container)
-}
+
 </style>

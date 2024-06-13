@@ -1,8 +1,8 @@
 <template>
     <div class="scenarioBar">
       <div class="leftPart">
-        <div style="width: 15px;"></div>
-        <h3>MotoCan</h3>
+        <div style="width: 15px; margin-left: 5px;"></div>
+        <h3 style="margin-left: 25px; margin-right: 25px;">MotoCan</h3>
         <div>Сценарий</div>
       </div>
       <div class="rightPart">
@@ -54,7 +54,6 @@ export default {
 }
 .leftPart{
   width: 20%;
-  justify-content: space-around;
   display: inherit;
   align-items: center;
   position: relative;

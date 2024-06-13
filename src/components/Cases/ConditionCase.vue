@@ -5,7 +5,7 @@
     <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
     @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
     <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
-    @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignal"/>
+    @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignals"/>
     <div class="closeIcon"></div>
     <!-- <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delays"
     @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/> -->
@@ -44,13 +44,12 @@ export default {
       return this.store.modelAttributes[0].conditionAttributes;
     },
     currentCondition(){
-      console.log(this.containerID)
-      console.log(this.currentModel.contours.find(contour => contour.selected).containers[this.containerID])
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
     },
     filterCondition(){
-      console.log(this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition))
+      console.log(this.currentCondition.condition)
       if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition)){
+        
         return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
       }
       else {
@@ -74,11 +73,10 @@ export default {
   methods: {
     updateConditionParams(type, event){
       const currentModel = this.currentModel;
-      const currentCondition = currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
       if (type == 'condition'){
-        currentCondition = new ConditionCaseModel({condition: event});
+        currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID] = new ConditionCaseModel(event);
       }else {
-        currentCondition[type] = event;
+        currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID][type] = event;
       }
       this.currentModel = currentModel;
     },

@@ -1,13 +1,13 @@
 <template>
   <div class="actionCase">
-    <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.action" 
+    <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.actions" 
     @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-    <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interruption"
+    <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interruptions"
     @attribute="updateAttribute('interruption', $event)" :current="currentAction.interruption"/>
-    <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.workingPeriod"
+    <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.workingPeriod.types"
     @attribute="updateAttribute('workingPeriod', $event)" :current="currentAction.workingPeriod"/>
     <SelectBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"
-    :attributes="filterActionAttributes.power"/>
+    :attributes="filterActionAttributes.powers"/>
     <div class="closeIcon"></div>
   </div>
 </template>
@@ -47,8 +47,9 @@
       },
       filterActionAttributes(){
         if (this.currentAction.action === "Включить" || this.currentAction.action === ''){
-          return {action: this.actionAttributes.action, interruption: [], workingPeriod: [], power: this.actionAttributes.power} 
+          return {actions: this.actionAttributes.actions, interruptions: [], workingPeriods: [], powers: this.actionAttributes.powers} 
         }
+        console.log(this.actionAttributes);
         return this.actionAttributes;
       }
     },

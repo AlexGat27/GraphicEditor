@@ -1,6 +1,9 @@
 <template>
     <div class="containerItem">
-      <h3 style="margin: 15px; margin-bottom: 10px;">Правило {{ containerID + 1 }}</h3>
+      <div style="margin: 15px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+        <h3 style="margin:0;">Правило {{ containerID + 1 }}</h3>
+        <button style="text-decoration: underline;" @click="removeContainer()">удалить правило</button>
+      </div>
       <div class="container">
           <div class="cases">
             <ConditionCase  v-for="(conditionCase, index) in conditionCases" :key="index" :caseID="index" :containerID="containerID"/>
@@ -10,8 +13,8 @@
           </div>
       </div>
       <div class="addButtons">
-        <button style="background-color: none; border: none;">Добавить условие</button>
-        <button>Добавить действие</button>
+        <button @click="addCase('conditionAttributes')">Добавить условие</button>
+        <button @click="addCase('actionAttributes')">Добавить действие</button>
       </div>
     </div>
   </template>
@@ -59,28 +62,18 @@ export default {
   },
   methods: {
     addCase(type){
-      const currentModel = this.store.currentModel;
-      const selectedContour = currentModel.contours.find(contour => contour.selected);
-      if (type === "actionAttributes") {
+      const selectedContour = this.currentModel.contours.find(contour => contour.selected);
+      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 1) {
         selectedContour.containers[this.containerID].actionCases.push(new ActionCaseModel());
-      } else if (type === "conditionAttributes") {
+      } else if (type === "conditionAttributes" && selectedContour.containers[this.containerID].conditionCases.length < 3) {
         selectedContour.containers[this.containerID].conditionCases.push(new ConditionCaseModel());
       } else {
-        console.error("Произошла ошибка в добавлении кейса");
+        console.error("Превышено количество");
       }
     },
-    removeCase(type){
-      const currentModel = this.store.currentModel;
-      const selectedContour = currentModel.contours.find(contour => contour.selected);
-      const actionCases = selectedContour.containers[this.containerID].actionCases;
-      const conditionCases = selectedContour.containers[this.containerID].conditionCases;
-      if (type === "actionAttributes" && actionCases.length > 1) {
-        actionCases.pop();
-      } else if (type === "conditionAttributes" && conditionCases.length > 1) {
-        conditionCases.pop();
-      } else {
-        console.error("Произошла ошибка в удалении кейса");
-      }
+    removeContainer(){
+      const selectedContour = this.currentModel.contours.find(contour => contour.selected);
+      selectedContour.containers.splice(this.containerID, 1);
     }
   }
 };
@@ -122,8 +115,9 @@ export default {
     bottom: -15px;
     width: 100%;
     transform: translateY(50%);
+    text-decoration: underline;
   }
-  .addButtons button{
+  button{
     color: var(--contour-elements);
     border: none;           /* Убирает границу */
     background: none;       /* Убирает фон */
@@ -131,6 +125,9 @@ export default {
     padding: 0;             /* Убирает внутренние отступы */
     font: inherit;          /* Устанавливает шрифт, такой же как у родительского элемента */
     cursor: pointer; 
+  }
+  .removeRuleBtn{
+
   }
 </style>
   

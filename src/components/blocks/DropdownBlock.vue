@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <label>{{ blockTitle }}</label>
+    <label v-if="blockTitle">{{ blockTitle }}</label>
     <div class="select-container">
       <select ref="selectElement" v-model="currentAttribute" @change="updateAttribute" :style="{ width: selectWidth }">
         <option v-for="attribute in attributes" :key="attribute" :value="attribute">{{ attribute }}</option>
@@ -14,7 +14,7 @@ export default {
   props: {
     blockTitle: {
       type: String,
-      required: true
+      required: false
     },
     attributes: {
       type: Array,

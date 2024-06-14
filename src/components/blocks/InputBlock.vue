@@ -50,8 +50,8 @@ export default {
     adjustWidth() {
       const input = this.$refs.input;
       if (input) {
-        const minWidth = 50; // Минимальная ширина в пикселях
-        input.style.width = 'auto';
+        const minWidth = 100;
+        input.style.width = '100px';
         input.style.width = `${Math.max(input.scrollWidth, minWidth)}px`;
       }
     },
@@ -75,6 +75,9 @@ export default {
 <style scoped>
   .block input {
     border: 1px solid var(--contour-elements);
+    height: 100%;
+    padding: 0;
+    margin: 0;
     border-radius: 5px;
     cursor: pointer;
     background-color: inherit;
@@ -83,8 +86,7 @@ export default {
   }
   .block {
     min-width: 50px;
-    height: 100%;
-    margin: 5px;
+    height: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -95,6 +97,7 @@ export default {
   }
   .block input.selected {
     background-color: var(--selected-block);
+    color: white;
   }
   label {
     margin: 0;

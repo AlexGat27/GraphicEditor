@@ -8,7 +8,7 @@ export class ActionCaseModel {
 }
 
 export class ConditionCaseModel {
-    constructor(condition='', value='', countSignals='', delay={delayType: '', delayValue: ''}) {
+    constructor(condition='', value='', countSignals='', delay={type: '', value: ''}) {
         this.condition = condition;
         this.value = value;
         this.countSignals = countSignals;

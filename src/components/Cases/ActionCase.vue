@@ -8,7 +8,7 @@
     @attribute="updateAttribute('workingPeriod', $event)" :current="currentAction.workingPeriod"/>
     <SelectBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"
     :attributes="filterActionAttributes.powers"/>
-    <div class="closeIcon"></div>
+    <div class="closeIcon" @click="removeCase()"></div>
   </div>
 </template>
   
@@ -47,7 +47,7 @@
       },
       filterActionAttributes(){
         if (this.currentAction.action === "Включить" || this.currentAction.action === ''){
-          return {actions: this.actionAttributes.actions, interruptions: [], workingPeriods: [], powers: this.actionAttributes.powers} 
+          return {actions: this.actionAttributes.actions, interruptions: [], workingPeriod: {types: []}, powers: this.actionAttributes.powers} 
         }
         console.log(this.actionAttributes);
         return this.actionAttributes;
@@ -74,6 +74,10 @@
         }
         this.currentModel = currentModel;
       },
+      removeCase(){
+        const actionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases;
+        if (actionCases.length > 1){actionCases.slice(this.caseID, 1)}
+      }
     }
   }
 </script>

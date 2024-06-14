@@ -1,31 +1,34 @@
 <template>
-  <div class="conditionCase">
-    <DropdownBlock :blockTitle="title1" :attributes="mapCondition" 
-    @attribute="updateConditionParams('condition', $event)" :current="currentCondition.condition"/>
-    <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
-    @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
-    <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
-    @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignals"/>
-    <div class="closeIcon"></div>
-    <!-- <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delays"
-    @attribute="updateConditionParams('spCanInterval', $event)" :current="currentCondition.spCanInterval"/> -->
+  <div>
+    <div class="divider" v-if="caseID > 0"></div> <!-- Добавлен горизонтальный разделитель -->
+    <div class="conditionCase">
+      <DropdownBlock :blockTitle="title1" :attributes="mapCondition" 
+      @attribute="updateConditionParams('condition', $event)" :current="currentCondition.condition"/>
+      <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
+      @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
+      <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
+      @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignals"/>
+      <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delayTypes"
+      @attribute="updateConditionParams('delay', $event)" :current="currentCondition.delay"/>
+      <div class="closeIcon" @click="removeCase()"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import DropdownBlock from '../blocks/DropdownBlock.vue';
-// import CompositeBlock from '../blocks/CompositeBlock.vue';
+import CompositeBlock from '../blocks/CompositeBlock.vue';
 import { useMainStore } from '@/store';
 import { ConditionCaseModel } from '@/models/interfaces/compileModel';
 
 export default {
-  components: {DropdownBlock},
+  components: {DropdownBlock, CompositeBlock},
   data(){
     return {
       title1: "Условие",
       title2: "Значение",
       title3: "Кол-во входящих сигналов",
-      title4: "Период считывания (delay)",
+      title4: "Период считывания",
     }
   },
   created() {
@@ -47,14 +50,8 @@ export default {
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
     },
     filterCondition(){
-      console.log(this.currentCondition.condition)
-      if (this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition)){
-        
-        return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
-      }
-      else {
-        return {values: [], countSignals: [], delays: {}} 
-      }
+      const conditionAttributes = this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
+      return conditionAttributes || { values: [], countSignals: [], delayTypes: [] };
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);
@@ -80,11 +77,24 @@ export default {
       }
       this.currentModel = currentModel;
     },
+    removeCase(){
+      const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
+      if (conditionCases.length > 1){
+        conditionCases.splice(this.caseID, 1)
+      }
+    }
   }
 }
 </script>
   
 <style scoped>
+  .divider {
+    height: 0.5px; /* Высота разделителя */
+    background-color: var(--contour-elements); /* Цвет разделителя */
+    margin-top: 20px; /* Отступ сверху для разделителя */
+    margin-bottom: 5px;
+  }
+
   .conditionCase{
     display: flex;
     height: 60px;

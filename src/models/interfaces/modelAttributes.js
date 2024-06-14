@@ -3,7 +3,7 @@ export class ConditionAttribute {
         this.condition = condition;
         this.values = values;
         this.countSignals = countSignals;
-        this.delays = { types: delayTypes };
+        this.delayTypes = delayTypes;
     }
 }
 

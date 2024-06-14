@@ -1,13 +1,15 @@
 <template>
     <div class="scenarioBar">
       <div class="leftPart">
-        <div style="width: 15px; margin-left: 5px;"></div>
-        <h3 style="margin-left: 25px; margin-right: 25px;">MotoCan</h3>
+        <span style="margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text)">&equiv;</span>
+        <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text)">MotoCan</h3>
         <div>Сценарий</div>
       </div>
       <div class="rightPart">
-        <button style="background-color: white; color: black;" @click="addContainer()">Добавить правило</button>
-        <button style="background-color: white; color: black;">SaveScenario</button>
+        <button  @click="addContainer()">Добавить правило</button>
+        <button >SaveScenario</button>
+        <span style="margin: 0;margin-right: 20px; font-size: 20px; color: var(--yellow-text); 
+        font-weight: bold; transform: translateY(-5px);">&hellip;</span>
       </div>
     </div>
   </template>
@@ -59,10 +61,13 @@ export default {
   position: relative;
 }
 .rightPart{
-  width: 30%;
-  justify-content: space-around;
+  justify-content: end;
   display: inherit;
   align-items: center;
+}
+.rightPart button {
+  background-color: #d9d9d9; color: black; margin-right: 20px;
+  border-radius: 5px; height: 30px;
 }
 
 </style>

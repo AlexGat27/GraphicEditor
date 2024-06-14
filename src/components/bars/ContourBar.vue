@@ -1,6 +1,6 @@
 <template>
     <div class="contourBar">
-        <h3 style="margin-left: 45px; margin-right: 45px;">Контуры</h3>
+        <h3 style="margin-left: 45px; margin-right: 25px;">Контуры</h3>
         <ul class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
                 <InputBlock :current="contour.name" :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
@@ -69,10 +69,12 @@ export default {
         display: flex;
         width: fit-content;
         align-items: center;
-        height: 80%;
+        height: 100%;
         overflow: hidden;
         overflow-x: auto;
         list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
     .contours li{
         margin-right: 15px;

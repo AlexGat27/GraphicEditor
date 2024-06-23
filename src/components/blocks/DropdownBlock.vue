@@ -57,7 +57,7 @@ export default {
         document.body.appendChild(dummyElement);
         const width = dummyElement.offsetWidth;
         document.body.removeChild(dummyElement);
-        this.selectWidth = `${width + 30 + 10}px`; // добавляем немного дополнительного пространства
+        this.selectWidth = `${width + 30 + 20}px`; // добавляем немного дополнительного пространства
       } else {
         this.selectWidth = '60px'; // Устанавливаем ширину по умолчанию, если нет атрибутов
       }
@@ -83,7 +83,7 @@ export default {
 }
 
 label {
-  margin-bottom: 5%;
+  margin-bottom: 5px;
   font-size: 15px;
 }
 

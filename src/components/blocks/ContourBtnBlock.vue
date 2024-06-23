@@ -1,13 +1,14 @@
 <template>
-  <div class="block" @click="handleClick" @dblclick="handleDoubleClick">
-    <label v-if="blockTitle">{{ blockTitle }}</label>
-    <input type="text" 
+  <div class="block" @click="handleClick">
+    <!-- <label v-if="blockTitle">{{ blockTitle }}</label> -->
+    <button ref="button">{{ blockTitle }}</button>
+    <!-- <input type="text" 
            v-model="reactiveCurrent" 
            :readonly="!isEditable"
            :class="{ selected: isSelected, editable: isEditable }"
            @blur="isEditable = false"
            @input="updateCurrentAttribute"
-           ref="input">
+           ref="input"> -->
   </div>
 </template>
 
@@ -18,10 +19,10 @@ export default {
       type: String,
       required: false
     },
-    current: {
-      type: String,
-      required: true,
-    },
+    // current: {
+    //   type: String,
+    //   required: true,
+    // },
     isSelected: {
       type: Boolean,
       required: true
@@ -41,43 +42,55 @@ export default {
     handleClick() {
       if (!this.isSelected) {
         this.$emit('selected', true); 
-        this.$refs.input.classList.add('selected');
+        this.$refs.button.classList.add('selected');
       }
     },
-    handleDoubleClick() {
-      this.isEditable = true;
-    },
-    adjustWidth() {
-      const input = this.$refs.input;
-      if (input) {
-        const minWidth = 100;
-        input.style.width = '100px';
-        input.style.width = `${Math.max(input.scrollWidth, minWidth)}px`;
-      }
-    },
+    // handleDoubleClick() {
+    //   this.isEditable = true;
+    // },
+    // adjustWidth() {
+    //   const input = this.$refs.input;
+    //   if (input) {
+    //     const minWidth = 100;
+    //     input.style.width = '100px';
+    //     input.style.width = `${Math.max(input.scrollWidth, minWidth)}px`;
+    //   }
+    // },
   },
   watch: {
-    reactiveCurrent() {
-      this.adjustWidth();
-    },
+    // reactiveCurrent() {
+    //   this.adjustWidth();
+    // },
     isSelected(newValue, oldValue) {
       if (!newValue) {
-        this.$refs.input.classList.remove('selected');
+        this.$refs.button.classList.remove('selected');
       }
     }
   },
-  mounted() {
-    this.adjustWidth();
-  },
+  // mounted() {
+  //   this.adjustWidth();
+  // },
 };
 </script>
 
 <style scoped>
-  .block input {
+  /* .block input {
     border: 1px solid var(--contour-elements);
     height: 100%;
     padding: 0;
     margin: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: inherit;
+    color: var(--contour-elements);
+    text-align: center;
+  } */
+  button{
+    border: 1px solid var(--contour-elements);
+    height: 100%;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
     border-radius: 5px;
     cursor: pointer;
     background-color: inherit;
@@ -92,10 +105,10 @@ export default {
     justify-content: center;
     background-color: inherit;
   }
-  .block input.editable {
+  /* .block input.editable {
     cursor: text;
-  }
-  .block input.selected {
+  } */
+  .block button.selected {
     background-color: var(--selected-block);
     color: white;
   }

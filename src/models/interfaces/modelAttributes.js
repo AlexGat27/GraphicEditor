@@ -8,11 +8,10 @@ export class ConditionAttribute {
 }
 
 export class ActionAttribute{
-    constructor(actions, types, interruptions, workingPeriodTypes, powers){
+    constructor(actions, interruptions, workingPeriod, powers){
         this.actions = actions;
-        this.types = types;
         this.interruptions = interruptions;
-        this.workingPeriod = {types: workingPeriodTypes};
+        this.workingPeriod = workingPeriod;
         this.powers = powers;
     }
 }

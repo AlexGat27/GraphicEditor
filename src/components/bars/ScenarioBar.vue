@@ -1,7 +1,7 @@
 <template>
     <div class="scenarioBar">
       <div class="leftPart">
-        <span style="margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text)">&equiv;</span>
+        <span style="margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text); font-weight: bold;">&equiv;</span>
         <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text)">MotoCan</h3>
         <div>Сценарий</div>
       </div>
@@ -36,6 +36,7 @@ export default {
     addContainer(){
       const currentModel = this.currentModel;
       if (currentModel.contours.find(contour => contour.selected && contour.name !== '')){
+        console.log(currentModel)
         currentModel.contours.find(contour => contour.selected && contour.name !== '').containers.push(new ContainerModel())
       }
       this.currentModel = currentModel;
@@ -68,6 +69,7 @@ export default {
 .rightPart button {
   background-color: #d9d9d9; color: black; margin-right: 20px;
   border-radius: 5px; height: 30px;
+  cursor: pointer;
 }
 
 </style>

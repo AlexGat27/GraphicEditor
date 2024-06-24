@@ -2,7 +2,7 @@ import { ArduinoConverter } from "./arduinoConverter";
 
 export class FileCreator{
     constructor(newFilePath){
-        this.filePath = 'src/assets/default.txt';
+        this.filePath = '/default.txt';
         this.newFilePath = newFilePath;
     }
 

@@ -9,7 +9,6 @@
 <script>
 import CaseContainer from './CaseContainer.vue';
 import { useMainStore } from '@/store';
-import { FileCreator } from '@/services/fileCreator';
 
 export default {
   components: {

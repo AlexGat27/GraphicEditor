@@ -3,20 +3,20 @@
         <h3 style="margin-left: 45px; margin-right: 25px;">Контуры</h3>
         <ul class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
-                <InputBlock :current="contour.name" :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
-                @selected="updateActiveContour($event, index)"/>
+                <ContourBtnBlock :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
+                @selected="updateActiveContour($event, index)" :blockTitle="`Контур ${index + 1}`"/>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
-import InputBlock from '../blocks/InputBlock.vue';
+import ContourBtnBlock from '../blocks/ContourBtnBlock.vue';
 import {useMainStore} from '../../store';
 
 export default {
     components:{
-        InputBlock
+        ContourBtnBlock
     },
     data(){
         return {

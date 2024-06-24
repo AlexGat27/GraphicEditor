@@ -10,25 +10,30 @@
       @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignals"/>
       <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delayTypes"
       @attribute="updateConditionParams('delay', $event)" :current="currentCondition.delay"/>
-      <div class="closeIcon" @click="removeCase()"></div>
+      <div class="closeIcon" @click="setShowConfirm()"></div>
     </div>
+    <ConfirmModal :message="'Точно хотите удалить условие?'" :isVisible="showConfirmModal" 
+    @confirm="removeCase" @cancel="showConfirmModal = false" />
   </div>
 </template>
 
 <script>
 import DropdownBlock from '../blocks/DropdownBlock.vue';
 import CompositeBlock from '../blocks/CompositeBlock.vue';
+import ConfirmModal from '../shared/ConfirmModal.vue';
 import { useMainStore } from '@/store';
 import { ConditionCaseModel } from '@/models/interfaces/compileModel';
 
 export default {
-  components: {DropdownBlock, CompositeBlock},
+  components: { DropdownBlock, CompositeBlock, ConfirmModal },
   data(){
     return {
       title1: "Условие",
       title2: "Значение",
       title3: "Кол-во входящих сигналов",
-      title4: "Период считывания",
+      title4: "Период считывания (sec)",
+      store: null,
+      showConfirmModal: false
     }
   },
   created() {
@@ -72,49 +77,54 @@ export default {
       const currentModel = this.currentModel;
       if (type == 'condition'){
         currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID] = new ConditionCaseModel(event);
-      }else {
+      } else {
         currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID][type] = event;
       }
       this.currentModel = currentModel;
     },
-    removeCase(){
+    setShowConfirm(){
       const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
       if (conditionCases.length > 1){
-        conditionCases.splice(this.caseID, 1)
+        this.showConfirmModal = true;
       }
+    },
+    removeCase(){
+      const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
+      conditionCases.splice(this.caseID, 1);
+      this.showConfirmModal = false;
     }
   }
 }
 </script>
   
 <style scoped>
-  .divider {
-    height: 0.5px; /* Высота разделителя */
-    background-color: var(--contour-elements); /* Цвет разделителя */
-    margin-top: 20px; /* Отступ сверху для разделителя */
-    margin-bottom: 5px;
-  }
+.divider {
+  height: 0.5px; /* Высота разделителя */
+  background-color: var(--contour-elements); /* Цвет разделителя */
+  margin-top: 20px; /* Отступ сверху для разделителя */
+  margin-bottom: 5px;
+}
 
-  .conditionCase{
-    display: flex;
-    height: 60px;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--background-cases);
-  }
+.conditionCase {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--background-cases);
+}
 
-  .closeIcon {
-    width: 30px; /* Ширина квадрата */
-    height: 30px; /* Высота квадрата */
-    background-color: transparent;
-    border: 1px solid var(--contour-elements); /* Цвет рамки */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transform: translateY(10px);
-    border-radius: 5px;
-  }
+.closeIcon {
+  width: 30px; /* Ширина квадрата */
+  height: 30px; /* Высота квадрата */
+  background-color: transparent;
+  border: 1px solid var(--contour-elements); /* Цвет рамки */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translateY(10px);
+  border-radius: 5px;
+}
 
 .closeIcon::before,
 .closeIcon::after {
@@ -125,11 +135,11 @@ export default {
   background-color: var(--contour-elements); /* Цвет палочек крестика */
 }
 
-  .closeIcon::before {
-    transform: rotate(45deg); /* Первая палочка крестика */
-  }
+.closeIcon::before {
+  transform: rotate(45deg); /* Первая палочка крестика */
+}
 
-  .closeIcon::after {
-    transform: rotate(-45deg); /* Вторая палочка крестика */
-  }
+.closeIcon::after {
+  transform: rotate(-45deg); /* Вторая палочка крестика */
+}
 </style>

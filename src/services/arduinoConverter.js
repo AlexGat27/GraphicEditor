@@ -8,43 +8,43 @@ export class ArduinoConverter{
     }
 
     _createConditionStringRecord(container){
-        switch(container.countConditions) {
+        switch(container.conditionCases.length) {
             case 1:
-                const con = container.conditionAttributes[0];
+                const con = container.conditionCases[0];
                 if (con.condition === "Сухой контакт"){
-                    this.updatedLoopContent += parseInt(con.inputSignal) ? 
-                    `   con[${this.conIndex}].checkOneValue(buttons[${con.value}].isPressed(${con.inputSignal}, ${con.spCanInterval}));\n` :
-                    `   con[${this.conIndex}].checkOneValue(buttons[${con.value}].isHold(${con.spCanInterval}));\n`
+                    this.updatedLoopContent += parseInt(con.countSignals) ? 
+                    `   con[${this.conIndex}].checkOneValue(buttons[${con.value}].isPressed(${con.countSignals}, ${con.delay.value}));\n` :
+                    `   con[${this.conIndex}].checkOneValue(buttons[${con.value}].isHold(${con.delay.value}));\n`
                 }else if (con.condition === "Фоторезистор"){
                     this.updatedLoopContent += con.value === "День" ? 
-                    `   con[${this.conIndex}].checkOneValue(day_night(${con.spCanInterval}));\n` :
-                    `   con[${this.conIndex}].checkOneValue(!day_night(${con.spCanInterval}));\n`
+                    `   con[${this.conIndex}].checkOneValue(day_night(${con.delay.value}));\n` :
+                    `   con[${this.conIndex}].checkOneValue(!day_night(${con.delay.value}));\n`
                 }
                 break;
             case 2:
                 this.updatedLoopContent += `   con[${this.conIndex}].checkTwoValues(`
-                container.conditionAttributes.forEach(con =>{
+                container.conditionCases.forEach(con =>{
                     if (con.condition === "Сухой контакт"){
-                        this.updatedLoopContent += parseInt(con.inputSignal) ? 
-                        `buttons[${con.value}].isPressed(${con.inputSignal}, ${con.spCanInterval}), ` :
-                        `buttons[${con.value}].isHold(${con.spCanInterval}), `
+                        this.updatedLoopContent += parseInt(con.countSignals) ? 
+                        `buttons[${con.value}].isPressed(${con.countSignals}, ${con.delay.value}), ` :
+                        `buttons[${con.value}].isHold(${con.delay.value}), `
                     }else if (con.condition === "Фоторезистор"){
                         this.updatedLoopContent += con.value === "День" ? 
-                        `day_night(${con.spCanInterval}), ` :`!day_night(${con.spCanInterval}), `
+                        `day_night(${con.delay.value}), ` :`!day_night(${con.delay.value}), `
                     }
                 })
                 this.updatedLoopContent = this.updatedLoopContent.slice(0, this.updatedLoopContent.length - 2) + `);\n`;
                 break;
             case 3:
                 this.updatedLoopContent += `   con[${this.conIndex}].checkThreeValues(`
-                container.conditionAttributes.forEach(con =>{
+                container.conditionCases.forEach(con =>{
                     if (con.condition === "Сухой контакт"){
-                        this.updatedLoopContent += parseInt(con.inputSignal) ? 
-                        `buttons[${con.value}].isPressed(${con.inputSignal}, ${con.spCanInterval}), ` :
-                        `buttons[${con.value}].isHold(${con.spCanInterval}), `
+                        this.updatedLoopContent += parseInt(con.countSignals) ? 
+                        `buttons[${con.value}].isPressed(${con.countSignals}, ${con.delay.value}), ` :
+                        `buttons[${con.value}].isHold(${con.delay.value}), `
                     }else if (con.condition === "Фоторезистор"){
                         this.updatedLoopContent += con.value === "День" ? 
-                        `day_night(${con.spCanInterval}), ` :`!day_night(${con.spCanInterval}), `
+                        `day_night(${con.delay.value}), ` :`!day_night(${con.delay.value}), `
                     }
                 })
                 this.updatedLoopContent = this.updatedLoopContent.slice(0, this.updatedLoopContent.length - 2) + `);\n`;
@@ -56,24 +56,29 @@ export class ArduinoConverter{
     }
 
     _createActionStringRecord(container, contourID){
-        container.actionAttributes.forEach(act =>{
-            if (act.action === "Включить"){
-                if (act.actionType === "Без мерцания"){
+        container.actionCases.forEach(act =>{
+            switch(act.action){
+                case "Включить":
                     this.updatedLoopContent += `      kontours[${contourID}].turnON(${act.power});\n`;
-                }else if (act.actionType === "Мигание"){
-                    if (act.cyclePeriod === "Постоянно" || act.cyclePeriod === ''){
-                        this.updatedLoopContent += `      kontours[${contourID}].blink(${act.interrupedTime}, ${act.interrupedTime}, ${act.power});\n`;
+                    break;
+                case "Мигать":
+                    if (act.workingPeriod === "Постоянно" || act.workingPeriod === ''){
+                        this.updatedLoopContent += `      kontours[${contourID}].blink(${act.interruption}, ${act.interruption}, ${act.power});\n`;
                     }else{
-                        this.updatedLoopContent += `      kontours[${contourID}].blinkInPeriod(${act.interrupedTime}, ${act.interrupedTime}, ${act.cyclePeriod}, ${act.power});\n`;
+                        this.updatedLoopContent += `      kontours[${contourID}].blinkInPeriod(${act.interruption}, ${act.interruption}, ${act.workingPeriod}, ${act.power});\n`;
                     }
-                }
-            }else if (act.action === "Выключить"){
-                this.updatedLoopContent += `      kontours[${contourID}].turnOFF();\n`
+                    break;
+                case "Выключить":
+                    this.updatedLoopContent += `      kontours[${contourID}].turnOFF();\n`
+                    break;
+                default:
+                    break;
             }
         })
     }
 
     createStringRecord(fileString, data){
+        console.log(data)
         fileString = fileString.replace(/int countCon = (\d+);/, `int countCon = ${data.countContainers};`);
         data.contours.forEach(contour => {
             contour.containers.forEach(container => {

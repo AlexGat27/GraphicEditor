@@ -69,9 +69,9 @@ export default {
   methods: {
     addCase(type){
       const selectedContour = this.currentModel.contours.find(contour => contour.selected);
-      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 5) {
+      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 2) {
         selectedContour.containers[this.containerID].actionCases.push(new ActionCaseModel());
-      } else if (type === "conditionAttributes" && selectedContour.containers[this.containerID].conditionCases.length < 5) {
+      } else if (type === "conditionAttributes" && selectedContour.containers[this.containerID].conditionCases.length < 3) {
         selectedContour.containers[this.containerID].conditionCases.push(new ConditionCaseModel());
       } else {
         console.error("Превышено количество");

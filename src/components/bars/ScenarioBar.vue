@@ -7,7 +7,7 @@
       </div>
       <div class="rightPart">
         <button  @click="addContainer()">Добавить правило</button>
-        <button >SaveScenario</button>
+        <button @click="saveScenario()">SaveScenario</button>
         <span style="margin: 0;margin-right: 20px; font-size: 20px; color: var(--yellow-text); 
         font-weight: bold; transform: translateY(-5px);">&hellip;</span>
       </div>
@@ -17,6 +17,7 @@
 <script>
 import { ContainerModel } from '@/models/interfaces/compileModel';
 import { useMainStore } from '@/store';
+import { FileCreator } from '@/services/fileCreator';
 
 export default {
   created(){
@@ -35,11 +36,41 @@ export default {
   methods:{
     addContainer(){
       const currentModel = this.currentModel;
-      if (currentModel.contours.find(contour => contour.selected && contour.name !== '')){
-        console.log(currentModel)
-        currentModel.contours.find(contour => contour.selected && contour.name !== '').containers.push(new ContainerModel())
+      const potentialContour = currentModel.contours.find(contour => contour.selected && contour.name !== '');
+      if (potentialContour && potentialContour.containers.length < 5){
+        potentialContour.containers.push(new ContainerModel())
       }
       this.currentModel = currentModel;
+      console.log(currentModel)
+    },
+    saveScenario(){
+      let isNullValues = false;
+      let compileModel = {countContainers: 0, ...this.currentModel}
+      compileModel.contours.forEach(contour => {
+        contour.containers.forEach(container => {
+          container.conditionCases.forEach(attr => {
+            if (attr.condition === '' || attr.value === '' || attr.countSignals === '' || 
+            attr.delay.type === '' || attr.delay.value === ''){
+              console.error("Не все поля условия заполнены");
+              isNullValues = true;
+              return;
+            }
+          })
+          container.actionCases.forEach(attr => {
+            if (attr.action === '' || attr.power === '' || (attr.action === 'Мигать' && (attr.interruption === '' || attr.workingPeriod === ''))){
+              console.error("Не все поля действия заполнены");
+              isNullValues = true;
+              return;
+            }
+          })
+          if (isNullValues) return;
+        });
+        compileModel.countContainers += contour.containers.length;
+        if (isNullValues) return;
+      });
+      if (isNullValues) return;
+      const fileCreator = new FileCreator('compile.txt')
+      fileCreator.saveTxtFile(compileModel);
     }
   }
 }

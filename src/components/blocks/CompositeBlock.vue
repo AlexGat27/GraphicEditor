@@ -70,19 +70,24 @@ import DropdownBlock from './DropdownBlock.vue';
     align-items: center;
     height: 30px;
     width: 100%;
+    padding: 1px;
   }
   
   .block input {
     border: 1px solid var(--contour-elements);
     height: 100%;
     padding: 0;
-    margin-left: 10px;
+    margin-right: 3px;
     width: 50px;
     border-radius: 5px;
     cursor: pointer;
     background-color: inherit;
     color: var(--contour-elements);
     text-align: center;
+  }
+  .block input::-webkit-outer-spin-button,
+  .block input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
   }
   </style>
   

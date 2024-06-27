@@ -15,7 +15,7 @@
     </div>
     <div class="addButtons">
       <button class="add-button" @click="addCase('conditionAttributes')">Добавить условие</button>
-      <button class="add-button" @click="addCase('actionAttributes')">Добавить действие</button>
+      <!-- <button class="add-button" @click="addCase('actionAttributes')">Добавить действие</button> -->
     </div>
     <ConfirmModal :message="'Точно хотите удалить правило?'" :isVisible="showConfirmModal" 
     @confirm="removeContainer" @cancel="showConfirmModal = false" />
@@ -69,7 +69,7 @@ export default {
   methods: {
     addCase(type){
       const selectedContour = this.currentModel.contours.find(contour => contour.selected);
-      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 2) {
+      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 1) {
         selectedContour.containers[this.containerID].actionCases.push(new ActionCaseModel());
       } else if (type === "conditionAttributes" && selectedContour.containers[this.containerID].conditionCases.length < 3) {
         selectedContour.containers[this.containerID].conditionCases.push(new ConditionCaseModel());
@@ -118,10 +118,10 @@ export default {
 }
 .addButtons {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   position: absolute;
   bottom: -15px;
-  width: 100%;
+  width: 50%;
   transform: translateY(50%);
   text-decoration: underline;
 }

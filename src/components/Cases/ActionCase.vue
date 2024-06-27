@@ -54,7 +54,8 @@ export default {
       return this.store.modelAttributes[0].actionAttributes;
     },
     filterActionAttributes() {
-      if (this.currentAction.action === "Включить" || this.currentAction.action === '' || this.currentAction.action === "Выключить") {
+      if (this.currentAction.action === "Включить" || this.currentAction.action === '' || 
+      this.currentAction.action === "Выключить" || this.currentAction.action === "Включить/Выключить") {
         return {
           actions: this.actionAttributes.actions,
           interruptions: [],

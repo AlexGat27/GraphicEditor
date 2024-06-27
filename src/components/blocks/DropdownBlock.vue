@@ -91,6 +91,7 @@ label {
   position: relative;
   display: inline-block;
   width: 100%;
+  padding: 1px;
 }
 
 .select-container select {

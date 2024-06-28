@@ -68,9 +68,9 @@ import DropdownBlock from './DropdownBlock.vue';
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 30px;
+    height: 32px;
     width: 100%;
-    padding: 1px;
+    padding: 0;
   }
   
   .block input {

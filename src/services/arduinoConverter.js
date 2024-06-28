@@ -69,9 +69,13 @@ export class ArduinoConverter{
                     }
                     break;
                 case "Выключить":
-                    this.updatedLoopContent += `      kontours[${contourID}].turnOFF();\n`
+                    this.updatedLoopContent += `      kontours[${contourID}].turnOFF();\n`;
+                    break;
+                case "Включить/Выключить":
+                    this.updatedLoopContent += `      kontours[${contourID}].toggle(${act.power});\n`;
                     break;
                 default:
+                    console.error("Нет такого действия");
                     break;
             }
         })

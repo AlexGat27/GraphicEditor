@@ -2,14 +2,14 @@
     <div class="scenarioBar">
       <div class="leftPart">
         <span style="margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text); font-weight: bold;">&equiv;</span>
-        <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text)">MotoCan</h3>
+        <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text); font-size: 16px;" class="fira-sans-medium">MotoCan</h3>
         <div>Сценарий</div>
       </div>
-      <div class="rightPart">
+      <div class="rightPart fira-sans-regular" style="font-size: 12px;">
         <button  @click="addContainer()">Добавить правило</button>
         <button @click="saveScenario()">SaveScenario</button>
-        <span style="margin: 0;margin-right: 20px; font-size: 20px; color: var(--yellow-text); 
-        font-weight: bold; transform: translateY(-5px);">&hellip;</span>
+        <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
+        font-weight: bold; transform: translateY(-10px);">&hellip;</span>
       </div>
     </div>
   </template>

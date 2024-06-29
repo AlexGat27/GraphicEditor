@@ -3,7 +3,7 @@
       <label for="compose">{{blockTitle}}</label>
       <div class="select-container" id="compose">
         <DropdownBlock :attributes="attributes" @attribute="updateDropdown" :current="currentAttribute.type"/>
-        <input type="number" v-model="currentAttribute.value" @input="updateInput">
+        <input type="number" v-model="currentAttribute.value" @input="updateInput" class="fira-sans-regular" style="font-size: 12px;">
       </div>
     </div>
   </template>
@@ -53,32 +53,33 @@ import DropdownBlock from './DropdownBlock.vue';
   <style scoped>
   .block {
     height: 100%;
+    min-width: 100px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     overflow: hidden;
     background-color: none;
   }
   
   label {
-    margin-bottom: 5%;
-    font-size: 15px;
+    margin: 0;
+    font-size: 10px;
   }
   .select-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 32px;
+    overflow: hidden;
     width: 100%;
     padding: 0;
   }
   
   .block input {
     border: 1px solid var(--contour-elements);
-    height: 100%;
-    padding: 0;
-    margin-right: 3px;
-    width: 50px;
+    height: 28.4px;
+    padding: 0 10px 0 10px;
+    margin:0;
+    width: 20px;
     border-radius: 5px;
     cursor: pointer;
     background-color: inherit;

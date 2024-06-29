@@ -102,27 +102,27 @@ export default {
   height: 0.5px; /* Высота разделителя */
   background-color: var(--contour-elements); /* Цвет разделителя */
   margin-top: 20px; /* Отступ сверху для разделителя */
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .conditionCase {
   display: flex;
-  height: 60px;
+  height: 47px;
   align-items: center;
   justify-content: space-between;
   background-color: var(--background-cases);
 }
 
 .closeIcon {
-  width: 30px; /* Ширина квадрата */
-  height: 30px; /* Высота квадрата */
+  width: 28.4px; /* Ширина квадрата */
+  height: 28.4px; /* Высота квадрата */
   background-color: transparent;
   border: 1px solid var(--contour-elements); /* Цвет рамки */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transform: translateY(10px);
+  transform: translateY(7px);
   border-radius: 5px;
 }
 

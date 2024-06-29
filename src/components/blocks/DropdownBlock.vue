@@ -2,7 +2,8 @@
   <div class="block">
     <label v-if="blockTitle">{{ blockTitle }}</label>
     <div class="select-container">
-      <select ref="selectElement" v-model="currentAttribute" @change="updateAttribute" :style="{ width: selectWidth }">
+      <select ref="selectElement" v-model="currentAttribute" @change="updateAttribute" 
+      :style="{ width: selectWidth }" class="fira-sans-regular">
         <option v-for="attribute in attributes" :key="attribute" :value="attribute">{{ attribute }}</option>
       </select>
     </div>
@@ -57,7 +58,7 @@ export default {
         document.body.appendChild(dummyElement);
         const width = dummyElement.offsetWidth;
         document.body.removeChild(dummyElement);
-        this.selectWidth = `${width + 30 + 20}px`; // добавляем немного дополнительного пространства
+        this.selectWidth = `${width + 30 + 10}px`; // добавляем немного дополнительного пространства
       } else {
         this.selectWidth = '60px'; // Устанавливаем ширину по умолчанию, если нет атрибутов
       }
@@ -77,14 +78,14 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   overflow: hidden;
   background-color: none;
 }
 
 label {
-  margin-bottom: 5px;
-  font-size: 15px;
+  margin: 0;
+  font-size: 10px;
 }
 
 .select-container {
@@ -96,10 +97,12 @@ label {
 
 .select-container select {
   width: calc(100% - 30px); /* Уменьшаем ширину на padding-right для размещения стрелки */
-  padding: 0 30px 0 15px; /* Устанавливаем padding-left для текста */
+  max-width: 180px;
+  padding: 0 10px 0 10px; /* Устанавливаем padding-left для текста */
   border: 1px solid var(--contour-elements);
   border-radius: 5px;
   cursor: pointer;
+  font-size: 12px;
   background-color: var(--background-editorfield);
   color: var(--contour-elements);
   height: 30px;

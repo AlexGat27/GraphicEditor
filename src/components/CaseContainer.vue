@@ -1,7 +1,7 @@
 <template>
   <div class="containerItem">
     <div style="margin: 15px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-      <h3 style="margin:0;">Правило {{ containerID + 1 }}</h3>
+      <h3 style="margin:0; font-size: 18px;" class="fira-sans-light">Правило {{ containerID + 1 }}</h3>
       <button class="delete-button" @click="showConfirmModal = true">удалить правило</button>
     </div>
     <div class="container">
@@ -124,6 +124,7 @@ export default {
   width: 50%;
   transform: translateY(50%);
   text-decoration: underline;
+  text-decoration-skip-ink: none;
 }
 button {
   border: none;
@@ -134,10 +135,13 @@ button {
 }
 .add-button {
   color: var(--contour-elements);
+  font-size: 10px;
 }
 .delete-button {
   color: var(--contour-elements);
   text-decoration: underline;
+  text-decoration-skip-ink: none;
+  font-size: 10px;
 }
 .verticalLines {
   width: 5px;

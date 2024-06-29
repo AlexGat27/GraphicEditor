@@ -1,7 +1,7 @@
 <template>
   <div class="block" @click="handleClick">
     <!-- <label v-if="blockTitle">{{ blockTitle }}</label> -->
-    <button ref="button">{{ blockTitle }}</button>
+    <button ref="button" class="fira-sans-regular">{{ blockTitle }}</button>
     <!-- <input type="text" 
            v-model="reactiveCurrent" 
            :readonly="!isEditable"
@@ -96,6 +96,7 @@ export default {
     background-color: inherit;
     color: var(--contour-elements);
     text-align: center;
+    font-size: 12px;
   }
   .block {
     min-width: 50px;

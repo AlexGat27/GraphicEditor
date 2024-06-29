@@ -1,6 +1,6 @@
 <template>
     <div class="contourBar">
-        <h3 style="margin-left: 45px; margin-right: 25px;">Контуры</h3>
+        <h3 style="margin-left: 45px; margin-right: 25px; font-size: 16px;" class="fira-sans-regular">Контуры</h3>
         <ul class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
                 <ContourBtnBlock :isSelected="contour.selected" @attribute="updateModelName($event, index)" 

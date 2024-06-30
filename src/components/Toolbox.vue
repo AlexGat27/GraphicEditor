@@ -19,5 +19,9 @@ export default {
 .bar{
   height: 50%;
   width: 100%;
+  overflow-x: auto;
+}
+.bar::-webkit-scrollbar{
+  display: none;
 }
 </style>

@@ -58,6 +58,7 @@ export default {
     .contourBar{
         height: 100%;
         width: 100%;
+        min-width: 820px;
         margin: 0;
         display: flex;
         align-items: center;

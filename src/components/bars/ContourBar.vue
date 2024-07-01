@@ -4,7 +4,7 @@
         <ul class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
                 <ContourBtnBlock :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
-                @selected="updateActiveContour($event, index)" :blockTitle="`Контур ${index + 1}`"/>
+                @selected="updateActiveContour($event, index)" :current="contour.name"/>
             </li>
         </ul>
     </div>
@@ -78,7 +78,8 @@ export default {
         margin: 0;
     }
     .contours li{
-        margin-right: 15px;
+        margin-right: 14px;
+        margin-left: 1px;
     }
     ::-webkit-scrollbar {
         display: none;

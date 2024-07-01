@@ -1,25 +1,35 @@
 <template>
     <div class="scenarioBar">
       <div class="leftPart">
-        <span style="margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text); font-weight: bold;">&equiv;</span>
+        <span @click="toggleSidebar">&equiv;</span>
         <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text); font-size: 16px;" class="fira-sans-medium">MotoCan</h3>
         <div>Сценарий</div>
       </div>
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
-        <button  @click="addContainer()">Добавить правило</button>
-        <button @click="saveScenario()">SaveScenario</button>
+        <button class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
+        <button class="fira-sans-regular" @click="saveScenario()">SaveScenario</button>
         <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
         font-weight: bold; transform: translateY(-10px);">&hellip;</span>
       </div>
     </div>
+    <Sidenav v-if="isSidebarOpen" @close="toggleSidebar" />
   </template>
   
 <script>
 import { ContainerModel } from '@/models/interfaces/compileModel';
 import { useMainStore } from '@/store';
 import { FileCreator } from '@/services/fileCreator';
+import Sidenav from '../shared/Sidenav.vue';
 
 export default {
+  components: {
+    Sidenav
+  },
+  data() {
+    return {
+      isSidebarOpen: false
+    };
+  },
   created(){
     this.store = useMainStore();
   },
@@ -34,6 +44,9 @@ export default {
     }
   },
   methods:{
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    },
     addContainer(){
       const currentModel = this.currentModel;
       const potentialContour = currentModel.contours.find(contour => contour.selected && contour.name !== '');
@@ -92,6 +105,9 @@ export default {
   display: inherit;
   align-items: center;
   position: relative;
+}
+.leftPart span{
+  margin: 0; margin-left: 10px; font-size: 20px; color: var(--yellow-text); font-weight: bold; cursor: pointer;
 }
 .rightPart{
   justify-content: end;

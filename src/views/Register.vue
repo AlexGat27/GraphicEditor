@@ -1,7 +1,7 @@
 <template>
     <div class="registration-container">
       <h2 class="fira-sans-medium">Регистрация</h2>
-      <form @submit.prevent="register" class="registration-form">
+      <form @submit.prevent="register" class="registration-form" ref="form">
         <input v-model="username" placeholder="Username" required class="registration-input">
         <input v-model="password" type="password" placeholder="Password" required class="registration-input">
         <button type="submit">Зарегистрироваться</button>
@@ -11,6 +11,8 @@
   </template>
   
   <script>
+  import api from '@/services/api';
+  // import VueReCaptcha from 'vue-recaptcha';
   export default {
     data() {
       return {
@@ -18,13 +20,25 @@
         password: ''
       };
     },
+    // components: {VueReCaptcha},
     methods: {
       async register() {
-        // Ваш код для регистрации
+        try {
+          await this.$recaptchaLoaded();
+          const recaptchaToken = await this.$recaptcha('register');
+          const response = await api.register({
+            username: this.username,
+            password: this.password,
+            reCaptcha: recaptchaToken
+          });
+          console.log('Регистрация успешна', response.data);
+        } catch (error) {
+          console.error('Ошибка регистрации', error.response.data);
+        }
       },
       goToRedactor() {
         this.$router.push('/');
-      }
+      },
     }
   };
   </script>

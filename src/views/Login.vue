@@ -11,6 +11,8 @@
   </template>
   
   <script>
+import api from '@/services/api';
+
   export default {
     data() {
       return {
@@ -20,7 +22,19 @@
     },
     methods: {
       async login() {
-        // Ваш код для авторизации
+        try{
+          await this.$recaptchaLoaded();
+          const recaptchaToken = await this.$recaptcha('login');
+          const response = api.login({
+            username: this.username,
+            password: this.password,
+            reCaptcha: recaptchaToken
+          })
+          console.log("Успешная авторизация", response);
+          this.$router.push('/');
+        }catch (error){
+          console.error("Ошибка авторизации", error);
+        }
       },
       goToRedactor(){
         this.$router.push('/');

@@ -6,8 +6,8 @@
         <div>Сценарий</div>
       </div>
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
-        <button class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
-        <button class="fira-sans-regular" @click="saveScenario()">SaveScenario</button>
+        <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
+        <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario()">SaveScenario</button>
         <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
         font-weight: bold; transform: translateY(-10px);">&hellip;</span>
       </div>
@@ -17,9 +17,10 @@
   
 <script>
 import { ContainerModel } from '@/models/interfaces/compileModel';
-import { useMainStore } from '@/store';
+import { useMainStore } from '@/stores/modelStore';
 import { FileCreator } from '@/services/fileCreator';
 import Sidenav from '../shared/Sidenav.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 export default {
   components: {
@@ -32,6 +33,7 @@ export default {
   },
   created(){
     this.store = useMainStore();
+    this.authStore = useAuthStore();
   },
   computed:{
     currentModel: {
@@ -41,6 +43,9 @@ export default {
       set(value){
         this.store.setCurrentModel(value);
       }
+    },
+    isAuthenticated(){
+      return this.authStore.isAuthenticated;
     }
   },
   methods:{

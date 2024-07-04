@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
 import App from './App.vue'
 import router from './router'
+import { useAuthStore } from './stores/authStore'
 
 const app = createApp(App);
 const pinia = createPinia(); // Создайте экземпляр Pinia

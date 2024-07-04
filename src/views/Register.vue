@@ -32,6 +32,7 @@
             reCaptcha: recaptchaToken
           });
           console.log('Регистрация успешна', response.data);
+          this.$router.push('/login');
         } catch (error) {
           console.error('Ошибка регистрации', error.response.data);
         }

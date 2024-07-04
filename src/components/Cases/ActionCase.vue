@@ -20,7 +20,7 @@
 <script>
 import SelectBlock from "../blocks/DropdownBlock.vue";
 import ConfirmModal from "../shared/ConfirmModal.vue";
-import { useMainStore } from "@/store";
+import { useMainStore } from "@/stores/modelStore";
 
 export default {
   components: { SelectBlock, ConfirmModal },

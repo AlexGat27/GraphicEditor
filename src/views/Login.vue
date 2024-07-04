@@ -25,13 +25,14 @@ import api from '@/services/api';
         try{
           await this.$recaptchaLoaded();
           const recaptchaToken = await this.$recaptcha('login');
-          const response = api.login({
+          api.login({
             username: this.username,
             password: this.password,
             reCaptcha: recaptchaToken
+          }).then(response => {
+            console.log("Успешная авторизация", response);
+            this.$router.push('/');
           })
-          console.log("Успешная авторизация", response);
-          this.$router.push('/');
         }catch (error){
           console.error("Ошибка авторизации", error);
         }

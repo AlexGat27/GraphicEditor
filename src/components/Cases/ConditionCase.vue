@@ -21,7 +21,7 @@
 import DropdownBlock from '../blocks/DropdownBlock.vue';
 import CompositeBlock from '../blocks/CompositeBlock.vue';
 import ConfirmModal from '../shared/ConfirmModal.vue';
-import { useMainStore } from '@/store';
+import { useMainStore } from '@/stores/modelStore';
 import { ConditionCaseModel } from '@/models/interfaces/compileModel';
 
 export default {

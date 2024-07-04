@@ -2,14 +2,27 @@
     <div>
       <div class="sidenav-overlay" @click="closeSidenav"></div>
       <div class="sidenav">
-        <button class="fira-sans-regular" @click="goToLogin">Login</button>
-        <button class="fira-sans-regular" @click="goToRegister">Register</button>
+        <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToLogin">Login</button>
+        <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToRegister">Register</button>
+        <button v-if="isAuthenticated" class="fira-sans-regular" @click="">Мои сценарии</button>
+        <button v-if="isAuthenticated" class="fira-sans-regular" @click="logout">Выход</button>
       </div>
   </div>
   </template>
   
   <script>
+import api from '@/services/api';
+import { useAuthStore } from '@/stores/authStore';
+
   export default {
+    created() {
+      this.authStore = useAuthStore();
+    },
+    computed:{
+      isAuthenticated(){
+        return this.authStore.isAuthenticated;
+      }
+    },
     methods: {
       closeSidenav() {
         this.$emit('close');
@@ -21,6 +34,9 @@
       goToRegister() {
         this.$router.push('/register');
         this.closeSidenav();
+      },
+      logout(){
+        this.authStore.logout();
       }
     }
   }
@@ -31,7 +47,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1001;
+    z-index: 1002;
     width: 250px;
     height: 100%;
     background-color: var(--background-toolbox-scenario);
@@ -64,7 +80,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* полупрозрачный черный цвет */
-    z-index: 1000; /* ниже z-index сайднава, чтобы сайднав был поверх затемнения */
+    z-index: 1001; /* ниже z-index сайднава, чтобы сайднав был поверх затемнения */
   }
   </style>
   

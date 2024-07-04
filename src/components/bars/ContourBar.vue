@@ -12,7 +12,7 @@
 
 <script>
 import ContourBtnBlock from '../blocks/ContourBtnBlock.vue';
-import {useMainStore} from '../../store';
+import {useMainStore} from '../../stores/modelStore';
 
 export default {
     components:{
@@ -34,7 +34,7 @@ export default {
             set(value){
                 this.store.setCurrentModel(value);
             }
-        }
+        },
     },
     methods: {
         updateModelName(value, index){

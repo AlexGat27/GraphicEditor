@@ -1,9 +1,16 @@
 <script>
   import Toolbox from '@/components/Toolbox.vue';
   import Editor from '@/components/Editor.vue';
+import { useAuthStore } from '@/stores/authStore';
 
   export default {
     name: 'MainEditor',
+    setup(){
+      const authStore = useAuthStore();
+      return {
+        isAuthenticated: authStore.isAuthenticated
+      }
+    },
     components: {
       Toolbox,
       Editor
@@ -12,9 +19,12 @@
 </script>
 
 <template>
-  <div class="toolbox"><Toolbox/></div>
-  <div class="editor-scroller">
-    <div class="editor"><Editor/></div>
+  <div style="width:100%; height: 100%;">
+    <div class="toolbox"><Toolbox/></div>
+    <div class="editor-scroller">
+      <div class="editor"><Editor/></div>
+    </div>
+    <div v-if="!isAuthenticated" class="authPlug"></div>
   </div>
 </template>
 
@@ -46,5 +56,11 @@
     width:100%;
     height: 100px;
     padding: 0;
+  }
+  .authPlug{
+    position: fixed;
+    left:0; right: 0; top: 50px; bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
   }
 </style>

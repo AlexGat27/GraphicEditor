@@ -1,11 +1,11 @@
 // store.js
 import { defineStore } from 'pinia';
-import defaultModel from '../models/objects/defaultModel';
 import { modelAttributes } from '../models/objects/modelsAttributes';
+import { CompileModel } from '@/models/interfaces/compileModel';
 
 export const useMainStore = defineStore('main', {
   state: () => ({
-    currentModel: defaultModel,
+    currentModel: new CompileModel(''),
     modelAttributes: modelAttributes,
     isAuthenticated: false
   }),

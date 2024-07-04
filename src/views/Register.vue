@@ -5,6 +5,7 @@
         <input v-model="username" placeholder="Username" required class="registration-input">
         <input v-model="password" type="password" placeholder="Password" required class="registration-input">
         <button type="submit">Зарегистрироваться</button>
+        <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка регистрации</span>
       </form>
       <button @click="goToRedactor">Вернуться в редактор</button>
     </div>
@@ -12,12 +13,12 @@
   
   <script>
   import api from '@/services/api';
-  // import VueReCaptcha from 'vue-recaptcha';
   export default {
     data() {
       return {
         username: '',
-        password: ''
+        password: '',
+        isError: false
       };
     },
     // components: {VueReCaptcha},
@@ -34,6 +35,7 @@
           console.log('Регистрация успешна', response.data);
           this.$router.push('/login');
         } catch (error) {
+          this.isError = true;
           console.error('Ошибка регистрации', error.response.data);
         }
       },
@@ -94,6 +96,7 @@
     cursor: pointer;
     font-size: 16px;
     font-family: "Fira Sans", sans-serif;
+    margin-bottom: 5px;
   }
   
   .registration-form button:hover {
@@ -104,6 +107,11 @@
     text-align: center;
     color: white;
     margin-bottom: 20px;
+  }
+
+  .errorMsg{
+    color: red;
+    font-size: 12px;
   }
   
   @media(max-width: 420px) {

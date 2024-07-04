@@ -5,10 +5,12 @@ import { useAuthStore } from '@/stores/authStore';
 
   export default {
     name: 'MainEditor',
-    setup(){
-      const authStore = useAuthStore();
-      return {
-        isAuthenticated: authStore.isAuthenticated
+    created(){
+      this.authStore = useAuthStore();
+    },
+    computed: {
+      isAuthenticated(){
+        return this.authStore.isAuthenticated;
       }
     },
     components: {

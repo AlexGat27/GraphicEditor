@@ -5,6 +5,7 @@
         <input v-model="username" placeholder="Username" required class="login-input">
         <input v-model="password" type="password" placeholder="Password" required class="login-input">
         <button type="submit">Вход</button>
+        <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка авторизации</span>
       </form>
       <button @click="goToRedactor">Вернуться в редактор</button>
     </div>
@@ -17,7 +18,8 @@ import api from '@/services/api';
     data() {
       return {
         username: '',
-        password: ''
+        password: '',
+        isError: false
       };
     },
     methods: {
@@ -25,15 +27,15 @@ import api from '@/services/api';
         try{
           await this.$recaptchaLoaded();
           const recaptchaToken = await this.$recaptcha('login');
-          api.login({
+          const response = await api.login({
             username: this.username,
             password: this.password,
             reCaptcha: recaptchaToken
-          }).then(response => {
-            console.log("Успешная авторизация", response);
-            this.$router.push('/');
           })
+          console.log("Успешная авторизация", response);
+          this.$router.push('/');
         }catch (error){
+          this.isError = true;
           console.error("Ошибка авторизации", error);
         }
       },
@@ -94,6 +96,7 @@ import api from '@/services/api';
     cursor: pointer;
     font-size: 16px;
     font-family: "Fira Sans", sans-serif;
+    margin-bottom: 5px;
   }
   
   .login-form button:hover {
@@ -104,6 +107,11 @@ import api from '@/services/api';
     text-align: center;
     color: white;
     margin-bottom: 20px;
+  }
+
+  .errorMsg{
+    color: red;
+    font-size: 12px;
   }
 
   @media(max-width: 420px){

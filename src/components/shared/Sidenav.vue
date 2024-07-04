@@ -11,17 +11,28 @@
   </template>
   
   <script>
+import { CompileModel } from '@/models/interfaces/compileModel';
 import api from '@/services/api';
 import { useAuthStore } from '@/stores/authStore';
+import { useMainStore } from '@/stores/modelStore';
 
   export default {
     created() {
       this.authStore = useAuthStore();
+      this.mainStore = useMainStore();
     },
     computed:{
       isAuthenticated(){
         return this.authStore.isAuthenticated;
-      }
+      },
+      currentModel: {
+        get(){
+          return this.mainStore.currentModel;
+        },
+        set(value){
+          this.mainStore.setCurrentModel(value);
+        }
+      },
     },
     methods: {
       closeSidenav() {
@@ -35,8 +46,10 @@ import { useAuthStore } from '@/stores/authStore';
         this.$router.push('/register');
         this.closeSidenav();
       },
-      logout(){
-        this.authStore.logout();
+      async logout(){
+        await this.authStore.logout();
+        this.currentModel = new CompileModel('');
+        this.closeSidenav();
       }
     }
   }

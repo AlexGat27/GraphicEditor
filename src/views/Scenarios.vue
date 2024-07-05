@@ -2,11 +2,8 @@
     <div class="scenario-view">
       <h1>Список сценариев</h1>
       <ul>
-        <li>
-          <h3 style="margin: 5px;">Тестовый сценарий</h3>
-          <p style="margin: 5px;">Тестовая модель</p>
-        </li>
-        <li v-for="scenario in scenarios" :key="scenario.id" @click="selectModel(scenario)">
+        <li v-for="scenario in scenarios" :key="scenario.id" @click="selectModel(scenario)"
+        :class="{ selected: selectedScenario === scenario.id }">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
           <p style="margin: 5px;">{{ scenario.model_name }}</p>
           <div class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
@@ -26,6 +23,7 @@ import { useMainStore } from '@/stores/modelStore';
       return {
         scenarios: [],
         showCreatePanel: false,
+        selectedScenario: null,
       };
     },
     async created(){
@@ -60,9 +58,9 @@ import { useMainStore } from '@/stores/modelStore';
         }
       },
       async selectModel(scenario){
-        const modelAttributes =  await api.getModel(scenario.model_id);
-        this.modelStore.setModelAttributes(modelAttributes);
-        this.modelStore.setCurrentModel(scenario.id, scenario.jsonData);
+        this.selectedScenario = scenario.id;
+        this.modelStore.setModelAttributes(scenario.model_attributes);
+        if (scenario.jsonData) this.modelStore.setCurrentModel(scenario.jsonData);
       }
     },
     components: {
@@ -93,6 +91,9 @@ import { useMainStore } from '@/stores/modelStore';
     margin: 15px;
     cursor: pointer;
     z-index: 1002;
+  }
+  ul li.selected {
+    border-color: white; /* Цвет рамки при подсветке */
   }
   .closeIcon {
     position: absolute;

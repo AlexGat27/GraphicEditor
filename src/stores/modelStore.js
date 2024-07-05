@@ -1,6 +1,6 @@
 // store.js
 import { defineStore } from 'pinia';
-import { CompileModel } from '@/models/interfaces/compileModel';
+import { CompileModel, ConditionCaseModel, ContourModel, ContainerModel, ActionCaseModel } from '@/models/interfaces/compileModel';
 import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/interfaces/modelAttributes';
 
 export const useMainStore = defineStore('main', {
@@ -11,30 +11,52 @@ export const useMainStore = defineStore('main', {
   }),
   actions: {
     setCurrentModel(value) {
-      this.currentModel = new CompileModel(
-        value.scenario,
-        
-      );
+      console.log(value);
+      const contours = value.contours.map(contourData => {
+        const containers = contourData.containers.map(containerData => {
+          const actionCases = containerData.actionCases.map(actionCaseData =>
+            new ActionCaseModel(
+              actionCaseData.action,
+              actionCaseData.interruption,
+              actionCaseData.workingPeriod,
+              actionCaseData.power
+            )
+          );
+    
+          const conditionCases = containerData.conditionCases.map(conditionCaseData =>
+            new ConditionCaseModel(
+              conditionCaseData.condition,
+              conditionCaseData.value,
+              conditionCaseData.countSignals,
+              conditionCaseData.delay
+            )
+          );
+    
+          return new ContainerModel(actionCases, conditionCases);
+        });
+    
+        return new ContourModel(contourData.contourID, contourData.name, containers);
+      })
+      this.currentModel = new CompileModel(value.scenario_id, value.scenario);
+      this.currentModel.contours = contours;
     },
     setModelAttributes(value){
-      this.modelAttributes = new ModelAttributes(
-        value.model_name,
-        [
-            new ConditionAttribute(value.conditions[0].name, value.conditions[0].times, value.conditions[0].modes, value.conditions[0].values),
-            new ConditionAttribute(
-                value.conditions[1].name, 
-                value.conditions[1].times, 
-                value.conditions[1].modes, 
-                value.conditions[1].values
-            ),
-        ],
-        new ActionAttribute(
-          value.actions.types, 
-          value.actions.durations, 
-          value.actions.speeds,
-          value.actions.intensities
+      console.log(value)
+      const conditionAttributes = value.conditions.map(condition => 
+        new ConditionAttribute(
+          condition.name, 
+          condition.times, 
+          condition.modes, 
+          condition.values
         )
-      )
+      );
+      const actionAttributes = new ActionAttribute(
+        value.actions.types, 
+        value.actions.durations, 
+        value.actions.speeds,
+        value.actions.intensities
+      );
+      this.modelAttributes = new ModelAttributes(value.model_name, conditionAttributes, actionAttributes)
     }
   },
 });

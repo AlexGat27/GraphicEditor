@@ -4,7 +4,7 @@
       <div class="sidenav">
         <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToLogin">Login</button>
         <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToRegister">Register</button>
-        <button v-if="isAuthenticated" class="fira-sans-regular" @click="">Мои сценарии</button>
+        <button v-if="isAuthenticated" class="fira-sans-regular" @click="goToScenarios">Мои сценарии</button>
         <button v-if="isAuthenticated" class="fira-sans-regular" @click="logout">Выход</button>
       </div>
   </div>
@@ -44,6 +44,10 @@ import { useMainStore } from '@/stores/modelStore';
       },
       goToRegister() {
         this.$router.push('/register');
+        this.closeSidenav();
+      },
+      goToScenarios() {
+        this.$router.push('/scenarios');
         this.closeSidenav();
       },
       async logout(){

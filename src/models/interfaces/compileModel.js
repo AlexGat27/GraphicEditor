@@ -33,7 +33,8 @@ export class ContourModel {
 }
 
 export class CompileModel {
-    constructor(scenario) {
+    constructor(id, scenario) {
+        this.scenario_id = id;
         this.scenario = scenario;
         this.contours = [];
         for (let i = 1; i <= 8; i++) {

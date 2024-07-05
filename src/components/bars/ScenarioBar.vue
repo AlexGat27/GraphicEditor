@@ -21,6 +21,7 @@ import { useMainStore } from '@/stores/modelStore';
 import { FileCreator } from '@/services/fileCreator';
 import Sidenav from '../shared/Sidenav.vue';
 import { useAuthStore } from '@/stores/authStore';
+import api from '@/services/api';
 
 export default {
   components: {
@@ -61,9 +62,9 @@ export default {
       this.currentModel = currentModel;
       console.log(currentModel)
     },
-    saveScenario(){
+    async saveScenario(){
       let isNullValues = false;
-      let compileModel = {countContainers: 0, ...this.currentModel}
+      let compileModel = this.currentModel;
       compileModel.contours.forEach(contour => {
         contour.containers.forEach(container => {
           container.conditionCases.forEach(attr => {
@@ -87,8 +88,8 @@ export default {
         if (isNullValues) return;
       });
       if (isNullValues) return;
-      const fileCreator = new FileCreator('compile.txt')
-      fileCreator.saveTxtFile(compileModel);
+      const response = await api.updateScenario(compileModel.scenario_id, compileModel.scenario);
+      console.log(response);
     }
   }
 }

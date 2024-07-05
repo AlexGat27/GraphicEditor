@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 import MainEditor from './views/MainEditor.vue';
+import Scenarios from './views/Scenarios.vue';
 import { useAuthStore } from './stores/authStore';
 
 const routes = [
@@ -9,6 +10,12 @@ const routes = [
     path: '/',
     name: 'MainEditor',
     component: MainEditor,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/scenarios',
+    name: 'Scenarios',
+    component: Scenarios,
     meta: { requiresAuth: true }
   },
   {

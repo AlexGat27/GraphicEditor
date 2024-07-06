@@ -1,7 +1,7 @@
 <template>
     <div class="overlay">
       <div class="create-panel">
-        <h2 style="margin-top: 0; margin-bottom: 15px;">Создать новый сценарий</h2>
+        <h2 style="margin-top: 0; margin-bottom: 15px;">{{ action }} сценарий</h2>
         <form @submit.prevent="createScenario">
             <input type="text" v-model="name" required placeholder="Название"/>
             <select v-model="model" required>
@@ -19,6 +19,12 @@
 import api from '@/services/api';
 
   export default {
+    props:{
+      action: {
+        type: String,
+        required: true
+      }
+    },  
     data() {
       return {
         name: '',

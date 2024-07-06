@@ -3,14 +3,15 @@
       <h1>Список сценариев</h1>
       <ul>
         <li v-for="scenario in scenarios" :key="scenario.id" @click="selectModel(scenario)"
-        :class="{ selected: selectedScenario === scenario.id }">
+        :class="{ selected: selectedScenario === scenario.id }" @dblclick="showUpdatePanel = true">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
           <p style="margin: 5px;">{{ scenario.model_name }}</p>
           <div id="deleteScenario" class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
-      <CreateScenario v-if="showCreatePanel" @close="showCreatePanel = false" @create="addScenario"/>
+      <CreateScenario :action="'Добавить новый'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addScenario"/>
+      <CreateScenario :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateScenario"/>
       <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
   </template>
@@ -25,6 +26,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
       return {
         scenarios: [],
         showCreatePanel: false,
+        showUpdatePanel: false,
         selectedScenario: null,
       };
     },
@@ -57,6 +59,17 @@ import { CompileModel } from '@/models/interfaces/compileModel';
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
+        }
+      },
+      async updateScenario(scenarioData){
+        try {
+          const response = await api.updateScenario(this.selectedScenario, scenarioData);
+          const updatedScenario = response.data;
+          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
+          this.scenarios.push(updatedScenario);
+          this.showUpdatePanel = false;
+        } catch (error) {
+          console.error('Ошибка при обновлении сценария:', error);
         }
       },
       async selectModel(scenario){

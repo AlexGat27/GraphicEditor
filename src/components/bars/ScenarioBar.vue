@@ -7,7 +7,7 @@
       </div>
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
         <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
-        <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario()">SaveScenario</button>
+        <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario()">Выгрузить сценарий</button>
         <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
         font-weight: bold; transform: translateY(-10px);">&hellip;</span>
       </div>

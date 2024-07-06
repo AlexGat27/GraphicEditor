@@ -49,7 +49,7 @@ export default {
       }
     },
     conditionAttributes(){
-      return this.store.modelAttributes[0].conditionAttributes;
+      return this.store.modelAttributes.conditionAttributes;
     },
     currentCondition(){
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];

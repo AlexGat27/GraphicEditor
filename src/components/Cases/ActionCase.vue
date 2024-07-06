@@ -51,7 +51,7 @@ export default {
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
     },
     actionAttributes() {
-      return this.store.modelAttributes[0].actionAttributes;
+      return this.store.modelAttributes.actionAttributes;
     },
     filterActionAttributes() {
       if (this.currentAction.action === "Включить" || this.currentAction.action === '' || 

@@ -1,7 +1,7 @@
 <template>
     <div class="contourBar">
         <h3 style="margin-left: 45px; margin-right: 25px; font-size: 16px;" class="fira-sans-regular">Контуры</h3>
-        <ul class="contours">
+        <ul v-if="isShowContours" class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
                 <ContourBtnBlock :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
                 @selected="updateActiveContour($event, index)" :current="contour.name"/>
@@ -13,6 +13,7 @@
 <script>
 import ContourBtnBlock from '../blocks/ContourBtnBlock.vue';
 import {useMainStore} from '../../stores/modelStore';
+import { useAuthStore } from '@/stores/authStore';
 
 export default {
     components:{
@@ -25,6 +26,7 @@ export default {
     },
     created(){
         this.store = useMainStore();
+        this.authStore = useAuthStore();
     },
     computed:{
         currentModel: {
@@ -35,6 +37,9 @@ export default {
                 this.store.setCurrentModel(value);
             }
         },
+        isShowContours(){
+            return this.store.currentModel !== null && this.authStore.isAuthenticated;
+        }
     },
     methods: {
         updateModelName(value, index){

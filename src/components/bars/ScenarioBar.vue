@@ -3,7 +3,7 @@
       <div class="leftPart">
         <span @click="toggleSidebar">&equiv;</span>
         <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text); font-size: 16px;" class="fira-sans-medium">MotoCan</h3>
-        <div>Сценарий</div>
+        <div v-if="isAuthenticated && currentModel !== null">{{currentModel.scenario}}</div>
       </div>
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
         <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
@@ -65,6 +65,7 @@ export default {
     async saveScenario(){
       let isNullValues = false;
       let compileModel = this.currentModel;
+      compileModel.countContainers = 0;
       compileModel.contours.forEach(contour => {
         contour.containers.forEach(container => {
           container.conditionCases.forEach(attr => {
@@ -88,7 +89,8 @@ export default {
         if (isNullValues) return;
       });
       if (isNullValues) return;
-      const response = await api.updateScenario(compileModel.scenario_id, compileModel.scenario);
+      const requestData = {json_data: compileModel}
+      const response = await api.updateScenario(compileModel.scenario_id, requestData);
       console.log(response);
     }
   }

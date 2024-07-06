@@ -52,7 +52,7 @@ import { useMainStore } from '@/stores/modelStore';
       },
       async logout(){
         await this.authStore.logout();
-        this.currentModel = new CompileModel('');
+        this.currentModel = null;
         this.closeSidenav();
       }
     }

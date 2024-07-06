@@ -5,13 +5,12 @@ import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/i
 
 export const useMainStore = defineStore('main', {
   state: () => ({
-    currentModel: new CompileModel(''),
+    currentModel: null,
     modelAttributes: {},
-    isAuthenticated: false
   }),
   actions: {
     setCurrentModel(value) {
-      console.log(value);
+      if (!value) return;
       const contours = value.contours.map(contourData => {
         const containers = contourData.containers.map(containerData => {
           const actionCases = containerData.actionCases.map(actionCaseData =>
@@ -35,28 +34,27 @@ export const useMainStore = defineStore('main', {
           return new ContainerModel(actionCases, conditionCases);
         });
     
-        return new ContourModel(contourData.contourID, contourData.name, containers);
+        return new ContourModel(contourData.contourID, contourData.name, contourData.selected, containers);
       })
       this.currentModel = new CompileModel(value.scenario_id, value.scenario);
       this.currentModel.contours = contours;
     },
     setModelAttributes(value){
-      console.log(value)
       const conditionAttributes = value.conditions.map(condition => 
         new ConditionAttribute(
-          condition.name, 
-          condition.times, 
-          condition.modes, 
-          condition.values
+          condition.condition, 
+          condition.values, 
+          condition.countSignals, 
+          condition.delayTypes
         )
       );
       const actionAttributes = new ActionAttribute(
-        value.actions.types, 
-        value.actions.durations, 
-        value.actions.speeds,
-        value.actions.intensities
+        value.actions.actions, 
+        value.actions.interruptions, 
+        value.actions.workingPeriod,
+        value.actions.powers
       );
-      this.modelAttributes = new ModelAttributes(value.model_name, conditionAttributes, actionAttributes)
+      this.modelAttributes = new ModelAttributes(value.name, conditionAttributes, actionAttributes);
     }
   },
 });

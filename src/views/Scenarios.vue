@@ -6,11 +6,12 @@
         :class="{ selected: selectedScenario === scenario.id }">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
           <p style="margin: 5px;">{{ scenario.model_name }}</p>
-          <div class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
+          <div id="deleteScenario" class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
       <CreateScenario v-if="showCreatePanel" @close="showCreatePanel = false" @create="addScenario"/>
+      <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
   </template>
   
@@ -18,6 +19,7 @@
   import api from '@/services/api';
 import CreateScenario from '../components/shared/CreateScenario.vue'
 import { useMainStore } from '@/stores/modelStore';
+import { CompileModel } from '@/models/interfaces/compileModel';
   export default {
     data() {
       return {
@@ -61,6 +63,10 @@ import { useMainStore } from '@/stores/modelStore';
         this.selectedScenario = scenario.id;
         this.modelStore.setModelAttributes(scenario.model_attributes);
         if (scenario.jsonData) this.modelStore.setCurrentModel(scenario.jsonData);
+        else this.modelStore.setCurrentModel(new CompileModel(scenario.id, scenario.name));
+      },
+      exitPage(){
+        this.$router.push('/');
       }
     },
     components: {
@@ -97,9 +103,6 @@ import { useMainStore } from '@/stores/modelStore';
   }
   .closeIcon {
     position: absolute;
-    bottom:5px; right: 5px;
-    width: 25px; /* Ширина квадрата */
-    height: 25px; /* Высота квадрата */
     background-color: transparent;
     border: 1px solid var(--contour-elements); /* Цвет рамки */
     display: flex;
@@ -114,14 +117,31 @@ import { useMainStore } from '@/stores/modelStore';
 .closeIcon::after {
   content: '';
   position: absolute;
-  width: 20px; /* Ширина палочек крестика */
-  height: 1px; /* Высота палочек крестика */
   background-color: var(--contour-elements); /* Цвет палочек крестика */
 }
 
 .closeIcon::before {
   transform: rotate(45deg); /* Первая палочка крестика */
 }
+#deleteScenario{
+  bottom:5px; right: 5px;
+  width: 25px; /* Ширина квадрата */
+  height: 25px; /* Высота квадрата */
+}
+#deleteScenario::before, #deleteScenario::after{
+  width: 20px; /* Ширина палочек крестика */
+  height: 1px; /* Высота палочек крестика */
+}
+#exitPage{
+  top:25px; right: 25px;
+  width: 50px; /* Ширина квадрата */
+  height: 50px; /* Высота квадрата */
+}
+#exitPage::before, #exitPage::after{
+  width: 25px; /* Ширина палочек крестика */
+  height: 3px; /* Высота палочек крестика */
+}
+
 
 .closeIcon::after {
   transform: rotate(-45deg); /* Вторая палочка крестика */

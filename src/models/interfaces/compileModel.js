@@ -24,10 +24,10 @@ export class ContainerModel {
 }
 
 export class ContourModel {
-    constructor(contourID, name, containers=[]) {
+    constructor(contourID, name, selected=false, containers=[]) {
         this.contourID = contourID;
         this.name = name;
-        this.selected = false;
+        this.selected = selected;
         this.containers = containers;
     }
 }

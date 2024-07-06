@@ -2,15 +2,20 @@
   import Toolbox from '@/components/Toolbox.vue';
   import Editor from '@/components/Editor.vue';
 import { useAuthStore } from '@/stores/authStore';
+import { useMainStore } from '@/stores/modelStore';
 
   export default {
     name: 'MainEditor',
     created(){
       this.authStore = useAuthStore();
+      this.modelStore = useMainStore();
     },
     computed: {
       isAuthenticated(){
         return this.authStore.isAuthenticated;
+      },
+      isScenarioChange(){
+        return this.modelStore.currentModel !== null;
       }
     },
     components: {
@@ -24,9 +29,9 @@ import { useAuthStore } from '@/stores/authStore';
   <div style="width:100%; height: 100%;">
     <div class="toolbox"><Toolbox/></div>
     <div class="editor-scroller">
-      <div class="editor"><Editor/></div>
+      <div v-if="isScenarioChange" class="editor"><Editor/></div>
     </div>
-    <div v-if="!isAuthenticated" class="authPlug"></div>
+    <div v-if="!isAuthenticated && isScenarioChange" class="authPlug"></div>
   </div>
 </template>
 

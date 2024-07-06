@@ -40,7 +40,6 @@ import api from '@/services/api';
         },
       createScenario() {
         const newScenario = {
-          id: Date.now(),
           name: this.name,
           model_name: this.model,
         };

@@ -27,7 +27,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
         scenarios: [],
         showCreatePanel: false,
         showUpdatePanel: false,
-        selectedScenario: null,
+        selectedScenario: null
       };
     },
     async created(){
@@ -40,6 +40,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
         try {
           const response = await api.getScenarios();
           this.scenarios = response.data;
+          if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
         } catch (error) {
           console.error('Ошибка при загрузке сценариев:', error);
         }
@@ -81,9 +82,6 @@ import { CompileModel } from '@/models/interfaces/compileModel';
       exitPage(){
         this.$router.push('/');
       }
-    },
-    components: {
-      CreateScenario,
     },
   };
   </script>

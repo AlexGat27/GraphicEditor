@@ -11,8 +11,6 @@
   </template>
   
   <script>
-import { CompileModel } from '@/models/interfaces/compileModel';
-import api from '@/services/api';
 import { useAuthStore } from '@/stores/authStore';
 import { useMainStore } from '@/stores/modelStore';
 

@@ -12,7 +12,7 @@
   </template>
   
   <script>
-import api from '@/services/api';
+import { authApi } from '@/services/api';
 
   export default {
     data() {
@@ -27,7 +27,7 @@ import api from '@/services/api';
         try{
           await this.$recaptchaLoaded();
           const recaptchaToken = await this.$recaptcha('login');
-          const response = await api.login({
+          const response = await authApi.login({
             username: this.username,
             password: this.password,
             reCaptcha: recaptchaToken

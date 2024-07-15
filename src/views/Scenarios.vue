@@ -17,7 +17,7 @@
   </template>
   
   <script>
-  import api from '@/services/api';
+import { scenarioApi } from '@/services/api';
 import CreateScenario from '../components/shared/CreateScenario.vue'
 import { useMainStore } from '@/stores/modelStore';
 import { CompileModel } from '@/models/interfaces/compileModel';
@@ -39,7 +39,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
     methods: {
       async fetchScenarios() {
         try {
-          const response = await api.getScenarios();
+          const response = await scenarioApi.getScenarios();
           this.scenarios = response.data;
           if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
         } catch (error) {
@@ -48,7 +48,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
       },
       async deleteScenario(id) {
         try {
-          await api.deleteScenario(id);
+          await scenarioApi.deleteScenario(id);
           this.scenarios = this.scenarios.filter(scenario => scenario.id !== id);
         } catch (error) {
           console.error('Ошибка при удалении сценария:', error);
@@ -56,7 +56,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
       },
       async addScenario(scenario) {
         try {
-          const response = await api.addScenario(scenario);
+          const response = await scenarioApi.addScenario(scenario);
           this.scenarios.push(response.data);
           this.showCreatePanel = false;
         } catch (error) {
@@ -65,7 +65,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
       },
       async updateScenario(scenarioData){
         try {
-          const response = await api.updateScenario(this.selectedScenario, scenarioData);
+          const response = await scenarioApi.updateScenario(this.selectedScenario, scenarioData);
           const updatedScenario = response.data;
           this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
           this.scenarios.push(updatedScenario);

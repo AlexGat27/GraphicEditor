@@ -18,10 +18,9 @@
 <script>
 import { ContainerModel } from '@/models/interfaces/compileModel';
 import { useMainStore } from '@/stores/modelStore';
-import { FileCreator } from '@/services/fileCreator';
 import Sidenav from '../shared/Sidenav.vue';
 import { useAuthStore } from '@/stores/authStore';
-import api from '@/services/api';
+import { scenarioApi } from '@/services/api';
 
 export default {
   components: {
@@ -92,7 +91,7 @@ export default {
       });
       if (isNullValues) return;
       const requestData = {json_data: compileModel, model_name: this.modelName};
-      const response = await api.updateScenario(compileModel.scenario_id, requestData);
+      const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
       console.log(response);
     }
   }

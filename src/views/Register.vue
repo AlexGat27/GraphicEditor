@@ -12,8 +12,8 @@
   </template>
   
   <script>
-  import api from '@/services/api';
-  export default {
+import { authApi } from '@/services/api';
+export default {
     data() {
       return {
         username: '',
@@ -27,7 +27,7 @@
         try {
           await this.$recaptchaLoaded();
           const recaptchaToken = await this.$recaptcha('register');
-          const response = await api.register({
+          const response = await authApi.register({
             username: this.username,
             password: this.password,
             reCaptcha: recaptchaToken

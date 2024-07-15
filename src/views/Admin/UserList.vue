@@ -17,9 +17,8 @@
             <td>{{ user.username }}</td>
             <td>{{ formatDateTime(user.created_at) }}</td>
             <td>
-              <button class="btn btn-sm btn-danger" @click="blockUser(user.id)">
-                Заблокировать
-              </button>
+              <button class="btn btn-sm btn-danger" @click="blockUser(user.id)">Заблокировать</button>
+              <button class="btn btn-sm btn-danger" @click="deleteUser(user.id)">Удалить</button>
             </td>
           </tr>
         </tbody>
@@ -29,7 +28,7 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import api from '@/services/api/apiInstance';
 
 export default {
   data() {
@@ -55,8 +54,10 @@ export default {
         console.error('Ошибка при блокировке пользователя:', error);
       }
     },
+    async deleteUser(userId){
+      const response = await api.del
+    },
     formatDateTime(dateTimeStr) {
-      // Функция для форматирования даты и времени (при необходимости)
       return new Date(dateTimeStr).toLocaleString();
     }
   },

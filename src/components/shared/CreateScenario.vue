@@ -20,7 +20,7 @@
   </template>
   
   <script>
-import api from '@/services/api';
+import { modelApi } from '@/services/api';
 
   export default {
     props:{
@@ -68,7 +68,7 @@ import api from '@/services/api';
     methods: {
         async fetchModels() {
             try {
-                const response = await api.getModels();
+                const response = await modelApi.getModels();
                 this.brand_models = response.data;
             } catch (error) {
                 console.error('Ошибка при загрузке списка моделей:', error);

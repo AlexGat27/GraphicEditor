@@ -37,5 +37,8 @@ export default {
   },
   updateScenario(id, data){
     return api.put(`/scenarios/${id}`, data);
+  },
+  getUsers(){
+    return api.get('/users');
   }
 };

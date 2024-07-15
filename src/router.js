@@ -4,6 +4,7 @@ import Register from './views/Register.vue';
 import MainEditor from './views/MainEditor.vue';
 import Scenarios from './views/Scenarios.vue';
 import { useAuthStore } from './stores/authStore';
+import UserList from './views/Admin/UserList.vue';
 
 const routes = [
   {
@@ -27,6 +28,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/admin/users',
+    name: 'UserList',
+    component: UserList
   }
 ];
 

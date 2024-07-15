@@ -7,6 +7,7 @@ export const useMainStore = defineStore('main', {
   state: () => ({
     currentModel: null,
     modelAttributes: {},
+    selectedScenarioId: null
   }),
   actions: {
     setCurrentModel(value) {
@@ -55,6 +56,9 @@ export const useMainStore = defineStore('main', {
         value.actionAttributes.powers
       );
       this.modelAttributes = new ModelAttributes(value.name, conditionAttributes, actionAttributes);
+    },
+    selectScenario(value){
+      this.selectedScenarioId = value;
     }
   },
 });

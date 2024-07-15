@@ -29,9 +29,9 @@ import { useMainStore } from '@/stores/modelStore';
   <div style="width:100%; height: 100%;">
     <div class="toolbox"><Toolbox/></div>
     <div class="editor-scroller">
-      <div v-if="isScenarioChange" class="editor"><Editor/></div>
+      <div v-if="isAuthenticated && isScenarioChange" class="editor"><Editor/></div>
     </div>
-    <div v-if="!isAuthenticated && isScenarioChange" class="authPlug"></div>
+    <div v-if="!isAuthenticated || !isScenarioChange" class="authPlug"></div>
   </div>
 </template>
 

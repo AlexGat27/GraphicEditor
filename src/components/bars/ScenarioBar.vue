@@ -47,6 +47,9 @@ export default {
     },
     isAuthenticated(){
       return this.authStore.isAuthenticated;
+    },
+    modelName(){
+      return this.store.modelAttributes.name;
     }
   },
   methods:{
@@ -60,7 +63,6 @@ export default {
         potentialContour.containers.push(new ContainerModel())
       }
       this.currentModel = currentModel;
-      console.log(currentModel)
     },
     async saveScenario(){
       let isNullValues = false;
@@ -89,7 +91,7 @@ export default {
         if (isNullValues) return;
       });
       if (isNullValues) return;
-      const requestData = {json_data: compileModel}
+      const requestData = {json_data: compileModel, model_name: this.modelName};
       const response = await api.updateScenario(compileModel.scenario_id, requestData);
       console.log(response);
     }

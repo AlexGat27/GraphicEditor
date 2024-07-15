@@ -32,6 +32,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
     },
     async created(){
       this.modelStore = useMainStore();
+      if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
       await this.fetchScenarios();
     },
     components: {CreateScenario},

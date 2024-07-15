@@ -40,7 +40,7 @@ export const useMainStore = defineStore('main', {
       this.currentModel.contours = contours;
     },
     setModelAttributes(value){
-      const conditionAttributes = value.conditions.map(condition => 
+      const conditionAttributes = value.conditionAttributes.map(condition => 
         new ConditionAttribute(
           condition.condition, 
           condition.values, 
@@ -49,10 +49,10 @@ export const useMainStore = defineStore('main', {
         )
       );
       const actionAttributes = new ActionAttribute(
-        value.actions.actions, 
-        value.actions.interruptions, 
-        value.actions.workingPeriod,
-        value.actions.powers
+        value.actionAttributes.actions, 
+        value.actionAttributes.interruptions, 
+        value.actionAttributes.workingPeriod,
+        value.actionAttributes.powers
       );
       this.modelAttributes = new ModelAttributes(value.name, conditionAttributes, actionAttributes);
     }

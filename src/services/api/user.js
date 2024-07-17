@@ -7,6 +7,9 @@ export default userApi = {
     updateUser(id, body){
         return api.put(`/users/${id}`, body);
     },
+    assignRoleUser(id, body){
+        return api.put(`/users/assign-role/${id}`, body);
+    },
     deleteUser(id){
         return api.delete(`/users/${id}`);
     }

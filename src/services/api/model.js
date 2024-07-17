@@ -7,5 +7,10 @@ export default modelApi = {
     getModel(id){
       return api.get(`/models/${id}`);
     },
-
+    createModel(body){
+      return api.post('/models', body);
+    },
+    updateModel(id, body){
+      return api.put(`/models/${id}`, body);
+    }
 }

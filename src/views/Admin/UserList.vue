@@ -8,6 +8,7 @@
             <th>ID</th>
             <th>Имя пользователя</th>
             <th>Время создания</th>
+            <th>Роль</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -16,9 +17,10 @@
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ formatDateTime(user.created_at) }}</td>
-            <td>
-              <button class="btn btn-sm btn-danger" @click="blockUser(user.id)">Заблокировать</button>
-              <button class="btn btn-sm btn-danger" @click="deleteUser(user.id)">Удалить</button>
+            <td>{{ user.role }}</td>
+            <td style="display: flex; justify-content: space-around;">
+              <button v-if="user.role !== 'banned'" @click="blockUser(user.id)">Заблокировать</button>
+              <button @click="deleteUser(user.id)">Удалить</button>
             </td>
           </tr>
         </tbody>
@@ -28,7 +30,7 @@
 </template>
 
 <script>
-import api from '@/services/api/apiInstance';
+import api from '@/services/api/user';
 
 export default {
   data() {
@@ -48,14 +50,22 @@ export default {
     },
     async blockUser(userId) {
       try {
-        // Здесь вызывайте API для блокировки пользователя по userId
-        console.log('Блокировка пользователя с ID:', userId);
+        await api.assignRoleUser(userId, {roleName: "banned"});
+        const userToBlock = this.users.find(user => user.id === userId);
+        userToBlock.role = "banned";
+        console.log(`User with ID ${userId} has been banned.`);
       } catch (error) {
-        console.error('Ошибка при блокировке пользователя:', error);
+        console.error('Error banned user:', error);
       }
     },
     async deleteUser(userId){
-      const response = await api.del
+      try {
+        await api.deleteUser(userId);
+        this.users = this.users.filter(user => user.id !== userId);
+        console.log(`User with ID ${userId} has been deleted.`);
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
     },
     formatDateTime(dateTimeStr) {
       return new Date(dateTimeStr).toLocaleString();
@@ -101,15 +111,9 @@ export default {
   background-color: inherit
 }
 
-.btn-danger {
-  color: var(--contour-elements);
-  background-color: #6e0000;
-  border-color: var(--contour-elements);
-}
-
-.btn-danger:hover {
-  color: var(--contour-elements);
-  background-color: #a30010;
-  border-color: var(--contour-elements);
+td button{
+  background-color: #d9d9d9; color: black;
+  border-radius: 5px; height: 30px;
+  cursor: pointer;
 }
 </style>

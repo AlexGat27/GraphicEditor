@@ -1,6 +1,6 @@
 import api from "./apiInstance";
 
-export default userApi = {
+const userApi = {
     getUsers(){
       return api.get('/users');
     },
@@ -12,5 +12,7 @@ export default userApi = {
     },
     deleteUser(id){
         return api.delete(`/users/${id}`);
-    }
+    },
 }
+
+export default userApi;

@@ -1,6 +1,6 @@
 import api from "./apiInstance";
 
-export default scenarioApi = {
+const scenarioApi = {
     getScenarios(){
       return api.get('/scenarios');
     },
@@ -14,3 +14,5 @@ export default scenarioApi = {
       return api.put(`/scenarios/${id}`, data);
     },
 }
+
+export default scenarioApi;

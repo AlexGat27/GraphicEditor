@@ -1,6 +1,6 @@
 // stores/auth.js
 import { defineStore } from 'pinia';
-import api from '@/services/apiInstance';
+import api from '@/services/api/auth';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -21,6 +21,23 @@ export const useAuthStore = defineStore('auth', {
             } catch (error) {
                 this.isAuthenticated = false;
                 this.user = null;
+            }
+        },
+        async checkAdmin(){
+            try {
+                const response = await api.checkAdmin();
+                if (response.data.status === 'permitted') {
+                    this.isAuthenticated = true;
+                    this.user = response.data.user;
+                    console.log('permitted')
+                    return false; 
+                }
+                console.log('allow')
+                this.isAuthenticated = true;
+                this.user = response.data.user;
+                return true; 
+            } catch (error) {
+                return false;
             }
         },
         logout() {

@@ -1,6 +1,6 @@
 import api from "./apiInstance";
 
-export default authApi = {
+const authApi = {
     register(userData) {
       return api.post('/register', userData);
     },
@@ -13,4 +13,9 @@ export default authApi = {
     checkAuth(){
       return api.get('/check-auth');
     },
+    checkAdmin(){
+      return api.get('/check-admin');
+    }
 }
+
+export default authApi;

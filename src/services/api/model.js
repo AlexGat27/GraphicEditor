@@ -1,6 +1,6 @@
 import api from "./apiInstance";
 
-export default modelApi = {
+const modelApi = {
     getModels(){
       return api.get('/models');
     },
@@ -14,3 +14,5 @@ export default modelApi = {
       return api.put(`/models/${id}`, body);
     }
 }
+
+export default modelApi;

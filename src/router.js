@@ -5,6 +5,7 @@ import MainEditor from './views/MainEditor.vue';
 import Scenarios from './views/Scenarios.vue';
 import { useAuthStore } from './stores/authStore';
 import UserList from './views/Admin/UserList.vue';
+// import ModelList from './views/Admin/ModelList.vue';
 
 const routes = [
   {
@@ -32,8 +33,15 @@ const routes = [
   {
     path: '/admin/users',
     name: 'UserList',
-    component: UserList
-  }
+    component: UserList,
+    meta: {requiresAdmin: true}
+  },
+  // {
+  //   path: '/admin/users',
+  //   name: 'UserList',
+  //   component: ModelList,
+  //   meta: {requiresAdmin: true}
+  // }
 ];
 
 const router = createRouter({
@@ -46,6 +54,13 @@ router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
     await authStore.checkAuth();
     next()
+  }else if(to.matched.some(record => record.meta.requiresAdmin)){
+    const authStore = useAuthStore();
+    if (await authStore.checkAdmin()) {
+      next();
+    } else {
+      next({ name: 'Login' });
+    }
   }else{
     next();
   }

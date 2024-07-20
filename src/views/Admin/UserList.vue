@@ -17,15 +17,17 @@
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ formatDateTime(user.created_at) }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ user.roles[0] }}</td>
             <td style="display: flex; justify-content: space-around;">
-              <button v-if="user.role !== 'banned'" @click="blockUser(user.id)">Заблокировать</button>
+              <button v-if="user.roles[0] !== 'banned'" @click="blockUser(user.id)">Заблокировать</button>
+              <button v-if="user.roles[0] === 'banned'" @click="unBlockUser(user.id)">Разблокировать</button>
               <button @click="deleteUser(user.id)">Удалить</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div id="exitPage" class="closeIcon" @click="exitPage"></div>
   </div>
 </template>
 
@@ -52,10 +54,20 @@ export default {
       try {
         await api.assignRoleUser(userId, {roleName: "banned"});
         const userToBlock = this.users.find(user => user.id === userId);
-        userToBlock.role = "banned";
+        userToBlock.roles[0] = "banned";
         console.log(`User with ID ${userId} has been banned.`);
       } catch (error) {
         console.error('Error banned user:', error);
+      }
+    },
+    async unBlockUser(userId){
+      try {
+        await api.assignRoleUser(userId, {roleName: "user"});
+        const userToBlock = this.users.find(user => user.id === userId);
+        userToBlock.roles[0] = "user";
+        console.log(`User with ID ${userId} has been unbanned.`);
+      } catch (error) {
+        console.error('Error unbanned user:', error);
       }
     },
     async deleteUser(userId){
@@ -69,6 +81,9 @@ export default {
     },
     formatDateTime(dateTimeStr) {
       return new Date(dateTimeStr).toLocaleString();
+    },
+    exitPage(){
+      this.$router.push('/');
     }
   },
   mounted() {
@@ -115,5 +130,40 @@ td button{
   background-color: #d9d9d9; color: black;
   border-radius: 5px; height: 30px;
   cursor: pointer;
+}
+
+.closeIcon {
+    position: absolute;
+    background-color: transparent;
+    border: 1px solid var(--contour-elements); /* Цвет рамки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 1003;
+  }
+
+.closeIcon::before,
+.closeIcon::after {
+  content: '';
+  position: absolute;
+  background-color: var(--contour-elements); /* Цвет палочек крестика */
+}
+
+.closeIcon::before {
+  transform: rotate(45deg); /* Первая палочка крестика */
+}
+.closeIcon::after {
+  transform: rotate(-45deg); /* Вторая палочка крестика */
+}
+#exitPage{
+  top:25px; right: 25px;
+  width: 50px; /* Ширина квадрата */
+  height: 50px; /* Высота квадрата */
+}
+#exitPage::before, #exitPage::after{
+  width: 25px; /* Ширина палочек крестика */
+  height: 3px; /* Высота палочек крестика */
 }
 </style>

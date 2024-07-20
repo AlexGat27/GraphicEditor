@@ -5,6 +5,7 @@ import api from '@/services/api/auth';
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         isAuthenticated: false,
+        isAdmin: false,
         user: null,
     }),
     actions: {
@@ -14,36 +15,26 @@ export const useAuthStore = defineStore('auth', {
                 if (response.data.status === 'authorized') {
                     this.isAuthenticated = true;
                     this.user = response.data.user;
+                    if (response.data.roles[0] === "admin"){
+                        console.log(response.data)
+                        this.isAdmin = true;
+                    }
                 } else {
                     this.isAuthenticated = false;
                     this.user = null;
+                    this.isAdmin = false;
                 }
             } catch (error) {
                 this.isAuthenticated = false;
                 this.user = null;
-            }
-        },
-        async checkAdmin(){
-            try {
-                const response = await api.checkAdmin();
-                if (response.data.status === 'permitted') {
-                    this.isAuthenticated = true;
-                    this.user = response.data.user;
-                    console.log('permitted')
-                    return false; 
-                }
-                console.log('allow')
-                this.isAuthenticated = true;
-                this.user = response.data.user;
-                return true; 
-            } catch (error) {
-                return false;
+                this.isAdmin = false;
             }
         },
         logout() {
             api.logout().then(() => {
                 this.isAuthenticated = false;
                 this.user = null;
+                this.isAdmin = false;
             })
         }
     },

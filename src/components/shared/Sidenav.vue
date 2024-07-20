@@ -5,6 +5,8 @@
         <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToLogin">Login</button>
         <button v-if="!isAuthenticated" class="fira-sans-regular" @click="goToRegister">Register</button>
         <button v-if="isAuthenticated" class="fira-sans-regular" @click="goToScenarios">Мои сценарии</button>
+        <button v-if="isAuthenticated && isAdmin" class="fira-sans-regular" @click="goToUsersPage">Пользователи</button>
+        <button v-if="isAuthenticated && isAdmin" class="fira-sans-regular" @click="goToModelsPage">Модели</button>
         <button v-if="isAuthenticated" class="fira-sans-regular" @click="logout">Выход</button>
       </div>
   </div>
@@ -23,6 +25,9 @@ import { useMainStore } from '@/stores/modelStore';
       isAuthenticated(){
         return this.authStore.isAuthenticated;
       },
+      isAdmin(){
+        return this.authStore.isAdmin;
+      },  
       currentModel: {
         get(){
           return this.mainStore.currentModel;
@@ -46,6 +51,14 @@ import { useMainStore } from '@/stores/modelStore';
       },
       goToScenarios() {
         this.$router.push('/scenarios');
+        this.closeSidenav();
+      },
+      goToUsersPage(){
+        this.$router.push('/admin/users');
+        this.closeSidenav();
+      },
+      goToModelsPage(){
+        this.$router.push('/admin/models');
         this.closeSidenav();
       },
       async logout(){

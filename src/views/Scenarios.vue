@@ -5,7 +5,7 @@
         <li v-for="scenario in scenarios" :key="scenario.id" @click="selectModel(scenario)"
         :class="{ selected: selectedScenario === scenario.id }" @dblclick="showUpdatePanel = true">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
-          <p style="margin: 5px;">{{ scenario.model_name }}</p>
+          <p style="margin: 5px;">{{ scenario.model_attributes.scenario }}</p>
           <div id="deleteScenario" class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
@@ -135,6 +135,9 @@ import { CompileModel } from '@/models/interfaces/compileModel';
 .closeIcon::before {
   transform: rotate(45deg); /* Первая палочка крестика */
 }
+.closeIcon::after {
+  transform: rotate(-45deg); /* Вторая палочка крестика */
+}
 #deleteScenario{
   bottom:5px; right: 5px;
   width: 25px; /* Ширина квадрата */
@@ -152,11 +155,6 @@ import { CompileModel } from '@/models/interfaces/compileModel';
 #exitPage::before, #exitPage::after{
   width: 25px; /* Ширина палочек крестика */
   height: 3px; /* Высота палочек крестика */
-}
-
-
-.closeIcon::after {
-  transform: rotate(-45deg); /* Вторая палочка крестика */
 }
 
 .circle {

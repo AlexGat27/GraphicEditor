@@ -56,7 +56,8 @@ router.beforeEach(async (to, from, next) => {
     next()
   }else if(to.matched.some(record => record.meta.requiresAdmin)){
     const authStore = useAuthStore();
-    if (await authStore.checkAdmin()) {
+    await authStore.checkAuth()
+    if (authStore.isAdmin) {
       next();
     } else {
       next({ name: 'Login' });

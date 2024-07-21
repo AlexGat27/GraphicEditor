@@ -1,8 +1,8 @@
 import api from "./apiInstance";
 
 const modelApi = {
-    getModels(){
-      return api.get('/models');
+    getModels(id){
+      return api.get(`brands/${id}/models`);
     },
     getModel(id){
       return api.get(`/models/${id}`);
@@ -24,7 +24,7 @@ const modelApi = {
     },
     updateBrand(id, body){
       return api.put(`/brands/${id}`, body);
-    }
+    },
 }
 
 export default modelApi;

@@ -1,73 +1,74 @@
 <template>
-    <div class="brandList-view">
-      <h1>Список марок</h1>
+    <div class="modelList-view">
+      <h1>Список моделей марки {{ brand_name }}</h1>
       <ul>
-        <li v-for="brand in brands" :key="brand.id" :class="{ selected: selectedBrand === brand.id }"
-        @click="selectedBrand = brand.id" @dblclick="showUpdatePanel = true">
-          <h3 style="margin: 5px; word-wrap: break-word;">{{ brand.name }}</h3>
+        <li v-for="model in models" :key="model.id" :class="{ selected: selectedmodel === model.id }"
+        @click="selectedmodel = model.id" @dblclick="showUpdatePanel = true">
+          <h3 style="margin: 5px; word-wrap: break-word;">{{ model.name }}</h3>
           <div style="display: flex; width: 100%; justify-content: space-around; margin: 5px 0 5px 0;">
-            <button @click="goToModelsList(brand.id, brand.name)">Модели</button>
-            <div id="deleteBrand" class="closeIcon" @click.stop="deleteBrand(brand.id)"></div>
+            <button @click="modelsPage">Модели</button>
+            <div id="deleteModel" class="closeIcon" @click.stop="deleteModel(model.id)"></div>
           </div>
           
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
-      <CreateBrand :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addBrand"/>
-      <CreateBrand :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateBrand"/>
+      <CreateModel :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addModel"/>
+      <CreateModel :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateModel"/>
       <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
   </template>
   
   <script>
-import CreateBrand from '@/components/shared/CreateBrand.vue';
+import CreateModel from '@/components/shared/CreateModel.vue';
 import { modelApi } from '@/services/api';
   export default {
     data() {
       return {
-        brands: [],
+        brand_name: '',
+        models: [],
         showCreatePanel: false,
         showUpdatePanel: false,
-        selectedBrand: null
+        selectedModel: null
       };
     },
     async created(){
-      await this.fetchBrands();
+        this.brand_name = this.$route.query.brand_name;
+        await this.fetchModels(this.$route.query.brand_id);
     },
-    components: {CreateBrand},
+    components: {CreateModel},
     methods: {
-      async fetchBrands() {
+      async fetchModels(brand_id) {
         try {
-          const response = await modelApi.getBrands();
-          console.log(response.data)
-          this.brands = response.data;
+          const response = await modelApi.getModels(brand_id);
+          this.models = response.data;
         } catch (error) {
           console.error('Ошибка при загрузке марок:', error);
         }
       },
-      async deleteBrand(id) {
+      async deleteModel(id) {
         try {
-          await modelApi.deleteBrands(id);
-          this.brands = this.brands.filter(brand => brand.id !== id);
+          await modelApi.deleteModels(id);
+          this.models = this.models.filter(model => model.id !== id);
         } catch (error) {
           console.error('Ошибка при удалении сценария:', error);
         }
       },
-      async addBrand(brand) {
+      async addModel(model) {
         try {
-          const response = await modelApi.createBrand(brand);
-          this.brands.push(response.data);
+          const response = await modelApi.createModel(model);
+          this.models.push(response.data);
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
         }
       },
-      async updateBrand(brand){
+      async updateModel(model){
         try {
-          const response = await modelApi.updateBrand(this.selectedBrand, brand);
-          const updatedBrand = response.data;
-          this.brands = this.brands.filter(brand => brand.id !== updatedBrand.id);
-          this.brands.push(updatedBrand);
+          const response = await modelApi.updateModel(this.selectedModel, model);
+          const updatedModel = response.data;
+          this.models = this.models.filter(model => model.id !== updatedModel.id);
+          this.models.push(updatedModel);
           this.showUpdatePanel = false;
         } catch (error) {
           console.error('Ошибка при обновлении сценария:', error);
@@ -75,16 +76,13 @@ import { modelApi } from '@/services/api';
       },
       exitPage(){
         this.$router.push('/');
-      },
-      goToModelsList(id, name){
-        this.$router.push({ name: 'ModelList', query: { brand_id: `${id}`, brand_name: `${name}` } })
       }
     },
   };
   </script>
   
 <style scoped>
-  .brandList-view{
+  .modelList-view{
     width: 90%; height: 90%; text-align: center;
   }
   ul{
@@ -147,11 +145,11 @@ import { modelApi } from '@/services/api';
 .closeIcon::after {
   transform: rotate(-45deg); /* Вторая палочка крестика */
 }
-#deleteBrand{
+#deleteModel{
   width: 25px; /* Ширина квадрата */
   height: 25px; /* Высота квадрата */
 }
-#deleteBrand::before, #deleteBrand::after{
+#deleteModel::before, #deleteModel::after{
   width: 20px; /* Ширина палочек крестика */
   height: 1px; /* Высота палочек крестика */
 }

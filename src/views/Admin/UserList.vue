@@ -17,7 +17,16 @@
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ formatDateTime(user.created_at) }}</td>
-            <td>{{ user.roles[0] }}</td>
+            <td @dblclick="editRole(user)" style="cursor: pointer;">
+              <template v-if="user.editingRole">
+                <select v-model="user.selectedRole" @change="updateUserRole(user)">
+                  <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+                </select>
+              </template>
+              <template v-else>
+                {{ user.roles[0] }}
+              </template>
+            </td>
             <td style="display: flex; justify-content: space-around;">
               <button v-if="user.roles[0] !== 'banned'" @click="blockUser(user.id)">Заблокировать</button>
               <button v-if="user.roles[0] === 'banned'" @click="unBlockUser(user.id)">Разблокировать</button>
@@ -37,14 +46,19 @@ import api from '@/services/api/user';
 export default {
   data() {
     return {
-      users: []
+      users: [],
+      roles: ['admin', 'user']
     };
   },
   methods: {
     async fetchUsers() {
       try {
         const response = await api.getUsers();
-        this.users = response.data.users;
+        this.users = response.data.users.map(user => ({
+          ...user,
+          editingRole: false,
+          selectedRole: user.roles[0]
+        }));
         console.log(this.users)
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error);
@@ -77,6 +91,22 @@ export default {
         console.log(`User with ID ${userId} has been deleted.`);
       } catch (error) {
         console.error('Error deleting user:', error);
+      }
+    },
+    editRole(user) {
+      this.users.forEach(user => {
+        user.editingRole = false;
+      })
+      user.editingRole = true;
+    },
+    async updateUserRole(user) {
+      try {
+        await api.assignRoleUser(user.id, { roleName: user.selectedRole });
+        user.roles[0] = user.selectedRole;
+        user.editingRole = false;
+        console.log(`User with ID ${user.id} role has been changed to ${user.selectedRole}.`);
+      } catch (error) {
+        console.error('Error changing user role:', error);
       }
     },
     formatDateTime(dateTimeStr) {
@@ -165,5 +195,26 @@ td button{
 #exitPage::before, #exitPage::after{
   width: 25px; /* Ширина палочек крестика */
   height: 3px; /* Высота палочек крестика */
+}
+
+td select {
+  width: calc(100% - 30px); /* Уменьшаем ширину на padding-right для размещения стрелки */
+  max-width: 180px;
+  padding: 0 10px 0 10px; /* Устанавливаем padding-left для текста */
+  border: 1px solid var(--contour-elements);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: var(--background-editorfield);
+  color: var(--contour-elements);
+  height: 30px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%237f7f7f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center; /* Позиционирование стрелки */
+  background-size: 20px; /* Увеличиваем размер стрелки */
 }
 </style>

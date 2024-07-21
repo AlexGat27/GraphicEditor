@@ -99,8 +99,9 @@ import { CompileModel } from '@/models/interfaces/compileModel';
     padding: 0;
   }
   ul li{
-    width: 150px;
-    height: 100px;
+    max-width: 250px;
+    max-height: 200px;
+    min-height: 100px;
     border: 1px solid var(--contour-elements);
     text-align: start;
     overflow: hidden;

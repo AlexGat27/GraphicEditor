@@ -1,7 +1,7 @@
 <template>
     <div class="overlay">
       <div class="create-panel">
-        <h2 style="margin-top: 0; margin-bottom: 15px;">{{ action }} сценарий</h2>
+        <h2 style="margin-top: 0; margin-bottom: 15px;">{{ action }} марку</h2>
         <form @submit.prevent="createBrand">
             <input type="text" v-model="name" required placeholder="Название"/>
             <button class="fira-sans-regular" type="submit">Сохранить</button>
@@ -12,7 +12,6 @@
   </template>
   
   <script>
-import { modelApi } from '@/services/api';
 
   export default {
     props:{

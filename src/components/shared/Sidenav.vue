@@ -58,7 +58,7 @@ import { useMainStore } from '@/stores/modelStore';
         this.closeSidenav();
       },
       goToModelsPage(){
-        this.$router.push('/admin/models');
+        this.$router.push('/admin/brands');
         this.closeSidenav();
       },
       async logout(){

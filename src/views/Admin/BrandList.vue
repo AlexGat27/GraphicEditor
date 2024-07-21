@@ -4,13 +4,16 @@
       <ul>
         <li v-for="brand in brands" :key="brand.id" :class="{ selected: selectedBrand === brand.id }"
         @click="selectedBrand = brand.id" @dblclick="showUpdatePanel = true">
-          <h3 style="margin: 5px;">{{ brand.name }}</h3>
-          <button @click="modelsPage">Модели</button>
-          <div id="deleteBrand" class="closeIcon" @click.stop="deleteBrand(brand.id)"></div>
+          <h3 style="margin: 5px; word-wrap: break-word;">{{ brand.name }}</h3>
+          <div style="display: flex; width: 100%; justify-content: space-around; margin: 5px 0 5px 0;">
+            <button @click="modelsPage">Модели</button>
+            <div id="deleteBrand" class="closeIcon" @click.stop="deleteBrand(brand.id)"></div>
+          </div>
+          
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
-      <CreateBrand :action="'Добавить новый'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addBrand"/>
+      <CreateBrand :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addBrand"/>
       <CreateBrand :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateBrand"/>
       <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
@@ -35,7 +38,8 @@ import { modelApi } from '@/services/api';
     methods: {
       async fetchBrands() {
         try {
-          const response = await modelApi.getModels();
+          const response = await modelApi.getBrands();
+          console.log(response.data)
           this.brands = response.data;
         } catch (error) {
           console.error('Ошибка при загрузке марок:', error);
@@ -43,7 +47,7 @@ import { modelApi } from '@/services/api';
       },
       async deleteBrand(id) {
         try {
-          await modelApi.deleteScenario(id);
+          await modelApi.deleteBrands(id);
           this.brands = this.brands.filter(brand => brand.id !== id);
         } catch (error) {
           console.error('Ошибка при удалении сценария:', error);
@@ -60,7 +64,7 @@ import { modelApi } from '@/services/api';
       },
       async updateBrand(brand){
         try {
-          const response = await modelApi.updateScenario(this.selectedBrand, brand);
+          const response = await modelApi.updateBrand(this.selectedBrand, brand);
           const updatedBrand = response.data;
           this.brands = this.brands.filter(brand => brand.id !== updatedBrand.id);
           this.brands.push(updatedBrand);
@@ -88,10 +92,11 @@ import { modelApi } from '@/services/api';
     padding: 0;
   }
   ul li{
-    width: 150px;
-    height: 100px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
     border: 1px solid var(--contour-elements);
-    text-align: start;
+    text-align: center;
     overflow: hidden;
     position: relative;
     border-radius: 5px;
@@ -104,8 +109,8 @@ import { modelApi } from '@/services/api';
   }
   li button{
     border: 1px solid var(--contour-elements);
-    height: 50px;
-    width: 95%;
+    height: 25px;
+    width: 70%;
     padding: 0 5px 0 5px;
     margin: 0;
     border-radius: 5px;
@@ -115,7 +120,7 @@ import { modelApi } from '@/services/api';
     text-align: center;
   }
   .closeIcon {
-    position: absolute;
+    
     background-color: transparent;
     border: 1px solid var(--contour-elements); /* Цвет рамки */
     display: flex;
@@ -140,7 +145,6 @@ import { modelApi } from '@/services/api';
   transform: rotate(-45deg); /* Вторая палочка крестика */
 }
 #deleteBrand{
-  bottom:5px; right: 5px;
   width: 25px; /* Ширина квадрата */
   height: 25px; /* Высота квадрата */
 }
@@ -149,6 +153,7 @@ import { modelApi } from '@/services/api';
   height: 1px; /* Высота палочек крестика */
 }
 #exitPage{
+  position: absolute;
   top:25px; right: 25px;
   width: 50px; /* Ширина квадрата */
   height: 50px; /* Высота квадрата */

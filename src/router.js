@@ -5,7 +5,7 @@ import MainEditor from './views/MainEditor.vue';
 import Scenarios from './views/Scenarios.vue';
 import { useAuthStore } from './stores/authStore';
 import UserList from './views/Admin/UserList.vue';
-// import ModelList from './views/Admin/ModelList.vue';
+import BrandList from './views/Admin/BrandList.vue';
 
 const routes = [
   {
@@ -36,12 +36,12 @@ const routes = [
     component: UserList,
     meta: {requiresAdmin: true}
   },
-  // {
-  //   path: '/admin/users',
-  //   name: 'UserList',
-  //   component: ModelList,
-  //   meta: {requiresAdmin: true}
-  // }
+  {
+    path: '/admin/brands',
+    name: 'BrandList',
+    component: BrandList,
+    meta: {requiresAdmin: true}
+  }
 ];
 
 const router = createRouter({

@@ -1,5 +1,5 @@
 export class ConditionAttribute {
-    constructor(condition='', values=[], countSignals=[], delayTypes=[]) {
+    constructor(condition='', values=null, countSignals=null, delayTypes=["более", "менее", "равно"]) {
         this.condition = condition;
         this.values = values;
         this.countSignals = countSignals;
@@ -8,7 +8,7 @@ export class ConditionAttribute {
 }
 
 export class ActionAttribute{
-    constructor(actions=[], interruptions=[], workingPeriod=[], powers=[]){
+    constructor(actions=['Включить', "Выключить", "Мигать", "Включить/Выключить"], interruptions=null, workingPeriod=null, powers=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]){
         this.actions = actions;
         this.interruptions = interruptions;
         this.workingPeriod = workingPeriod;

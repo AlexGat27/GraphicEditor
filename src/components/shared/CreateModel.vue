@@ -1,20 +1,20 @@
 <template>
   <div class="overlay">
     <div class="create-panel">
-      <h2 style="margin-top: 0; margin-bottom: 15px;">{{ action }} модель</h2>
+      <h2>{{ action }} модель</h2>
       <form @submit.prevent="createModel">
         <input type="text" v-model="name" required placeholder="Название" />
-        <h3 style="margin-top: 0; margin-bottom: 15px;">Аттрибуты модели</h3>
+        <h3>Аттрибуты модели</h3>
 
         <div style="display: flex; width: 100%;">
           <!-- Condition Attributes -->
           <div class="condition-group">
+            <h4>Аттрибуты условий</h4>
             <div class="scrollable">
               <div v-for="(condition, index) in conditionAttributes" :key="index">
                 <input type="text" v-model="condition.condition" required placeholder="Условие" />
                 <input type="text" v-model="condition.values" placeholder="Значения" />
                 <input type="text" v-model="condition.countSignals" placeholder="Сигналы" />
-                <input type="text" v-model="condition.delayTypes" placeholder="Типы задержек" />
                 <button type="button" @click="removeCondition(index)" style="width: 50%;">Удалить условие</button>
               </div>
             </div>
@@ -23,16 +23,9 @@
 
           <!-- Action Attributes -->
           <div class="action-group">
-            <div class="scrollable">
-              <div v-for="(action, index) in actionAttributes.actions" :key="index">
-                <input type="text" v-model="action.action" required placeholder="Действие" />
-                <input type="text" v-model="action.interruptions" placeholder="Прерывания" />
-                <input type="text" v-model="action.workingPeriod" placeholder="Рабочий период" />
-                <input type="text" v-model="action.powers" placeholder="Мощности" />
-                <button type="button" @click="removeAction(index)" style="width: 50%;">Удалить действие</button>
-              </div>
-            </div>
-            <button type="button" @click="addAction" style="width: 50%;">Добавить действие</button>
+            <h4>Аттрибуты для мигания контуром</h4>
+            <input type="text" v-model="actionAttributes.interruptions" placeholder="Прерывания" />
+            <input type="text" v-model="actionAttributes.workingPeriod" placeholder="Рабочий период" />
           </div>
         </div>
 
@@ -60,18 +53,24 @@ export default {
   data() {
     return {
       name: '',
-      actionAttributes: {
-        actions: [new ActionAttribute()]
-      },
+      actionAttributes: new ActionAttribute(),
       conditionAttributes: [new ConditionAttribute()]
     };
   },
   methods: {
     createModel() {
+      this.conditionAttributes.forEach((attribute, index) => {
+        attribute.condition = attribute.condition;
+        attribute.values = attribute.values.split();
+        attribute.countSignals = attribute.countSignals.split();
+      });
+      this.actionAttributes.interruptions = this.actionAttributes.interruptions.split();
+      this.actionAttributes.workingPeriod = this.actionAttributes.workingPeriod.split();
+
       const newModel = {
         brand_id: this.brand_id,
         name: this.name,
-        data: new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes)
+        data: JSON.stringify(new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes))
       };
       this.$emit('create', newModel);
     },
@@ -116,6 +115,10 @@ form {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+h2, h3, h4{
+  margin-top: 0; margin-bottom: 15px;
 }
 
 input,

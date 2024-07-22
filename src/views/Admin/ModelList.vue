@@ -2,19 +2,18 @@
     <div class="modelList-view">
       <h1>Список моделей марки {{ brand_name }}</h1>
       <ul>
-        <li v-for="model in models" :key="model.id" :class="{ selected: selectedmodel === model.id }"
+        <li v-for="model in models" :key="model.id" :class="{ selected: selectedModel === model.id }"
         @click="selectedmodel = model.id" @dblclick="showUpdatePanel = true">
           <h3 style="margin: 5px; word-wrap: break-word;">{{ model.name }}</h3>
-          <div style="display: flex; width: 100%; justify-content: space-around; margin: 5px 0 5px 0;">
-            <button @click="modelsPage">Модели</button>
+          <div style="display: flex; width: 100%; justify-content: end; margin-top: 5px;">
             <div id="deleteModel" class="closeIcon" @click.stop="deleteModel(model.id)"></div>
           </div>
           
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
-      <CreateModel :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addModel"/>
-      <CreateModel :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateModel"/>
+      <CreateModel :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addModel" :brand_id="brand_id"/>
+      <CreateModel :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateModel" :brand_id="brand_id"/>
       <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
   </template>
@@ -26,6 +25,7 @@ import { modelApi } from '@/services/api';
     data() {
       return {
         brand_name: '',
+        brand_id: null,
         models: [],
         showCreatePanel: false,
         showUpdatePanel: false,
@@ -33,8 +33,9 @@ import { modelApi } from '@/services/api';
       };
     },
     async created(){
+        this.brand_id = parseInt(this.$route.query.brand_id);
         this.brand_name = this.$route.query.brand_name;
-        await this.fetchModels(this.$route.query.brand_id);
+        await this.fetchModels(this.brand_id);
     },
     components: {CreateModel},
     methods: {
@@ -48,7 +49,7 @@ import { modelApi } from '@/services/api';
       },
       async deleteModel(id) {
         try {
-          await modelApi.deleteModels(id);
+          await modelApi.deleteModel(id);
           this.models = this.models.filter(model => model.id !== id);
         } catch (error) {
           console.error('Ошибка при удалении сценария:', error);
@@ -57,7 +58,8 @@ import { modelApi } from '@/services/api';
       async addModel(model) {
         try {
           const response = await modelApi.createModel(model);
-          this.models.push(response.data);
+          console.log(response);
+          this.models.push(response.data.model);
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
@@ -102,6 +104,7 @@ import { modelApi } from '@/services/api';
     position: relative;
     border-radius: 5px;
     margin: 15px;
+    padding: 5px;
     cursor: pointer;
     z-index: 1002;
   }
@@ -121,7 +124,6 @@ import { modelApi } from '@/services/api';
     text-align: center;
   }
   .closeIcon {
-    
     background-color: transparent;
     border: 1px solid var(--contour-elements); /* Цвет рамки */
     display: flex;

@@ -4,8 +4,8 @@ const modelApi = {
     getModels(id){
       return api.get(`brands/${id}/models`);
     },
-    getModel(id){
-      return api.get(`/models/${id}`);
+    deleteModel(id){
+      return api.delete(`/models/${id}`);
     },
     createModel(body){
       return api.post('/models', body);

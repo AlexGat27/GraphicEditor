@@ -1,8 +1,14 @@
 import api from "./apiInstance";
 
 const modelApi = {
-    getModels(id){
+    getBrandModels(id){
       return api.get(`brands/${id}/models`);
+    },
+    getModels(){
+      return api.get('/models')
+    },
+    getModel(id){
+      return api.get(`/models/${id}`);
     },
     deleteModel(id){
       return api.delete(`/models/${id}`);

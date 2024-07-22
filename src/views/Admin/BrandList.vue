@@ -5,7 +5,7 @@
         <li v-for="brand in brands" :key="brand.id" :class="{ selected: selectedBrand === brand.id }"
         @click="selectedBrand = brand.id" @dblclick="showUpdatePanel = true">
           <h3 style="margin: 5px; word-wrap: break-word;">{{ brand.name }}</h3>
-          <div style="display: flex; width: 100%; justify-content: space-around; margin: 5px 0 5px 0;">
+          <div style="display: flex; width: 100%; justify-content: space-around; margin-top: 10px;">
             <button @click="goToModelsList(brand.id, brand.name)">Модели</button>
             <div id="deleteBrand" class="closeIcon" @click.stop="deleteBrand(brand.id)"></div>
           </div>
@@ -104,8 +104,8 @@ import { modelApi } from '@/services/api';
     position: relative;
     border-radius: 5px;
     margin: 15px;
+    padding:10px;
     cursor: pointer;
-    z-index: 1002;
   }
   ul li.selected {
     border-color: white; /* Цвет рамки при подсветке */
@@ -123,7 +123,6 @@ import { modelApi } from '@/services/api';
     text-align: center;
   }
   .closeIcon {
-    
     background-color: transparent;
     border: 1px solid var(--contour-elements); /* Цвет рамки */
     display: flex;
@@ -131,7 +130,6 @@ import { modelApi } from '@/services/api';
     justify-content: center;
     cursor: pointer;
     border-radius: 5px;
-    z-index: 1003;
   }
 
 .closeIcon::before,

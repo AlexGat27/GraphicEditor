@@ -3,23 +3,26 @@
       <h1>Список моделей марки {{ brand_name }}</h1>
       <ul>
         <li v-for="model in models" :key="model.id" :class="{ selected: selectedModel === model.id }"
-        @click="selectedmodel = model.id" @dblclick="showUpdatePanel = true">
+        @click="selectedModel = model.id" @dblclick="showUpdatePanel = true">
           <h3 style="margin: 5px; word-wrap: break-word;">{{ model.name }}</h3>
-          <div style="display: flex; width: 100%; justify-content: end; margin-top: 5px;">
+          <div style="display: flex; width: 100%; justify-content: end; margin-top: 10px;">
             <div id="deleteModel" class="closeIcon" @click.stop="deleteModel(model.id)"></div>
           </div>
           
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
       </ul>  
-      <CreateModel :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addModel" :brand_id="brand_id"/>
-      <CreateModel :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateModel" :brand_id="brand_id"/>
+      <CreateModel :action="'Добавить новую'" v-if="showCreatePanel" @close="showCreatePanel = false" 
+      @create="addModel" :brand_id="brand_id" :modelAttributes="defaultAttributes"/>
+      <CreateModel :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" 
+      @create="updateModel" :brand_id="brand_id" :modelAttributes="currentAttributes"/>
       <div id="exitPage" class="closeIcon" @click="exitPage"></div>
     </div>
   </template>
   
   <script>
 import CreateModel from '@/components/shared/CreateModel.vue';
+import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/interfaces/modelAttributes';
 import { modelApi } from '@/services/api';
   export default {
     data() {
@@ -38,10 +41,20 @@ import { modelApi } from '@/services/api';
         await this.fetchModels(this.brand_id);
     },
     components: {CreateModel},
+    computed:{
+      currentAttributes(){
+        const attributes = this.models.find(model => this.selectedModel === model.id).data;
+        return new ModelAttributes(attributes.scenario, attributes.conditionAttributes, attributes.actionAttributes);
+      },
+      defaultAttributes(){
+        return new ModelAttributes('', [new ConditionAttribute()], new ActionAttribute());
+      }
+    },
     methods: {
       async fetchModels(brand_id) {
         try {
-          const response = await modelApi.getModels(brand_id);
+          const response = await modelApi.getBrandModels(brand_id);
+          console.log(response.data)
           this.models = response.data;
         } catch (error) {
           console.error('Ошибка при загрузке марок:', error);
@@ -77,7 +90,7 @@ import { modelApi } from '@/services/api';
         }
       },
       exitPage(){
-        this.$router.push('/');
+        this.$router.push('/admin/brands');
       }
     },
   };
@@ -104,9 +117,8 @@ import { modelApi } from '@/services/api';
     position: relative;
     border-radius: 5px;
     margin: 15px;
-    padding: 5px;
+    padding: 10px;
     cursor: pointer;
-    z-index: 1002;
   }
   ul li.selected {
     border-color: white; /* Цвет рамки при подсветке */
@@ -131,7 +143,6 @@ import { modelApi } from '@/services/api';
     justify-content: center;
     cursor: pointer;
     border-radius: 5px;
-    z-index: 1003;
   }
 
 .closeIcon::before,

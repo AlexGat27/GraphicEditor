@@ -15,7 +15,7 @@
                 <input type="text" v-model="condition.condition" required placeholder="Условие" />
                 <input type="text" v-model="condition.values" placeholder="Значения" />
                 <input type="text" v-model="condition.countSignals" placeholder="Сигналы" />
-                <button type="button" @click="removeCondition(index)" style="width: 50%;">Удалить условие</button>
+                <button v-if="conditionAttributes.length > 1" type="button" @click="removeCondition(index)" style="width: 50%;">Удалить условие</button>
               </div>
             </div>
             <button type="button" @click="addCondition" style="width: 50%;">Добавить условие</button>
@@ -48,14 +48,35 @@ export default {
     brand_id: {
       type: Number,
       required: true
+    },
+    modelAttributes:{
+      type: ModelAttributes,
+      required: true
     }
   },
-  data() {
+  data(){
     return {
       name: '',
-      actionAttributes: new ActionAttribute(),
-      conditionAttributes: [new ConditionAttribute()]
-    };
+      conditionAttributes: [],
+      actionAttributes: null
+    }
+  },
+  created(){
+    this.name = this.modelAttributes.scenario;
+    this.modelAttributes.conditionAttributes.forEach(attribute => {
+      this.conditionAttributes.push(new ConditionAttribute(
+        attribute.condition,
+        attribute.values ? attribute.values.join(' ') : attribute.values,
+        attribute.countSignals ? attribute.countSignals.join(' ') : attribute.countSignals,
+        attribute.delayTypes
+      ))
+    })
+    this.actionAttributes = new ActionAttribute(
+      this.modelAttributes.actionAttributes.actions,
+      this.modelAttributes.actionAttributes.interruptions ? this.modelAttributes.actionAttributes.interruptions.join(' ') : this.modelAttributes.actionAttributes.interruptions,
+      this.modelAttributes.actionAttributes.workingPeriod ? this.modelAttributes.actionAttributes.workingPeriod.join(' ') : this.modelAttributes.actionAttributes.workingPeriod,
+      this.modelAttributes.actionAttributes.powers
+    )
   },
   methods: {
     createModel() {
@@ -75,17 +96,12 @@ export default {
       this.$emit('create', newModel);
     },
     addCondition() {
+      console.log(this.conditionAttributes)
       this.conditionAttributes.push(new ConditionAttribute());
     },
     removeCondition(index) {
       this.conditionAttributes.splice(index, 1);
     },
-    addAction() {
-      this.actionAttributes.actions.push(new ActionAttribute());
-    },
-    removeAction(index) {
-      this.actionAttributes.actions.splice(index, 1);
-    }
   }
 };
 </script>
@@ -97,7 +113,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;

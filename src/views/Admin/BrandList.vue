@@ -39,7 +39,6 @@ import { modelApi } from '@/services/api';
       async fetchBrands() {
         try {
           const response = await modelApi.getBrands();
-          console.log(response.data)
           this.brands = response.data;
         } catch (error) {
           console.error('Ошибка при загрузке марок:', error);

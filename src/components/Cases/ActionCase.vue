@@ -21,6 +21,8 @@
 import SelectBlock from "../blocks/DropdownBlock.vue";
 import ConfirmModal from "../shared/ConfirmModal.vue";
 import { useMainStore } from "@/stores/modelStore";
+import { ActionParams } from "@/models/attributeEnums";
+import { ActionAttribute } from "@/models/modelAttributes";
 
 export default {
   components: { SelectBlock, ConfirmModal },
@@ -54,16 +56,10 @@ export default {
       return this.store.modelAttributes.actionAttributes;
     },
     filterActionAttributes() {
-      if (this.currentAction.action === "Включить" || this.currentAction.action === '' || 
-      this.currentAction.action === "Выключить" || this.currentAction.action === "Включить/Выключить") {
-        return {
-          actions: this.actionAttributes.actions,
-          interruptions: [],
-          workingPeriod: [],
-          powers: this.actionAttributes.powers
-        } 
+      if (this.currentAction.action === ActionParams.BLINK) {
+        return this.actionAttributes; 
       }
-      return this.actionAttributes;
+      return new ActionAttribute();
     }
   },
   props: {

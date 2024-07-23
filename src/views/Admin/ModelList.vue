@@ -22,7 +22,7 @@
   
   <script>
 import CreateModel from '@/components/shared/CreateModel.vue';
-import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/interfaces/modelAttributes';
+import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/modelAttributes';
 import { modelApi } from '@/services/api';
   export default {
     data() {
@@ -57,7 +57,7 @@ import { modelApi } from '@/services/api';
           console.log(response.data)
           this.models = response.data;
         } catch (error) {
-          console.error('Ошибка при загрузке марок:', error);
+          console.error('Ошибка при загрузке моделей:', error);
         }
       },
       async deleteModel(id) {

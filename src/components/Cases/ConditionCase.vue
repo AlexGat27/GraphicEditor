@@ -22,7 +22,8 @@ import DropdownBlock from '../blocks/DropdownBlock.vue';
 import CompositeBlock from '../blocks/CompositeBlock.vue';
 import ConfirmModal from '../shared/ConfirmModal.vue';
 import { useMainStore } from '@/stores/modelStore';
-import { ConditionCaseModel } from '@/models/interfaces/compileModel';
+import { ConditionCaseModel } from '@/models/compileModel';
+import { ConditionAttribute } from '@/models/modelAttributes';
 
 export default {
   components: { DropdownBlock, CompositeBlock, ConfirmModal },
@@ -56,7 +57,7 @@ export default {
     },
     filterCondition(){
       const conditionAttributes = this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
-      return conditionAttributes || { values: [], countSignals: [], delayTypes: [] };
+      return conditionAttributes || new ConditionAttribute();
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);

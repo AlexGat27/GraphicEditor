@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { ModelAttributes, ActionAttribute, ConditionAttribute } from '@/models/interfaces/modelAttributes';
+import { ModelAttributes, ActionAttribute, ConditionAttribute } from '@/models/modelAttributes';
 
 export default {
   props: {
@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     createModel() {
+      console.log(this.conditionAttributes)
       this.conditionAttributes.forEach((attribute, index) => {
         attribute.condition = attribute.condition;
         attribute.values = attribute.values.split();
@@ -91,7 +92,7 @@ export default {
       const newModel = {
         brand_id: this.brand_id,
         name: this.name,
-        data: JSON.stringify(new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes))
+        data: new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes)
       };
       this.$emit('create', newModel);
     },

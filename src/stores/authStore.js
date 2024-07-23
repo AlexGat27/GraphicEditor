@@ -16,7 +16,6 @@ export const useAuthStore = defineStore('auth', {
                     this.isAuthenticated = true;
                     this.user = response.data.user;
                     if (response.data.roles[0] === "admin"){
-                        console.log(response.data)
                         this.isAdmin = true;
                     }
                 } else {

@@ -16,11 +16,12 @@
   </template>
   
 <script>
-import { ContainerModel } from '@/models/interfaces/compileModel';
+import { ContainerModel } from '@/models/compileModel';
 import { useMainStore } from '@/stores/modelStore';
 import Sidenav from '../shared/Sidenav.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { scenarioApi } from '@/services/api';
+import { ActionParams } from '@/models/attributeEnums';
 
 export default {
   components: {
@@ -78,7 +79,7 @@ export default {
             }
           })
           container.actionCases.forEach(attr => {
-            if (attr.action === '' || attr.power === '' || (attr.action === 'Мигать' && (attr.interruption === '' || attr.workingPeriod === ''))){
+            if (attr.action === ActionParams.EMPTY || attr.power === '' || (attr.action === ActionParams.BLINK && (attr.interruption === '' || attr.workingPeriod === ''))){
               console.error("Не все поля действия заполнены");
               isNullValues = true;
               return;
@@ -90,7 +91,7 @@ export default {
         if (isNullValues) return;
       });
       if (isNullValues) return;
-      const requestData = {json_data: compileModel, model_name: this.modelName};
+      const requestData = {jsonData: compileModel, name: this.modelName};
       const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
       console.log(response);
     }

@@ -20,7 +20,7 @@
 import { scenarioApi } from '@/services/api';
 import CreateScenario from '../components/shared/CreateScenario.vue'
 import { useMainStore } from '@/stores/modelStore';
-import { CompileModel } from '@/models/interfaces/compileModel';
+import { CompileModel } from '@/models/compileModel';
   export default {
     data() {
       return {
@@ -41,6 +41,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
         try {
           const response = await scenarioApi.getScenarios();
           this.scenarios = response.data;
+          console.log(this.scenarios)
           if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
         } catch (error) {
           console.error('Ошибка при загрузке сценариев:', error);
@@ -75,6 +76,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
         }
       },
       async selectModel(scenario){
+        console.log(scenario)
         this.selectedScenario = scenario.id;
         this.modelStore.setModelAttributes(scenario.model_attributes);
         if (scenario.jsonData) this.modelStore.setCurrentModel(scenario.jsonData);
@@ -100,6 +102,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
   }
   ul li{
     max-width: 250px;
+    min-width: 100px;
     max-height: 200px;
     min-height: 100px;
     border: 1px solid var(--contour-elements);
@@ -108,6 +111,7 @@ import { CompileModel } from '@/models/interfaces/compileModel';
     position: relative;
     border-radius: 5px;
     margin: 15px;
+    padding: 10px;
     cursor: pointer;
     z-index: 1002;
   }

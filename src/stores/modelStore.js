@@ -1,7 +1,7 @@
 // store.js
 import { defineStore } from 'pinia';
-import { CompileModel, ConditionCaseModel, ContourModel, ContainerModel, ActionCaseModel } from '@/models/interfaces/compileModel';
-import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/interfaces/modelAttributes';
+import { CompileModel, ConditionCaseModel, ContourModel, ContainerModel, ActionCaseModel } from '@/models/compileModel';
+import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/modelAttributes';
 
 export const useMainStore = defineStore('main', {
   state: () => ({

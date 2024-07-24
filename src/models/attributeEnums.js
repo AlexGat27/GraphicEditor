@@ -5,3 +5,9 @@ export const ActionParams = {
     BLINK: "Мигать",
     EMPTY: ''
 }
+
+export const Roles = {
+    ADMIN: 'admin',
+    USER: 'user',
+    BANNED: 'banned'
+}

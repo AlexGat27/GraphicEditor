@@ -21,6 +21,7 @@
   
   <script>
 import CreateBrand from '@/components/shared/CreateBrand.vue';
+import { BrandResponse } from '@/models/responses';
 import { modelApi } from '@/services/api';
   export default {
     data() {
@@ -39,7 +40,9 @@ import { modelApi } from '@/services/api';
       async fetchBrands() {
         try {
           const response = await modelApi.getBrands();
-          this.brands = response.data;
+          response.data.forEach(element => {
+            this.brands.push(new BrandResponse(element));
+          });
         } catch (error) {
           console.error('Ошибка при загрузке марок:', error);
         }
@@ -55,7 +58,7 @@ import { modelApi } from '@/services/api';
       async addBrand(brand) {
         try {
           const response = await modelApi.createBrand(brand);
-          this.brands.push(response.data);
+          this.brands.push(new BrandResponse(response.data));
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
@@ -64,9 +67,9 @@ import { modelApi } from '@/services/api';
       async updateBrand(brand){
         try {
           const response = await modelApi.updateBrand(this.selectedBrand, brand);
-          const updatedBrand = response.data;
+          const updatedBrand = new BrandResponse(response.data);
           this.brands = this.brands.filter(brand => brand.id !== updatedBrand.id);
-          this.brands.push(updatedBrand);
+          this.brands.push(new BrandResponse(updatedBrand));
           this.showUpdatePanel = false;
         } catch (error) {
           console.error('Ошибка при обновлении сценария:', error);
@@ -95,6 +98,7 @@ import { modelApi } from '@/services/api';
   }
   ul li{
     max-width: 200px;
+    min-width: 150px;
     width: auto;
     height: auto;
     border: 1px solid var(--contour-elements);

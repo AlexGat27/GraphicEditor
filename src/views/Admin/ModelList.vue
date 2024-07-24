@@ -23,6 +23,7 @@
   <script>
 import CreateModel from '@/components/shared/CreateModel.vue';
 import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/modelAttributes';
+import { ModelResponse } from '@/models/responses';
 import { modelApi } from '@/services/api';
   export default {
     data() {
@@ -54,8 +55,10 @@ import { modelApi } from '@/services/api';
       async fetchModels(brand_id) {
         try {
           const response = await modelApi.getBrandModels(brand_id);
-          console.log(response.data)
-          this.models = response.data;
+          response.data.forEach(element => {
+            this.models.push(new ModelResponse(element));
+          });
+          console.log(this.models)
         } catch (error) {
           console.error('Ошибка при загрузке моделей:', error);
         }
@@ -71,8 +74,7 @@ import { modelApi } from '@/services/api';
       async addModel(model) {
         try {
           const response = await modelApi.createModel(model);
-          console.log(response);
-          this.models.push(response.data.model);
+          this.models.push(new ModelResponse(response.data.model));
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
@@ -81,7 +83,8 @@ import { modelApi } from '@/services/api';
       async updateModel(model){
         try {
           const response = await modelApi.updateModel(this.selectedModel, model);
-          const updatedModel = response.data;
+          console.log(response.data)
+          const updatedModel = new ModelResponse(response.data.model);
           this.models = this.models.filter(model => model.id !== updatedModel.id);
           this.models.push(updatedModel);
           this.showUpdatePanel = false;

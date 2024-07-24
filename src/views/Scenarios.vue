@@ -21,6 +21,7 @@ import { scenarioApi } from '@/services/api';
 import CreateScenario from '../components/shared/CreateScenario.vue'
 import { useMainStore } from '@/stores/modelStore';
 import { CompileModel } from '@/models/compileModel';
+import { ScenarioResponse } from '@/models/responses';
   export default {
     data() {
       return {
@@ -40,7 +41,9 @@ import { CompileModel } from '@/models/compileModel';
       async fetchScenarios() {
         try {
           const response = await scenarioApi.getScenarios();
-          this.scenarios = response.data;
+          response.data.forEach(element => {
+            this.scenarios.push(new ScenarioResponse(element))
+          });
           console.log(this.scenarios)
           if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
         } catch (error) {
@@ -58,7 +61,7 @@ import { CompileModel } from '@/models/compileModel';
       async addScenario(scenario) {
         try {
           const response = await scenarioApi.addScenario(scenario);
-          this.scenarios.push(response.data);
+          this.scenarios.push(new ScenarioResponse(response.data));
           this.showCreatePanel = false;
         } catch (error) {
           console.error('Ошибка при добавлении сценария:', error);
@@ -67,9 +70,8 @@ import { CompileModel } from '@/models/compileModel';
       async updateScenario(scenarioData){
         try {
           const response = await scenarioApi.updateScenario(this.selectedScenario, scenarioData);
-          const updatedScenario = response.data;
-          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
-          this.scenarios.push(updatedScenario);
+          const updatedScenario = new ScenarioResponse(response.data);
+          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id).push(updatedScenario);
           this.showUpdatePanel = false;
         } catch (error) {
           console.error('Ошибка при обновлении сценария:', error);

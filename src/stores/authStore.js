@@ -1,6 +1,8 @@
 // stores/auth.js
 import { defineStore } from 'pinia';
 import api from '@/services/api/auth';
+import { UserResponse } from '@/models/responses';
+import { Roles } from '@/models/attributeEnums';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -14,8 +16,8 @@ export const useAuthStore = defineStore('auth', {
                 const response = await api.checkAuth();
                 if (response.data.status === 'authorized') {
                     this.isAuthenticated = true;
-                    this.user = response.data.user;
-                    if (response.data.roles[0] === "admin"){
+                    this.user = new UserResponse(response.data);
+                    if (this.user.role === Roles.ADMIN){
                         this.isAdmin = true;
                     }
                 } else {

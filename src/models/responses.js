@@ -27,7 +27,7 @@ export class ModelResponse{
     constructor(response){
         this.id = response.id;
         this.name = response.name;
-        this.canComands = data.canComands;
+        this.canComands = response.canComands;
         this.brand_id = response.brand_id;
     }
 }

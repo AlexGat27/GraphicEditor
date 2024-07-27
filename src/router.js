@@ -48,7 +48,13 @@ const routes = [
     name: 'ModelList',
     component: ModelList,
     meta: {requiresAdmin: true}
-  }
+  },
+  // {
+  //   path: '/admin/canCommands',
+  //   name: 'CanCommandList',
+  //   component: CanCommandList,
+  //   meta: {requiresAdmin: true}
+  // }
 ];
 
 const router = createRouter({

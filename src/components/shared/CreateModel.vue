@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { ModelAttributes, ActionAttribute, ConditionAttribute } from '@/models/modelAttributes';
 
 export default {
   props: {
@@ -50,7 +49,7 @@ export default {
       required: true
     },
     modelAttributes:{
-      type: ModelAttributes,
+      // type: ModelAttributes,
       required: true
     }
   },
@@ -63,42 +62,28 @@ export default {
   },
   created(){
     this.name = this.modelAttributes.scenario;
-    this.modelAttributes.conditionAttributes.forEach(attribute => {
-      this.conditionAttributes.push(new ConditionAttribute(
-        attribute.condition,
-        attribute.values ? attribute.values.join(' ') : attribute.values,
-        attribute.countSignals ? attribute.countSignals.join(' ') : attribute.countSignals,
-        attribute.delayTypes
-      ))
-    })
-    this.actionAttributes = new ActionAttribute(
-      this.modelAttributes.actionAttributes.actions,
-      this.modelAttributes.actionAttributes.interruptions ? this.modelAttributes.actionAttributes.interruptions.join(' ') : this.modelAttributes.actionAttributes.interruptions,
-      this.modelAttributes.actionAttributes.workingPeriod ? this.modelAttributes.actionAttributes.workingPeriod.join(' ') : this.modelAttributes.actionAttributes.workingPeriod,
-      this.modelAttributes.actionAttributes.powers
-    )
   },
   methods: {
     createModel() {
-      console.log(this.conditionAttributes)
-      this.conditionAttributes.forEach((attribute, index) => {
-        attribute.condition = attribute.condition;
-        attribute.values = attribute.values.split();
-        attribute.countSignals = attribute.countSignals.split();
-      });
-      this.actionAttributes.interruptions = this.actionAttributes.interruptions.split();
-      this.actionAttributes.workingPeriod = this.actionAttributes.workingPeriod.split();
+      // console.log(this.conditionAttributes)
+      // this.conditionAttributes.forEach((attribute, index) => {
+      //   attribute.condition = attribute.condition;
+      //   attribute.values = attribute.values.split();
+      //   attribute.countSignals = attribute.countSignals.split();
+      // });
+      // this.actionAttributes.interruptions = this.actionAttributes.interruptions.split();
+      // this.actionAttributes.workingPeriod = this.actionAttributes.workingPeriod.split();
 
-      const newModel = {
-        brand_id: this.brand_id,
-        name: this.name,
-        data: new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes)
-      };
-      this.$emit('create', newModel);
+      // const newModel = {
+      //   brand_id: this.brand_id,
+      //   name: this.name,
+      //   data: new ModelAttributes(this.name, this.conditionAttributes, this.actionAttributes)
+      // };
+      // this.$emit('create', newModel);
     },
     addCondition() {
       console.log(this.conditionAttributes)
-      this.conditionAttributes.push(new ConditionAttribute());
+      // this.conditionAttributes.push(new ConditionAttribute());
     },
     removeCondition(index) {
       this.conditionAttributes.splice(index, 1);

@@ -2,15 +2,15 @@
   <div>
     <div class="divider" v-if="caseID > 0"></div>
     <div class="actionCase">
-      <SelectBlock :blockTitle="title1" :attributes="filterActionAttributes.actions" 
+      <SelectBlock :blockTitle="title1" :attributes="mapActions" 
       @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-      <SelectBlock :blockTitle="title3" :attributes="filterActionAttributes.interruptions"
+      <SelectBlock :blockTitle="title3" :attributes="filterAction.interruptions"
       @attribute="updateAttribute('interruption', $event)" :current="currentAction.interruption"/>
-      <SelectBlock :blockTitle="title4" :attributes="filterActionAttributes.workingPeriod"
+      <SelectBlock :blockTitle="title4" :attributes="filterAction.workingPeriod"
       @attribute="updateAttribute('workingPeriod', $event)" :current="currentAction.workingPeriod"/>
       <SelectBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"
-      :attributes="filterActionAttributes.powers"/>
-      <div class="closeIcon" @click="setShowConfirm()"></div>
+      :attributes="modelData.powers"/>
+      <!-- <div class="closeIcon" @click="setShowConfirm()"></div> -->
     </div>
     <ConfirmModal :message="'Точно хотите удалить действие?'" :isVisible="showConfirmModal" 
     @confirm="removeCase" @cancel="showConfirmModal = false" />
@@ -22,7 +22,7 @@ import SelectBlock from "../blocks/DropdownBlock.vue";
 import ConfirmModal from "../shared/ConfirmModal.vue";
 import { useMainStore } from "@/stores/modelStore";
 import { ActionParams } from "@/models/attributeEnums";
-import { ActionAttribute } from "@/models/modelAttributes";
+import { modelData } from "@/models/modelAttributes";
 
 export default {
   components: { SelectBlock, ConfirmModal },
@@ -30,7 +30,7 @@ export default {
     return {
       title1: 'Действие',
       title2: 'Тип',
-      title3: "Прерывание (ms)",
+      title3: "Прерывание",
       title4: "Период работы",
       title5: "Мощность контура",
       store: null,
@@ -46,21 +46,21 @@ export default {
           return this.store.currentModel;
       },
       set(value) {
-          this.store.setCurrentModel(value);
+        this.store.setCurrentModel(value);
       }
     },
     currentAction() {
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
     },
     actionAttributes() {
-      return this.store.modelAttributes.actionAttributes;
+      return modelData.actionAttributes;
     },
-    filterActionAttributes() {
-      if (this.currentAction.action === ActionParams.BLINK) {
-        return this.actionAttributes; 
-      }
-      return new ActionAttribute();
-    }
+    filterAction(){
+      return this.actionAttributes.find(act => act.action == this.currentAction.action);
+    },
+    mapActions(){
+      return this.actionAttributes.map(act => act.action);
+    },
   },
   props: {
     caseID: {

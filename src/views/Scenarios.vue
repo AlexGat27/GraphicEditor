@@ -3,16 +3,18 @@
       <h1>Список сценариев</h1>
       <ul>
         <li v-for="scenario in scenarios" :key="scenario.id" @click="selectModel(scenario)"
-        :class="{ selected: selectedScenario === scenario.id }" @dblclick="showUpdatePanel = true">
+        :class="{ selected: selectedScenario === scenario.id }" @dblclick="exitPage">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
-          <p style="margin: 5px;">{{ scenario.model_attributes.scenario }}</p>
-          <div id="deleteScenario" class="closeIcon" @click.stop="deleteScenario(scenario.id)"></div>
+          <p style="margin: 5px;">{{ scenario.model.name }}</p>
+          <div id="deleteScenario" class="btnIcon" @click.stop="deleteScenario(scenario.id)"></div>
+          <img id="editScenario" src="@/assets/icons/pencil.png" @click.stop="editScenario(scenario)" alt="Edit">
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
+        
       </ul>  
       <CreateScenario :action="'Добавить новый'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addScenario"/>
       <CreateScenario :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateScenario"/>
-      <div id="exitPage" class="closeIcon" @click="exitPage"></div>
+      <div id="exitPage" class="btnIcon" @click="exitPage"></div>
     </div>
   </template>
   
@@ -70,8 +72,10 @@ import { ScenarioResponse } from '@/models/responses';
       async updateScenario(scenarioData){
         try {
           const response = await scenarioApi.updateScenario(this.selectedScenario, scenarioData);
+          console.log(response.data)
           const updatedScenario = new ScenarioResponse(response.data);
-          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id).push(updatedScenario);
+          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
+          this.scenarios.push(updatedScenario);
           this.showUpdatePanel = false;
         } catch (error) {
           console.error('Ошибка при обновлении сценария:', error);
@@ -80,9 +84,13 @@ import { ScenarioResponse } from '@/models/responses';
       async selectModel(scenario){
         console.log(scenario)
         this.selectedScenario = scenario.id;
-        this.modelStore.setModelAttributes(scenario.model_attributes);
+        this.modelStore.setCanCommands(scenario.model.canCommands);
         if (scenario.jsonData) this.modelStore.setCurrentModel(scenario.jsonData);
         else this.modelStore.setCurrentModel(new CompileModel(scenario.id, scenario.name));
+      },
+      editScenario(scenario) {
+        this.selectedScenario = scenario.id;
+        this.showUpdatePanel = true;
       },
       exitPage(){
         this.$router.push('/');
@@ -91,18 +99,20 @@ import { ScenarioResponse } from '@/models/responses';
   };
   </script>
   
-<style scoped>
-  .scenario-view{
-    width: 90%; height: 90%; text-align: center;
+  <style scoped>
+  .scenario-view {
+    width: 90%; 
+    height: 90%; 
+    text-align: center;
   }
-  ul{
+  ul {
     width: 100%;
     display: flex;
     align-items: center;
     list-style-type: none;
     padding: 0;
   }
-  ul li{
+  ul li {
     max-width: 250px;
     min-width: 100px;
     max-height: 200px;
@@ -114,13 +124,14 @@ import { ScenarioResponse } from '@/models/responses';
     border-radius: 5px;
     margin: 15px;
     padding: 10px;
+    padding-right: 40px;
     cursor: pointer;
     z-index: 1002;
   }
   ul li.selected {
     border-color: white; /* Цвет рамки при подсветке */
   }
-  .closeIcon {
+  .btnIcon {
     position: absolute;
     background-color: transparent;
     border: 1px solid var(--contour-elements); /* Цвет рамки */
@@ -131,51 +142,64 @@ import { ScenarioResponse } from '@/models/responses';
     border-radius: 5px;
     z-index: 1003;
   }
-
-.closeIcon::before,
-.closeIcon::after {
-  content: '';
-  position: absolute;
-  background-color: var(--contour-elements); /* Цвет палочек крестика */
-}
-
-.closeIcon::before {
-  transform: rotate(45deg); /* Первая палочка крестика */
-}
-.closeIcon::after {
-  transform: rotate(-45deg); /* Вторая палочка крестика */
-}
-#deleteScenario{
-  bottom:5px; right: 5px;
-  width: 25px; /* Ширина квадрата */
-  height: 25px; /* Высота квадрата */
-}
-#deleteScenario::before, #deleteScenario::after{
-  width: 20px; /* Ширина палочек крестика */
-  height: 1px; /* Высота палочек крестика */
-}
-#exitPage{
-  top:25px; right: 25px;
-  width: 50px; /* Ширина квадрата */
-  height: 50px; /* Высота квадрата */
-}
-#exitPage::before, #exitPage::after{
-  width: 25px; /* Ширина палочек крестика */
-  height: 3px; /* Высота палочек крестика */
-}
-
-.circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: 1px solid var(--contour-elements);
-  color: var(--contour-elements);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  cursor: pointer;
-  margin: 15px;
-}
-</style>
+  
+  .btnIcon::before,
+  .btnIcon::after {
+    content: '';
+    position: absolute;
+    background-color: var(--contour-elements); /* Цвет палочек крестика */
+  }
+  
+  .btnIcon::before {
+    transform: rotate(45deg); /* Первая палочка крестика */
+  }
+  .btnIcon::after {
+    transform: rotate(-45deg); /* Вторая палочка крестика */
+  }
+  #deleteScenario {
+    bottom: 5px; 
+    right: 5px;
+    width: 25px; /* Ширина квадрата */
+    height: 25px; /* Высота квадрата */
+  }
+  #deleteScenario::before, #deleteScenario::after {
+    width: 20px; /* Ширина палочек крестика */
+    height: 1px; /* Высота палочек крестика */
+  }
+  #exitPage {
+    top: 25px; 
+    right: 25px;
+    width: 50px; /* Ширина квадрата */
+    height: 50px; /* Высота квадрата */
+  }
+  #exitPage::before, #exitPage::after {
+    width: 25px; /* Ширина палочек крестика */
+    height: 3px; /* Высота палочек крестика */
+  }
+  #editScenario {
+    position: absolute;
+    top: 5px; 
+    right: 5px;
+    width: 25px; 
+    height: 25px;
+    border: 1px solid var(--contour-elements);
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 1003;
+  }
+  .circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid var(--contour-elements);
+    color: var(--contour-elements);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    cursor: pointer;
+    margin: 15px;
+  }
+  </style>
+  

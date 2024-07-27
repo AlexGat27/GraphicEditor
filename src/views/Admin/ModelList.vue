@@ -22,7 +22,6 @@
   
   <script>
 import CreateModel from '@/components/shared/CreateModel.vue';
-import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/modelAttributes';
 import { ModelResponse } from '@/models/responses';
 import { modelApi } from '@/services/api';
   export default {

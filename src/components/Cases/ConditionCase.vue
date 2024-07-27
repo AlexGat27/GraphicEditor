@@ -3,14 +3,14 @@
     <div class="divider" v-if="caseID > 0"></div> <!-- Добавлен горизонтальный разделитель -->
     <div class="conditionCase">
       <DropdownBlock :blockTitle="title1" :attributes="mapCondition" 
-      @attribute="updateConditionParams('condition', $event)" :current="currentCondition.condition"/>
+      @attribute="updateConditionParams('condition', $event)" :current="currentCondition[caseID].condition"/>
       <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
-      @attribute="updateConditionParams('value', $event)" :current="currentCondition.value"/>
+      @attribute="updateConditionParams('value', $event)" :current="currentCondition[caseID].value"/>
       <DropdownBlock :blockTitle="title3" :attributes="filterCondition.countSignals" 
-      @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition.countSignals"/>
-      <CompositeBlock :blockTitle="title4" :attributes="filterCondition.delayTypes"
-      @attribute="updateConditionParams('delay', $event)" :current="currentCondition.delay"/>
-      <div class="closeIcon" @click="setShowConfirm()"></div>
+      @attribute="updateConditionParams('countSignals', $event)" :current="currentCondition[caseID].countSignals"/>
+      <CompositeBlock :blockTitle="title4" :attributes="modelData.delayTypes"
+      @attribute="updateConditionParams('delay', $event)" :current="currentCondition[caseID].delay"/>
+      <div :class="{closeIcon: currentCondition.length > 1}" @click="setShowConfirm()"></div>
     </div>
     <ConfirmModal :message="'Точно хотите удалить условие?'" :isVisible="showConfirmModal" 
     @confirm="removeCase" @cancel="showConfirmModal = false" />
@@ -23,7 +23,8 @@ import CompositeBlock from '../blocks/CompositeBlock.vue';
 import ConfirmModal from '../shared/ConfirmModal.vue';
 import { useMainStore } from '@/stores/modelStore';
 import { ConditionCaseModel } from '@/models/compileModel';
-import { ConditionAttribute } from '@/models/modelAttributes';
+import { modelData } from '@/models/modelAttributes';
+import { ConditionParams } from '@/models/attributeEnums';
 
 export default {
   components: { DropdownBlock, CompositeBlock, ConfirmModal },
@@ -32,7 +33,7 @@ export default {
       title1: "Условие",
       title2: "Значение",
       title3: "Кол-во входящих сигналов",
-      title4: "Период считывания (sec)",
+      title4: "Период считывания",
       store: null,
       showConfirmModal: false
     }
@@ -50,14 +51,13 @@ export default {
       }
     },
     conditionAttributes(){
-      return this.store.modelAttributes.conditionAttributes;
+      return modelData.conditionAttributes;
     },
     currentCondition(){
-      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID];
+      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
     },
     filterCondition(){
-      const conditionAttributes = this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
-      return conditionAttributes || new ConditionAttribute();
+      return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);
@@ -72,6 +72,7 @@ export default {
       type: Number,
       required: true
     }
+
   },
   methods: {
     updateConditionParams(type, event){
@@ -143,4 +144,5 @@ export default {
 .closeIcon::after {
   transform: rotate(-45deg); /* Вторая палочка крестика */
 }
+
 </style>

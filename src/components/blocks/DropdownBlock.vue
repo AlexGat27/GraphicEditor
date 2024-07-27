@@ -18,7 +18,6 @@ export default {
       required: false
     },
     attributes: {
-      type: Array,
       required: true
     },
     current: {

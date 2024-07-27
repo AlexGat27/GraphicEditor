@@ -11,3 +11,9 @@ export const Roles = {
     USER: 'user',
     BANNED: 'banned'
 }
+
+export const ConditionParams = {
+    CAN: "CAN команда",
+    CONTACT: "Сухой контакт",
+    PHOTO: "Фоторезистор"
+}

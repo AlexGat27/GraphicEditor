@@ -1,12 +1,11 @@
 // store.js
 import { defineStore } from 'pinia';
 import { CompileModel, ConditionCaseModel, ContourModel, ContainerModel, ActionCaseModel } from '@/models/compileModel';
-import { ModelAttributes, ConditionAttribute, ActionAttribute } from '@/models/modelAttributes';
 
 export const useMainStore = defineStore('main', {
   state: () => ({
     currentModel: null,
-    modelAttributes: {},
+    canCommands: [],
     selectedScenarioId: null
   }),
   actions: {
@@ -40,22 +39,8 @@ export const useMainStore = defineStore('main', {
       this.currentModel = new CompileModel(value.scenario_id, value.scenario);
       this.currentModel.contours = contours;
     },
-    setModelAttributes(value){
-      const conditionAttributes = value.conditionAttributes.map(condition => 
-        new ConditionAttribute(
-          condition.condition, 
-          condition.values, 
-          condition.countSignals, 
-          condition.delayTypes
-        )
-      );
-      const actionAttributes = new ActionAttribute(
-        value.actionAttributes.actions, 
-        value.actionAttributes.interruptions, 
-        value.actionAttributes.workingPeriod,
-        value.actionAttributes.powers
-      );
-      this.modelAttributes = new ModelAttributes(value.name, conditionAttributes, actionAttributes);
+    setCanCommands(value){
+      this.canCommands = value;
     },
     selectScenario(value){
       this.selectedScenarioId = value;

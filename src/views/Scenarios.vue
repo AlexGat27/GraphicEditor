@@ -6,7 +6,7 @@
         :class="{ selected: selectedScenario === scenario.id }" @dblclick="exitPage">
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
           <p style="margin: 5px;">{{ scenario.model.name }}</p>
-          <div id="deleteScenario" class="btnIcon" @click.stop="deleteScenario(scenario.id)"></div>
+          <div id="deleteScenario" class="btnIcon" @click.stop="showConfirmModal = true; selectedScenario = scenario.id"></div>
           <img id="editScenario" src="@/assets/icons/pencil.png" @click.stop="editScenario(scenario)" alt="Edit">
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
@@ -14,6 +14,8 @@
       </ul>  
       <CreateScenario :action="'Добавить новый'" v-if="showCreatePanel" @close="showCreatePanel = false" @create="addScenario"/>
       <CreateScenario :action="'Обновить'" v-if="showUpdatePanel" @close="showUpdatePanel = false" @create="updateScenario"/>
+      <ConfirmModal :message="'Точно хотите удалить сценарий?'" :isVisible="showConfirmModal"
+        @confirm="deleteScenario" @cancel="showConfirmModal = false" />
       <div id="exitPage" class="btnIcon" @click="exitPage"></div>
     </div>
   </template>
@@ -24,12 +26,14 @@ import CreateScenario from '../components/shared/CreateScenario.vue'
 import { useMainStore } from '@/stores/modelStore';
 import { CompileModel } from '@/models/compileModel';
 import { ScenarioResponse } from '@/models/responses';
+import ConfirmModal from '@/components/shared/ConfirmModal.vue';
   export default {
     data() {
       return {
         scenarios: [],
         showCreatePanel: false,
         showUpdatePanel: false,
+        showConfirmModal: false,
         selectedScenario: null
       };
     },
@@ -38,7 +42,7 @@ import { ScenarioResponse } from '@/models/responses';
       if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
       await this.fetchScenarios();
     },
-    components: {CreateScenario},
+    components: {CreateScenario, ConfirmModal},
     methods: {
       async fetchScenarios() {
         try {
@@ -52,10 +56,12 @@ import { ScenarioResponse } from '@/models/responses';
           console.error('Ошибка при загрузке сценариев:', error);
         }
       },
-      async deleteScenario(id) {
+      async deleteScenario() {
         try {
-          await scenarioApi.deleteScenario(id);
-          this.scenarios = this.scenarios.filter(scenario => scenario.id !== id);
+          await scenarioApi.deleteScenario(this.selectedScenario);
+          this.scenarios = this.scenarios.filter(scenario => scenario.id !== this.selectedScenario);
+          this.selectedScenario = null;
+          this.showConfirmModal = false;
         } catch (error) {
           console.error('Ошибка при удалении сценария:', error);
         }

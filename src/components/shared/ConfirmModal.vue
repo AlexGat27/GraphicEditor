@@ -18,11 +18,19 @@
       message: {
         type: String,
         default: 'Вы уверены, что хотите удалить?'
+      },
+      deletedIndex: {
+        type: Number,
+        required: false
       }
     },
     methods: {
       confirm() {
-        this.$emit('confirm');
+        if (this.deletedIndex){
+          this.$emit('confirm', this.deletedIndex);
+        }else{
+          this.$emit('confirm');
+        }
       },
       cancel() {
         this.$emit('cancel');

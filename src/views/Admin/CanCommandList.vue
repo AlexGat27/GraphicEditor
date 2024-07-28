@@ -4,7 +4,7 @@
       <div class="controls">
         <input type="text" v-model="searchNameQuery" placeholder="Поиск по имени..." />
         <input type="text" v-model="searchIdQuery" placeholder="Поиск по идентификатору..." />
-        <button @click="showAddCanCommandPanel = true">Добавить модель</button>
+        <button @click="showAddCanCommandPanel = true">Добавить команду</button>
       </div>
       <table>
         <thead>
@@ -24,63 +24,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="model in filteredModels" :key="model.id">
-            <td>{{ model.id }}</td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.name" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.name }}</span>
+          <tr v-for="command in filteredCommands" :key="command.id">
+            <td>{{ command.id }}</td>
+            <td @dblclick="startEditing(command.id)" :class="{ selected: isEditing(command.id) }">
+              <input v-if="isEditing(command.id)" v-model="command.name" @blur="saveCommand(command)" @keyup.enter="saveCommand(command)" />
+              <span v-else>{{ command.name }}</span>
             </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.command_id" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.command_id }}</span>
+            <td @dblclick="startEditing(command.id)" :class="{ selected: isEditing(command.id) }">
+              <input v-if="isEditing(command.id)" v-model="command.command_id" @blur="saveCommand(command)" @keyup.enter="saveCommand(command)" />
+              <span v-else>{{ command.command_id }}</span>
             </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_1" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_1 }}</span>
+            <td v-for="byte in byteFields" :key="byte" @dblclick="startEditing(command.id)" :class="{ selected: isEditing(command.id) }">
+              <input v-if="isEditing(command.id)" v-model="command[byte]" @blur="saveCommand(command)" @keyup.enter="saveCommand(command)" />
+              <span v-else>{{ command[byte] }}</span>
             </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_2" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_2 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_3" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_3 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_4" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_4 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_5" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_5 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_6" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_6 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_7" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_7 }}</span>
-            </td>
-            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-              <input v-if="isEditing(model.id)" v-model="model.byte_8" @blur="saveModel(model)" @keyup.enter="saveModel(model)"/>
-              <span v-else>{{ model.byte_8 }}</span>
-            </td>
-            <td class="interactiveColumn" @click.stop="deleteModel(model.id)">Удалить</td>
+            <td class="interactiveColumn" @click.stop="showConfirmModal = true; editingCommandId = command.id">Удалить</td>
           </tr>
         </tbody>
       </table>
       <div id="exitPage" @click="exitPage"></div>
-      <CreateCanCommand :action="'Добавить новую'" v-if="showAddCanCommandPanel" @close="showAddCanCommandPanel = false" 
-        @create="addModel" :model_id="model_id"/>
+      <div id="backButton" @click="goBack">←</div>
+      <CreateCanCommand :action="'Добавить новую'" v-if="showAddCanCommandPanel" @close="showAddCanCommandPanel = false" @create="addCommand" :model_id="model_id" />
+      <ConfirmModal :message="'Точно хотите удалить команду?'" :isVisible="showConfirmModal"
+        @confirm="deleteCommand" @cancel="showConfirmModal = false" />
     </div>
   </template>
   
-    
   <script>
-  import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
-  import { CanCommandResponse, ModelResponse } from '@/models/responses';
-import canCommandsApi from '@/services/api/canCommand';
+  import ConfirmModal from '@/components/shared/ConfirmModal.vue';
+import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
+  import { CanCommandResponse } from '@/models/responses';
+  import canCommandsApi from '@/services/api/canCommand';
   
   export default {
     data() {
@@ -88,170 +62,192 @@ import canCommandsApi from '@/services/api/canCommand';
         model_name: '',
         model_id: null,
         canCommands: [],
-        editingModelId: null,
+        editingCommandId: null,
         searchNameQuery: '',
         searchIdQuery: '',
         showAddCanCommandPanel: false,
+        showConfirmModal: false
       };
     },
-    components: {CreateCanCommand},
+    components: { CreateCanCommand, ConfirmModal },
     async created() {
       this.model_id = parseInt(this.$route.query.model_id);
       this.model_name = this.$route.query.model_name;
-      await this.fetchModels();
+      await this.fetchCommands();
     },
-    computed:{
-      filteredModels(){
-        return this.canCommands.filter(model => 
-        model.name.toLowerCase().includes(this.searchNameQuery.toLowerCase()) && 
-        model.command_id.toLowerCase().includes(this.searchIdQuery.toLowerCase())
-    );
+    computed: {
+      filteredCommands() {
+        return this.canCommands.filter(command => 
+          command.name.toLowerCase().includes(this.searchNameQuery.toLowerCase()) && 
+          command.command_id.toLowerCase().includes(this.searchIdQuery.toLowerCase())
+        );
+      },
+      byteFields() {
+        return ['byte_1', 'byte_2', 'byte_3', 'byte_4', 'byte_5', 'byte_6', 'byte_7', 'byte_8'];
       }
     },
     methods: {
-      async fetchModels() {
+      async fetchCommands() {
         try {
           const response = await canCommandsApi.getCanCommands(this.model_id);
           this.canCommands = response.data.map(element => new CanCommandResponse(element));
         } catch (error) {
-          console.error('Ошибка при загрузке моделей:', error);
+          console.error('Ошибка при загрузке команд:', error);
         }
       },
-      async deleteModel(id) {
+      async deleteCommand() {
         try {
-          await canCommandsApi.deleteModel(id);
-          this.canCommands = this.canCommands.filter((model) => model.id !== id);
+            await canCommandsApi.deleteModel(this.editingCommandId);
+            this.canCommands = this.canCommands.filter(command => command.id !== this.editingCommandId);
+            this.editingCommandId = null;
+            this.showConfirmModal = false;
         } catch (error) {
-          console.error('Ошибка при удалении модели:', error);
+            console.error('Ошибка при удалении команды:', error);
         }
       },
-      async addModel(value) {
+      async addCommand(value) {
         try {
-            console.log(value)
           const response = await canCommandsApi.createModel(value);
-          const newModel = new CanCommandResponse(response.data);
-          this.canCommands.push(newModel);
+          const newCommand = new CanCommandResponse(response.data);
+          this.canCommands.push(newCommand);
           this.showAddCanCommandPanel = false;
         } catch (error) {
-          console.error('Ошибка при добавлении марки:', error);
+          console.error('Ошибка при добавлении команды:', error);
         }
       },
-      async saveModel(model) {
+      async saveCommand(command) {
         try {
-          const response = await canCommandsApi.updateModel(model.id, { ...model });
-          const updatedModel = new CanCommandResponse(response.data);
-          const index = this.canCommands.findIndex((b) => b.id === model.id);
-          this.canCommands.splice(index, 1, updatedModel);
-          this.editingModelId = null;
+          const response = await canCommandsApi.updateModel(command.id, { ...command });
+          const updatedCommand = new CanCommandResponse(response.data);
+          const index = this.canCommands.findIndex(c => c.id === command.id);
+          this.canCommands.splice(index, 1, updatedCommand);
+          this.editingCommandId = null;
         } catch (error) {
-          console.error('Ошибка при обновлении марки:', error);
+          console.error('Ошибка при обновлении команды:', error);
         }
       },
       startEditing(id) {
-        this.editingModelId = id;
+        this.editingCommandId = id;
       },
       isEditing(id) {
-        return this.editingModelId === id;
+        return this.editingCommandId === id;
       },
+      goBack() {
+            this.$router.go(-1);
+        },
       exitPage() {
         this.$router.push('/');
-      },
-      goToModelsList(id, name) {
-        this.$router.push({ name: 'ModelList', query: { model_id: `${id}`, model_name: `${name}` } });
-      },
-    },
+      }
+    }
   };
   </script>
   
+  <style scoped>
+  .canCommandList-view {
+    width: 90%;
+    height: 90%;
+    text-align: center;
+  }
+  .controls {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 20px;
+  }
+  .controls input {
+    width: 300px;
+    padding: 5px;
+    margin-right: 15px;
+    cursor: pointer;
+    background-color: inherit;
+    color: var(--contour-elements);
+    border: 1px solid var(--contour-elements);
+    border-radius: 5px;
+  }
+  .controls button {
+    background-color: #d9d9d9;
+    color: black;
+    border-radius: 5px;
+    height: 30px;
+    width: 150px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--contour-elements);
+  }
+  th, td {
+    border: 1px solid var(--contour-elements);
+    text-align: center;
+    padding: 10px;
+    color: var(--contour-elements);
+  }
+  th {
+    background-color: var(--background-toolbox-contourbar);
+  }
+  .selected {
+    background-color: var(--background-toolbox-contourbar);
+  }
+  tr input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    border: none;
+    background-color: inherit;
+    color: var(--contour-elements);
+  }
+  #exitPage {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border: 1px solid var(--contour-elements);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  #exitPage::before,
+  #exitPage::after {
+    content: '';
+    position: absolute;
+    background-color: var(--contour-elements);
+    width: 25px;
+    height: 3px;
+  }
+  #exitPage::before {
+    transform: rotate(45deg);
+  }
+  #exitPage::after {
+    transform: rotate(-45deg);
+  }
+  #backButton {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: 1px solid var(--contour-elements); /* Цвет рамки */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 28px;
+}
+#backButton:hover, #exitPage:hover {
+  background-color: var(--background-toolbox-contourbar);
+}
+  .interactiveColumn {
+    cursor: pointer;
+  }
+  .interactiveColumn:hover {
+    background-color: var(--background-toolbox-contourbar);
+  }
+  </style>
   
-    
-    <style scoped>
-    .canCommandList-view {
-      width: 90%;
-      height: 90%;
-      text-align: center;
-    }
-    .controls {
-      display: flex;
-      justify-content: end;
-      margin-bottom: 20px;
-    }
-    .controls input {
-      width: 300px;
-      padding: 5px;
-      margin-right: 15px;
-      cursor: pointer;
-      background-color: inherit;
-      color: var(--contour-elements);
-      border: 1px solid var(--contour-elements);
-      padding: 0 5px 0 5px;
-      border-radius: 5px;
-    }
-    .controls button {
-      background-color: #d9d9d9; color: black;
-      border-radius: 5px; height: 30px;
-      width: 150px;
-      cursor: pointer;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--contour-elements);
-    }
-    th, td {
-      border: 1px solid var(--contour-elements);
-      text-align: center;
-      padding: 10px;
-      color: var(--contour-elements);
-    }
-    th {
-      background-color: var(--background-toolbox-contourbar);
-    }
-    .selected {
-      background-color: var(--background-toolbox-contourbar);
-    }
-    tr input{
-      height: 100%;
-      width: 100%;
-      text-align: center;
-      outline: none;
-      border: none;
-      background-color: inherit;
-      color: var(--contour-elements);
-    }
-    #exitPage {
-      position: absolute;
-      top: 25px;
-      right: 25px;
-      width: 50px;
-      height: 50px;
-      background-color: transparent;
-      border: 1px solid var(--contour-elements); /* Цвет рамки */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    #exitPage::before,
-    #exitPage::after {
-      content: '';
-      position: absolute;
-      background-color: var(--contour-elements);
-      width: 25px;
-      height: 3px;
-    }
-    #exitPage::before {
-      transform: rotate(45deg);
-    }
-    #exitPage::after {
-      transform: rotate(-45deg);
-    }
-    .interactiveColumn{
-      cursor: pointer;
-    }
-    .interactiveColumn:hover{
-      background-color: var(--background-toolbox-contourbar);
-    }
-    </style>
-    

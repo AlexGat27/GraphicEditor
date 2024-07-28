@@ -35,10 +35,12 @@ export default {
       title3: "Кол-во входящих сигналов",
       title4: "Период считывания",
       store: null,
-      showConfirmModal: false
+      showConfirmModal: false,
+      modelData: null
     }
   },
   created() {
+    this.modelData = modelData;
     this.store = useMainStore(); // Используйте хранилище Pinia
   },
   computed:{
@@ -57,7 +59,11 @@ export default {
       return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
     },
     filterCondition(){
-      return this.conditionAttributes.find(cond => cond.condition == this.currentCondition.condition);
+      const condAttributes = this.conditionAttributes.find(cond => cond.condition === this.currentCondition[this.caseID].condition);
+      if (condAttributes.condition === "CAN команда"){
+        condAttributes.values = this.store.canCommands;
+      }
+      return condAttributes;
     },
     mapCondition(){
       return this.conditionAttributes.map(cond => cond.condition);

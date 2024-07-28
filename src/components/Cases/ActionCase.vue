@@ -34,10 +34,12 @@ export default {
       title4: "Период работы",
       title5: "Мощность контура",
       store: null,
-      showConfirmModal: false
+      showConfirmModal: false,
+      modelData: null
     }
   },
   created() {
+    this.modelData = modelData;
     this.store = useMainStore();
   },
   computed: {

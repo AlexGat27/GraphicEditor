@@ -7,6 +7,7 @@ import { useAuthStore } from './stores/authStore';
 import UserList from './views/Admin/UserList.vue';
 import BrandList from './views/Admin/BrandList.vue';
 import ModelList from './views/Admin/ModelList.vue';
+import CanCommandList from './views/Admin/CanCommandList.vue';
 
 const routes = [
   {
@@ -49,12 +50,12 @@ const routes = [
     component: ModelList,
     meta: {requiresAdmin: true}
   },
-  // {
-  //   path: '/admin/canCommands',
-  //   name: 'CanCommandList',
-  //   component: CanCommandList,
-  //   meta: {requiresAdmin: true}
-  // }
+  {
+    path: '/admin/canCommands',
+    name: 'CanCommandList',
+    component: CanCommandList,
+    meta: {requiresAdmin: true}
+  }
 ];
 
 const router = createRouter({

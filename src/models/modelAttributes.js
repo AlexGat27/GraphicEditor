@@ -3,6 +3,11 @@ export const modelData = {
     powers: ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
     conditionAttributes: [
         {
+            condition: "",
+            values: [],
+            countSignals: [],
+        },
+        {
             condition: "Сухой контакт",
             values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             countSignals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "Постоянно"],
@@ -19,6 +24,11 @@ export const modelData = {
         },
     ],
     actionAttributes: [
+        {
+            action: "",
+            interruptions: [],
+            workingPeriod: []
+        },
         {
             action: "Включить",
             interruptions: [],

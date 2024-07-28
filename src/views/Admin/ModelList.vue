@@ -26,7 +26,7 @@
             />
             <span v-else>{{ model.name }}</span>
           </td>
-          <td @click="goToModelsList(model.id, model.name)" class="interactiveColumn">Can команды</td>
+          <td @click="goToCanCommandsList(model.id, model.name)" class="interactiveColumn">Can команды</td>
           <td class="interactiveColumn" @click.stop="deleteModel(model.id)">Удалить</td>
         </tr>
       </tbody>
@@ -112,8 +112,8 @@ export default {
     exitPage() {
       this.$router.push('/');
     },
-    goToModelsList(id, name) {
-      this.$router.push({ name: 'ModelList', query: { model_id: `${id}`, model_name: `${name}` } });
+    goToCanCommandsList(id, name) {
+      this.$router.push({ name: 'CanCommandList', query: { model_id: `${id}`, model_name: `${name}` } });
     },
   },
 };

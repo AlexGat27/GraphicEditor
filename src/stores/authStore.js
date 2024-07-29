@@ -31,8 +31,8 @@ export const useAuthStore = defineStore('auth', {
                 this.isAdmin = false;
             }
         },
-        logout() {
-            api.logout().then(() => {
+        async logout() {
+            return api.logout().then(() => {
                 this.isAuthenticated = false;
                 this.user = null;
                 this.isAdmin = false;

@@ -10,7 +10,10 @@ export const useMainStore = defineStore('main', {
   }),
   actions: {
     setCurrentModel(value) {
-      if (!value) return;
+      if (!value) {
+        this.currentModel = null;
+        return;
+      };
       const contours = value.contours.map(contourData => {
         const containers = contourData.containers.map(containerData => {
           const actionCases = containerData.actionCases.map(actionCaseData =>
@@ -38,6 +41,12 @@ export const useMainStore = defineStore('main', {
       })
       this.currentModel = new CompileModel(value.scenario_id, value.scenario);
       this.currentModel.contours = contours;
+    },
+    getFormattedCurrentModel(){
+      if (this.currentModel) {
+        return this.currentModel.getFormatObject();
+      }
+      return null;
     },
     setCanCommands(value){
       this.canCommands = value;

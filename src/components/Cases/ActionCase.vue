@@ -78,11 +78,7 @@ export default {
     updateAttribute(type, event) {
       const currentModel = this.currentModel;
       const currentAction = currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
-      if (type === 'power') {
-        currentAction[type] = event >= 0 && event <= 100 ? event : 0;
-      } else {
-        currentAction[type] = event;
-      }
+      currentAction[type] = event;
       this.currentModel = currentModel;
     },
     setShowConfirm(){

@@ -64,21 +64,15 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const authStore = useAuthStore();
-    await authStore.checkAuth();
-    next()
-  }else if(to.matched.some(record => record.meta.requiresAdmin)){
-    const authStore = useAuthStore();
-    await authStore.checkAuth()
-    if (authStore.isAdmin) {
-      next();
-    } else {
-      next({ name: 'Login' });
-    }
-  }else{
-    next();
-  }
+  let redirect = false;
+  
+  const authStore = useAuthStore();
+  await authStore.checkAuth();
+  console.log(authStore.isAdmin)
+  if ((to.matched.some(record => record.meta.requiresAuth) && !authStore.isAuthenticated) ||
+      (to.matched.some(record => record.meta.requiresAdmin) && !authStore.isAdmin)) redirect = true;
+  if (redirect) next( {name: 'Login'} )
+  else next();
 });
 
 export default router;

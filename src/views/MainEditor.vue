@@ -9,6 +9,7 @@ import { useMainStore } from '@/stores/modelStore';
     created(){
       this.authStore = useAuthStore();
       this.modelStore = useMainStore();
+      console.log(this.modelStore.currentModel)
     },
     computed: {
       isAuthenticated(){

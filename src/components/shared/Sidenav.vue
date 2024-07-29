@@ -61,10 +61,13 @@ import { useMainStore } from '@/stores/modelStore';
         this.$router.push('/admin/brands');
         this.closeSidenav();
       },
-      async logout(){
-        await this.authStore.logout();
-        this.currentModel = null;
-        this.closeSidenav();
+      logout(){
+        this.authStore.logout().then(() => {
+          this.currentModel = null;
+          this.mainStore.selectScenario(null);
+        }).then(() => {
+          this.goToLogin();
+        });
       }
     }
   }

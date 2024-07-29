@@ -7,7 +7,7 @@
         <button type="submit">Вход</button>
         <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка авторизации</span>
       </form>
-      <button @click="goToRedactor">Вернуться в редактор</button>
+      <button @click="goToRegister">Регистрация</button>
     </div>
   </template>
   
@@ -39,8 +39,8 @@ import { authApi } from '@/services/api';
           console.error("Ошибка авторизации", error);
         }
       },
-      goToRedactor(){
-        this.$router.push('/');
+      goToRegister(){
+        this.$router.push({name: 'Register'});
       }
     }
   };

@@ -196,6 +196,9 @@ import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
     border: none;
     background-color: inherit;
     color: var(--contour-elements);
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
   }
   #exitPage {
     position: absolute;

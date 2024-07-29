@@ -7,7 +7,7 @@
       <button type="submit">Зарегистрироваться</button>
       <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка регистрации</span>
     </form>
-    <button @click="goToRedactor">Вернуться в редактор</button>
+    <button @click="goToLogin">Вход</button>
 
     <!-- Success Modal -->
     <div v-if="isSuccess" class="modal-overlay">
@@ -55,10 +55,10 @@ export default {
     },
     closeModal() {
       this.isSuccess = false;
-      this.$router.push('/login');  // Redirect to login page
+      this.$router.push({name: 'Login'});  // Redirect to login page
     },
-    goToRedactor() {
-      this.$router.push('/');
+    goToLogin() {
+      this.$router.push({name: 'Login'});
     },
   }
 };

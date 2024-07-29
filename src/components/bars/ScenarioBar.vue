@@ -3,7 +3,7 @@
       <div class="leftPart">
         <span @click="toggleSidebar">&equiv;</span>
         <h3 style="margin-left: 25px; margin-right: 25px; color: var(--yellow-text); font-size: 16px;" class="fira-sans-medium">MotoCan</h3>
-        <div v-if="isAuthenticated && currentModel !== null">{{currentModel.scenario}}</div>
+        <div>{{currentModel ? currentModel.scenario : "Не выбран сценарий"}}</div>
       </div>
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
         <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
@@ -48,9 +48,6 @@ export default {
     isAuthenticated(){
       return this.authStore.isAuthenticated;
     },
-    modelName(){
-      return this.store.modelAttributes.name;
-    }
   },
   methods:{
     toggleSidebar() {
@@ -66,7 +63,7 @@ export default {
     },
     async saveScenario(){
       let isNullValues = false;
-      let compileModel = this.currentModel;
+      const compileModel = this.store.getFormattedCurrentModel();
       compileModel.countContainers = 0;
       compileModel.contours.forEach(contour => {
         contour.containers.forEach(container => {
@@ -91,9 +88,10 @@ export default {
         if (isNullValues) return;
       });
       if (isNullValues) return;
-      const requestData = {jsonData: compileModel, name: this.modelName};
+      const requestData = {jsonData: compileModel};
       const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
       console.log(response);
+      console.log(this.currentModel);
     }
   }
 }

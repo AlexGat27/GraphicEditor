@@ -33,7 +33,7 @@ export default {
       title1: "Условие",
       title2: "Значение",
       title3: "Кол-во входящих сигналов",
-      title4: "Период считывания",
+      title4: "Период считывания (sec)",
       store: null,
       showConfirmModal: false,
       modelData: null

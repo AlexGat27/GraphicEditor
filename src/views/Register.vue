@@ -23,6 +23,7 @@
   
 <script>
 import { authApi } from '@/services/api';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -43,12 +44,24 @@ export default {
           password: this.password,
           reCaptcha: recaptchaToken
         });
-        console.log('Регистрация успешна', response.data);
-        this.isSuccess = true;  // Show the success modal
+        Swal.fire({
+                    title: 'Успешная регистрация',
+                    text: 'Через 3 секунды вы будете перенаправлены на страницу авторизации.',
+                    icon: 'success',
+                    confirmButtonText: 'ОК',
+                    timer: 3000
+                });
         setTimeout(() => {
           this.$router.push('/login');  // Redirect after a short delay to show the modal
-        }, 5000);  // Adjust delay as needed
+        }, 3000);  // Adjust delay as needed
       } catch (error) {
+        Swal.fire({
+                    title: 'Ошибка регистрации',
+                    text: 'Попробуйте ввести другие данные',
+                    icon: 'error',
+                    confirmButtonText: 'ОК',
+                    timer: 3000
+                });
         this.isError = true;
         console.error('Ошибка регистрации', error.response.data);
       }

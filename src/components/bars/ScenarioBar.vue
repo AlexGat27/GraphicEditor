@@ -24,6 +24,7 @@ import Sidenav from '../shared/Sidenav.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { scenarioApi } from '@/services/api';
 import { ActionParams } from '@/models/attributeEnums';
+import Swal from 'sweetalert2';
 
 export default {
   components: {
@@ -98,14 +99,25 @@ export default {
           container.conditionCases.forEach(attr => {
             if (attr.condition === '' || attr.value === '' || attr.countSignals === '' || 
             attr.delay.type === '' || attr.delay.value === ''){
-              console.error("Не все поля условия заполнены");
+              Swal.fire({
+                    title: 'Ошибка',
+                    text: 'Не все поля условия заполнены.',
+                    icon: 'error',
+                    confirmButtonText: 'ОК', timer: 2000
+                });
               isNullValues = true;
               return;
             }
           })
           container.actionCases.forEach(attr => {
             if (attr.action === ActionParams.EMPTY || attr.power === '' || (attr.action === ActionParams.BLINK && (attr.interruption === '' || attr.workingPeriod === ''))){
-              console.error("Не все поля действия заполнены");
+              Swal.fire({
+                    title: 'Ошибка',
+                    text: 'Не все поля действия заполнены.',
+                    icon: 'error',
+                    confirmButtonText: 'ОК',
+                    timer: 2000
+                });
               isNullValues = true;
               return;
             }
@@ -118,6 +130,23 @@ export default {
       if (isNullValues) return;
       const requestData = {jsonData: compileModel};
       const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
+      if (response.status === 200) {
+                Swal.fire({
+                    title: 'Сохранение успешно',
+                    text: 'Сценарий был успешно сохранен!',
+                    icon: 'success',
+                    confirmButtonText: 'ОК',
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    title: 'Ошибка',
+                    text: 'Произошла ошибка при сохранении сценария.',
+                    icon: 'error',
+                    confirmButtonText: 'ОК',
+                    timer: 2000
+                });
+            }
     }
   }
 }

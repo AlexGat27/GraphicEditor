@@ -1,3 +1,5 @@
+import { ActionParams } from "./attributeEnums";
+
 export class ActionCaseModel {
     constructor(action='', interruption='', workingPeriod='', power='') {
         this.action = action;

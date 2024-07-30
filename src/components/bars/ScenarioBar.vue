@@ -8,8 +8,10 @@
       <div class="rightPart fira-sans-regular" style="font-size: 12px;">
         <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer()">Добавить правило</button>
         <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario()">Выгрузить сценарий</button>
-        <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
-        font-weight: bold; transform: translateY(-10px);">&hellip;</span>
+        <!-- <span style="margin: 0;margin-right: 20px; font-size: 35px; color: var(--yellow-text); 
+        font-weight: bold; transform: translateY(-10px);">&hellip;</span> -->
+        <img src="@/assets/icons/download-yellow.png" style="margin: 0;margin-right: 20px;height: 30px;cursor: pointer;"
+        @click="downloadScenarioTXT">
       </div>
     </div>
     <Sidenav v-if="isSidebarOpen" @close="toggleSidebar" />
@@ -61,6 +63,32 @@ export default {
       }
       this.currentModel = currentModel;
     },
+    async downloadScenarioTXT(){
+      try {
+        const response = await scenarioApi.downloadScenario(this.store.selectedScenarioId);
+        if (response.data.status === "error"){
+          console.error('Возникла ошибка при выгрузке сценария: ', response.data.message);
+          return;
+        }
+
+        const hexData = response.data["hexData"];
+        const binaryData = hexData.match(/.{1,2}/g).map(byte => parseInt(byte, 16));
+        const byteArray = new Uint8Array(binaryData);
+        const blob = new Blob([byteArray], { type: 'text/plain' });
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'scenario.txt';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (error) {
+        console.error('There has been a problem with your download operation:', error);
+      }
+    },
     async saveScenario(){
       let isNullValues = false;
       const compileModel = this.store.getFormattedCurrentModel();
@@ -90,8 +118,6 @@ export default {
       if (isNullValues) return;
       const requestData = {jsonData: compileModel};
       const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
-      console.log(response);
-      console.log(this.currentModel);
     }
   }
 }

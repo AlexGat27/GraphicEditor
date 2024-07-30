@@ -2,7 +2,7 @@
   <div>
     <div class="divider" v-if="caseID > 0"></div> <!-- Добавлен горизонтальный разделитель -->
     <div class="conditionCase">
-      <DropdownBlock :blockTitle="title1" :attributes="mapCondition" 
+      <DropdownBlock :blockTitle="title1" :attributes="mapCondition"
       @attribute="updateConditionParams('condition', $event)" :current="currentCondition[caseID].condition"/>
       <DropdownBlock :blockTitle="title2" :attributes="filterCondition.values" 
       @attribute="updateConditionParams('value', $event)" :current="currentCondition[caseID].value"/>

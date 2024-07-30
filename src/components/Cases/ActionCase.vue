@@ -4,12 +4,12 @@
     <div class="actionCase">
       <SelectBlock :blockTitle="title1" :attributes="mapActions" 
       @attribute="updateAttribute('action', $event)" :current="currentAction.action"/>
-      <SelectBlock :blockTitle="title3" :attributes="filterAction.interruptions"
+      <SelectBlock :blockTitle="title3" :attributes="filterAction.interruptions" :unit="' ms'"
       @attribute="updateAttribute('interruption', $event)" :current="currentAction.interruption"/>
-      <SelectBlock :blockTitle="title4" :attributes="filterAction.workingPeriod"
+      <SelectBlock :blockTitle="title4" :attributes="filterAction.workingPeriod" :unit="workingPeriodUnit"
       @attribute="updateAttribute('workingPeriod', $event)" :current="currentAction.workingPeriod"/>
       <SelectBlock :blockTitle="title5" @attribute="updateAttribute('power', $event)" :current="currentAction.power"
-      :attributes="modelData.powers"/>
+      :attributes="modelData.powers" :unit="'%'"/>
       <!-- <div class="closeIcon" @click="setShowConfirm()"></div> -->
     </div>
     <ConfirmModal :message="'Точно хотите удалить действие?'" :isVisible="showConfirmModal" 
@@ -23,6 +23,7 @@ import ConfirmModal from "../shared/ConfirmModal.vue";
 import { useMainStore } from "@/stores/modelStore";
 import { ActionParams } from "@/models/attributeEnums";
 import { modelData } from "@/models/modelAttributes";
+import { ActionCaseModel } from "@/models/compileModel";
 
 export default {
   components: { SelectBlock, ConfirmModal },
@@ -63,6 +64,9 @@ export default {
     mapActions(){
       return this.actionAttributes.map(act => act.action);
     },
+    workingPeriodUnit(){
+      return this.currentAction.action === ActionParams.BLINK ? ' ms' : this.currentAction.action === ActionParams.ON ? ' sec' : '';
+    }
   },
   props: {
     caseID: {
@@ -77,8 +81,8 @@ export default {
   methods: {
     updateAttribute(type, event) {
       const currentModel = this.currentModel;
-      const currentAction = currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
-      currentAction[type] = event;
+      if (type === "action"){ currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID] =  new ActionCaseModel()}
+      currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID][type] = event;
       this.currentModel = currentModel;
     },
     setShowConfirm(){

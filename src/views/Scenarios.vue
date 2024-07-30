@@ -91,8 +91,12 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
         console.log(scenario)
         this.selectedScenario = scenario.id;
         this.modelStore.setCanCommands(scenario.model.canCommands);
-        if (scenario.jsonData) this.modelStore.setCurrentModel(scenario.jsonData);
-        else this.modelStore.setCurrentModel(new CompileModel(scenario.id, scenario.name));
+        this.modelStore.selectScenario(this.selectedScenario);
+        if (scenario.jsonData){ this.modelStore.setCurrentModel(scenario.jsonData) }
+        else { 
+          console.log("set null")
+          this.modelStore.setCurrentModel(new CompileModel(scenario.id, scenario.name)) 
+        }
       },
       editScenario(scenario) {
         this.selectedScenario = scenario.id;

@@ -13,6 +13,9 @@ const scenarioApi = {
     updateScenario(id, data){
       return api.put(`/scenarios/${id}`, data);
     },
+    downloadScenario(id){
+      return api.get(`/scenarios/${id}/download`);
+    }
 }
 
 export default scenarioApi;

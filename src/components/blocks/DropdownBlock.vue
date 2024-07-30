@@ -2,7 +2,7 @@
   <div class="block">
     <label v-if="blockTitle">{{ blockTitle }}</label>
     <div class="select-container">
-      <select ref="selectElement" v-model="currentAttribute" @change="updateAttribute" 
+      <select ref="selectElement" v-model="currentAttribute" 
       :style="{ width: selectWidth }" class="fira-sans-regular">
         <option v-for="attribute in attributes" :key="attribute" :value="attribute">{{ attribute }}</option>
       </select>
@@ -23,6 +23,10 @@ export default {
     current: {
       type: String,
       required: true
+    },
+    unit: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -33,10 +37,10 @@ export default {
   computed: {
     currentAttribute: {
       get() {
-        return this.current;
+        return this.current ? this.current + this.unit : null;
       },
       set(value) {
-        this.$emit('attribute', value.toString());
+        this.$emit('attribute', value.toString().replace(this.unit, ''));
       }
     }
   },

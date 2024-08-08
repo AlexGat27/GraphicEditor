@@ -162,6 +162,8 @@ export default {
   height: 95%;
   padding: 20px;
   text-align: center;
+  min-width: 900px;
+  overflow: hidden;
 }
 
 .search-container {
@@ -318,6 +320,12 @@ td select {
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 20px;
+}
+
+@media(max-width: 420px) {
+  .user-list{
+    height: 85%;
+  }
 }
 </style>
 

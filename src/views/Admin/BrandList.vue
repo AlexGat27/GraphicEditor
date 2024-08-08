@@ -6,39 +6,34 @@
       <button @click="showAddBrandPanel = true">Добавить марку</button>
     </div>
     <div class="table-container">
-      <div class="table-header">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 5%;">ID</th>
-              <th>Название</th>
-              <th style="width: 27%;">Перейти в список моделей</th>
-              <th style="width: 8%;"></th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="table-content">
-        <table>
-          <tbody>
-            <tr v-for="brand in filteredBrands" :key="brand.id">
-              <td style="width: 5%;">{{ brand.id }}</td>
-              <td @dblclick="startEditing(brand.id)" :class="{ selected: isEditing(brand.id) }">
-                <input
-                  v-if="isEditing(brand.id)"
-                  v-model="brand.name"
-                  @blur="saveBrand(brand)"
-                  @keyup.enter="saveBrand(brand)"
-                />
-                <span v-else>{{ brand.name }}</span>
-              </td>
-              <td style="width: 27%;" @click="goToModelsList(brand.id, brand.name)" class="interactiveColumn">Модели</td>
-              <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal = true; editingBrandId = brand.id">Удалить</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <table>
+        <thead class="table-header">
+          <tr>
+            <th style="width: 5%;">ID</th>
+            <th>Название</th>
+            <th style="width: 27%;">Перейти в список моделей</th>
+            <th style="width: 8%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="brand in filteredBrands" :key="brand.id">
+            <td style="width: 5%;">{{ brand.id }}</td>
+            <td @dblclick="startEditing(brand.id)" :class="{ selected: isEditing(brand.id) }">
+              <input
+                v-if="isEditing(brand.id)"
+                v-model="brand.name"
+                @blur="saveBrand(brand)"
+                @keyup.enter="saveBrand(brand)"
+              />
+              <span v-else>{{ brand.name }}</span>
+            </td>
+            <td style="width: 27%;" @click="goToModelsList(brand.id, brand.name)" class="interactiveColumn">Модели</td>
+            <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal = true; editingBrandId = brand.id">Удалить</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
     <div id="exitPage" @click="exitPage"></div>
     <div id="backButton" @click="goBack">←</div>
     <CreateBrand v-if="showAddBrandPanel" @close="showAddBrandPanel = false" @create="addBrand" />
@@ -134,8 +129,10 @@ export default {
 <style scoped>
 .brandList-view {
   width: 90%;
-  height: 90%;
+  height: 95%;
   text-align: center;
+  min-width: 480px;
+  overflow: hidden;
 }
 
 .controls {
@@ -175,21 +172,19 @@ export default {
   display: none; /* Safari and Chrome */
 }
 
-.table-header {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 1;
-}
-
-.table-content {
-  overflow-y: auto;
-}
-
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border: 1px solid var(--contour-elements);
+  border-spacing: 0; /* Remove spacing between borders */
+}
+
+thead {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Ensure the header is above other content */
+  background-color: var(--background-toolbox-contourbar); /* Ensure background color is set */
 }
 
 th, td {
@@ -200,8 +195,9 @@ th, td {
 }
 
 th {
-  background-color: var(--background-toolbox-contourbar);
+  background-color: var(--background-toolbox-contourbar); /* Same as thead background */
 }
+
 
 .selected {
   background-color: var(--background-toolbox-contourbar);
@@ -275,5 +271,10 @@ tr input {
 
 .interactiveColumn:hover {
   background-color: var(--background-toolbox-contourbar);
+}
+@media(max-width: 420px) {
+  .brandList-view{
+    height: 85%;
+  }
 }
 </style>

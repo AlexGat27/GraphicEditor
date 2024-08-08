@@ -156,7 +156,7 @@ export default {
 .scenarioBar{
   height: 100%;
   width: 100%;
-  min-width: 600px;
+  min-width: 750px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -164,7 +164,7 @@ export default {
   background-color: var(--background-toolbox-scenario);
 }
 .leftPart{
-  width: 20%;
+  width: 50%;
   display: inherit;
   align-items: center;
   position: relative;
@@ -176,6 +176,7 @@ export default {
   justify-content: end;
   display: inherit;
   align-items: center;
+  width: 50%;
 }
 .rightPart button {
   background-color: #d9d9d9; color: black; margin-right: 20px;

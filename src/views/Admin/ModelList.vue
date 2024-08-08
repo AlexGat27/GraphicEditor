@@ -6,38 +6,32 @@
       <button @click="showAddModelPanel = true">Добавить модель</button>
     </div>
     <div class="table-container">
-      <div class="table-header">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 5%;">ID</th>
-              <th>Название</th>
-              <th style="width: 27%;">Перейти в список CAN команд</th>
-              <th style="width: 8%;"></th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="table-content">
-        <table>
-          <tbody>
-            <tr v-for="model in filteredModels" :key="model.id">
-              <td style="width: 5%;">{{ model.id }}</td>
-              <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
-                <input
-                  v-if="isEditing(model.id)"
-                  v-model="model.name"
-                  @blur="saveModel(model)"
-                  @keyup.enter="saveModel(model)"
-                />
-                <span v-else>{{ model.name }}</span>
-              </td>
-              <td style="width: 27%;" @click="goToCanCommandsList(model.id, model.name)" class="interactiveColumn">Can команды</td>
-              <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal = true; editingModelId = model.id">Удалить</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table>
+        <thead class="table-header"> <!-- Добавлено класс table-header -->
+          <tr>
+            <th style="width: 5%;">ID</th>
+            <th>Название</th>
+            <th style="width: 27%;">Перейти в список CAN команд</th>
+            <th style="width: 8%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="model in filteredModels" :key="model.id">
+            <td style="width: 5%;">{{ model.id }}</td>
+            <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
+              <input
+                v-if="isEditing(model.id)"
+                v-model="model.name"
+                @blur="saveModel(model)"
+                @keyup.enter="saveModel(model)"
+              />
+              <span v-else>{{ model.name }}</span>
+            </td>
+            <td style="width: 27%;" @click="goToCanCommandsList(model.id, model.name)" class="interactiveColumn">Can команды</td>
+            <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal = true; editingModelId = model.id">Удалить</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div id="exitPage" @click="exitPage"></div>
     <div id="backButton" @click="goBack">←</div>
@@ -46,6 +40,7 @@
         @confirm="deleteModel" @cancel="showConfirmModal = false" />
   </div>
 </template>
+
 
 <script>
 import ConfirmModal from '@/components/shared/ConfirmModal.vue';
@@ -138,8 +133,10 @@ export default {
 <style scoped>
 .modelList-view {
   width: 90%;
-  height: 90%;
+  height: 95%;
   text-align: center;
+  min-width: 480px;
+  overflow: hidden; /* Делаем переполнение скрытым, чтобы соответствовать `brandList-view` */
 }
 
 .controls {
@@ -156,7 +153,7 @@ export default {
   background-color: inherit;
   color: var(--contour-elements);
   border: 1px solid var(--contour-elements);
-  padding: 0 5px 0 5px;
+  padding: 0 5px;
   border-radius: 5px;
 }
 
@@ -171,9 +168,8 @@ export default {
 
 .table-container {
   max-height: 80%;
-  overflow-y: scroll;
+  overflow-y: auto; /* Используем auto, чтобы показать скролл при необходимости */
   position: relative;
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 }
 
@@ -181,21 +177,19 @@ export default {
   display: none; /* Safari and Chrome */
 }
 
-.table-header {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 1;
-}
-
-.table-content {
-  overflow-y: auto;
-}
-
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate; /* Ensure correct border spacing */
   border: 1px solid var(--contour-elements);
+  border-spacing: 0; /* Remove spacing between borders */
+}
+
+thead.table-header { /* Класс .table-header уже применен в HTML */
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Ensure the header is above other content */
+  background-color: var(--background-toolbox-contourbar); /* Same as in `brandList-view` */
 }
 
 th, td {
@@ -206,7 +200,7 @@ th, td {
 }
 
 th {
-  background-color: var(--background-toolbox-contourbar);
+  background-color: var(--background-toolbox-contourbar); /* Same as in `brandList-view` */
 }
 
 .selected {
@@ -226,10 +220,8 @@ tr input {
   font-style: normal;
 }
 
-#exitPage {
+#exitPage, #backButton {
   position: absolute;
-  top: 25px;
-  right: 25px;
   width: 50px;
   height: 50px;
   background-color: transparent;
@@ -239,6 +231,11 @@ tr input {
   justify-content: center;
   cursor: pointer;
   border-radius: 5px;
+}
+
+#exitPage {
+  top: 25px;
+  right: 25px;
 }
 
 #exitPage::before,
@@ -259,20 +256,11 @@ tr input {
 }
 
 #backButton {
-  position: absolute;
   top: 25px;
   left: 25px;
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  border: 1px solid var(--contour-elements); /* Цвет рамки */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 5px;
   font-size: 28px;
 }
+
 #backButton:hover, #exitPage:hover {
   background-color: var(--background-toolbox-contourbar);
 }
@@ -283,5 +271,11 @@ tr input {
 
 .interactiveColumn:hover {
   background-color: var(--background-toolbox-contourbar);
+}
+
+@media(max-width: 1000px) {
+  .modelList-view {
+    height: 85%; /* Снижение высоты для мобильных устройств */
+  }
 }
 </style>

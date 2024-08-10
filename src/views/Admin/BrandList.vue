@@ -129,10 +129,14 @@ export default {
 <style scoped>
 .brandList-view {
   width: 90%;
-  height: 95%;
+  height: 100%;
   text-align: center;
   min-width: 480px;
   overflow: hidden;
+}
+.brandList-view h1{
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
 
 .controls {
@@ -273,8 +277,8 @@ tr input {
   background-color: var(--background-toolbox-contourbar);
 }
 @media(max-width: 420px) {
-  .brandList-view{
-    height: 85%;
+  .brandList-view h1{
+    margin-top: 100px;
   }
 }
 </style>

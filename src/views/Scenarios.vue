@@ -39,7 +39,7 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
     },
     async created(){
       this.modelStore = useMainStore();
-      if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
+      if (this.modelStore.currentModel) this.modelStore.setCurrentModel(null);
       await this.fetchScenarios();
     },
     components: {CreateScenario, ConfirmModal},
@@ -112,15 +112,20 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
   <style scoped>
   .scenario-view {
     width: 90%; 
-    height: 90%; 
+    height: 100%;
     text-align: center;
   }
-  ul {
+  .scenario-view h1{
+    margin-top: 25px;
+  }
+  .scenario-view ul {
     width: 100%;
+    flex-wrap: wrap; /* Allow items to wrap onto the next line */
     display: flex;
     align-items: center;
     list-style-type: none;
     padding: 0;
+    margin: 0;
   }
   ul li {
     max-width: 250px;
@@ -136,7 +141,7 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
     padding: 10px;
     padding-right: 40px;
     cursor: pointer;
-    z-index: 1002;
+    z-index: 1;
   }
   ul li.selected {
     border-color: white; /* Цвет рамки при подсветке */
@@ -150,7 +155,7 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
     justify-content: center;
     cursor: pointer;
     border-radius: 5px;
-    z-index: 1003;
+    z-index: 2;
   }
   
   .btnIcon::before,
@@ -195,7 +200,7 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
     border: 1px solid var(--contour-elements);
     cursor: pointer;
     border-radius: 5px;
-    z-index: 1003;
+    z-index: 2;
   }
   .circle {
     width: 40px;
@@ -210,6 +215,11 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
     font-size: 32px;
     cursor: pointer;
     margin: 15px;
+  }
+  @media(max-width: 480px) {
+    .scenario-view h1{
+      margin-top: 100px;
+    }
   }
   </style>
   

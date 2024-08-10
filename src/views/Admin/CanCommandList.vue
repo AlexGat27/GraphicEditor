@@ -138,10 +138,14 @@ import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
  <style scoped>
 .canCommandList-view {
   width: 90%;
-  height: 90%;
+  height: 100%;
   text-align: center;
   min-width: 800px;
   overflow: hidden; /* Делаем переполнение скрытым, чтобы соответствовать `brandList-view` */
+}
+.canCommandList-view h1{
+  margin-bottom: 30px;
+  margin-top: 25px;
 }
 .controls {
   display: flex;
@@ -252,8 +256,8 @@ tr input {
   background-color: var(--background-toolbox-contourbar);
 }
 @media(max-width: 1000px) {
-  .canCommandList-view {
-    height: 85%; /* Снижение высоты для мобильных устройств */
+  .canCommandList-view h1{
+    margin-top: 100px;
   }
 }
 </style>

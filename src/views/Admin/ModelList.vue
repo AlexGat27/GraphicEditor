@@ -133,10 +133,14 @@ export default {
 <style scoped>
 .modelList-view {
   width: 90%;
-  height: 95%;
+  height: 100%;
   text-align: center;
   min-width: 480px;
   overflow: hidden; /* Делаем переполнение скрытым, чтобы соответствовать `brandList-view` */
+}
+.modelList-view h1{
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
 
 .controls {
@@ -274,8 +278,8 @@ tr input {
 }
 
 @media(max-width: 1000px) {
-  .modelList-view {
-    height: 85%; /* Снижение высоты для мобильных устройств */
+  .modelList-view h1{
+    margin-top: 100px;
   }
 }
 </style>

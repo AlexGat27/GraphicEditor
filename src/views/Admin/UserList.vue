@@ -1,6 +1,6 @@
 <template>
   <div class="user-list">
-    <h2 style="margin-bottom: 30px;">Список пользователей</h2>
+    <h1 style="margin-bottom: 30px;">Список пользователей</h1>
     <div class="search-container">
       <input v-model="nameSearch" type="text" placeholder="Поиск по имени" />
       <select v-model="roleSearch">
@@ -159,11 +159,15 @@ export default {
 <style scoped>
 .user-list {
   width: 90%;
-  height: 95%;
-  padding: 20px;
+  height: 100%;
+  padding: 0 20px 0 20px;
   text-align: center;
   min-width: 900px;
   overflow: hidden;
+}
+.user-list h1{
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
 
 .search-container {
@@ -322,9 +326,9 @@ td select {
   background-size: 20px;
 }
 
-@media(max-width: 420px) {
-  .user-list{
-    height: 85%;
+@media(max-width: 768px) {
+  .user-list h1{
+    margin-top: 100px;
   }
 }
 </style>

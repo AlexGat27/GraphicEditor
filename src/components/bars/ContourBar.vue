@@ -1,6 +1,6 @@
 <template>
     <div class="contourBar">
-        <h3 style="margin-left: 45px; margin-right: 25px; font-size: 16px;" class="fira-sans-regular">Контуры</h3>
+        <h3 class="fira-sans-regular">Контуры</h3>
         <ul v-if="isShowContours" class="contours">
             <li v-for="(contour, index) in currentModel.contours" :key="index">
                 <ContourBtnBlock :isSelected="contour.selected" @attribute="updateModelName($event, index)" 
@@ -63,13 +63,15 @@ export default {
     .contourBar{
         height: 100%;
         width: 100%;
-        min-width: 820px;
         margin: 0;
         display: flex;
         align-items: center;
         justify-content: start;
         background-color: var(--background-toolbox-contourbar);
         overflow: hidden;
+    }
+    .contourBar h3{
+      margin: 0 25px 0 60px; font-size: 16px;
     }
     .contours{
         display: flex;

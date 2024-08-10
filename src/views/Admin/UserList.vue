@@ -158,7 +158,8 @@ export default {
 
 <style scoped>
 .user-list {
-  width: 90%;
+  width: calc(100% - 40px);
+  padding: 0 20px 0 20px;
   height: 100%;
   padding: 0 20px 0 20px;
   text-align: center;

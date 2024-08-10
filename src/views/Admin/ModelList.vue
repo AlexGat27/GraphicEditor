@@ -132,7 +132,8 @@ export default {
 
 <style scoped>
 .modelList-view {
-  width: 90%;
+  width: calc(100% - 40px);
+  padding: 0 20px 0 20px;
   height: 100%;
   text-align: center;
   min-width: 480px;

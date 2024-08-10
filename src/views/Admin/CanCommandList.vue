@@ -4,7 +4,7 @@
     <div class="controls">
       <input type="text" v-model="searchNameQuery" placeholder="Поиск по имени..." />
       <input type="text" v-model="searchIdQuery" placeholder="Поиск по идентификатору..." />
-      <button @click="toggleAddCommandPanel">Добавить команду</button>
+      <button @click="showAddCanCommandPanel = true">Добавить команду</button>
     </div>
     <table>
       <thead>
@@ -37,7 +37,8 @@
     </table>
     <div id="exitPage" @click="exitPage"></div>
     <div id="backButton" @click="goBack">←</div>
-    <CreateCanCommand :action="'Добавить новую'" v-if="showAddCanCommandPanel" @close="toggleAddCommandPanel" @create="addCommand" :model_id="model_id" />
+    <CreateCanCommand :action="'Добавить новую'" v-if="showAddCanCommandPanel" @close="showAddCanCommandPanel = false"
+                      @create="addCommand" :model_id="model_id" />
     <ConfirmModal :message="'Точно хотите удалить команду?'" :isVisible="showConfirmModal" @confirm="deleteCommand" @cancel="showConfirmModal = false" />
   </div>
 </template>
@@ -137,7 +138,8 @@ import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
   
  <style scoped>
 .canCommandList-view {
-  width: 90%;
+  width: calc(100% - 40px);
+  padding: 0 20px 0 20px;
   height: 100%;
   text-align: center;
   min-width: 800px;

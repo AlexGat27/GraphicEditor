@@ -99,14 +99,14 @@ import { modelApi } from '@/services/api';
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10;
   }
   
   .create-panel {
     background: var(--background-editorfield);
     padding: 20px;
     border-radius: 5px;
-    z-index: 1001;
+    z-index: 11;
   }
   form{
     display: flex;

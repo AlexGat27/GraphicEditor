@@ -111,7 +111,8 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue';
   
   <style scoped>
   .scenario-view {
-    width: 90%; 
+    width: calc(100% - 40px);
+    padding: 0 20px 0 20px;
     height: 100%;
     text-align: center;
   }

@@ -8,30 +8,24 @@
       <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка регистрации</span>
     </form>
     <button @click="goToLogin">Вход</button>
-
-    <!-- Success Modal -->
-    <div v-if="isSuccess" class="modal-overlay">
-      <div class="modal-content">
-        <h3>Регистрация успешна!</h3>
-        <p>Через 5 секунд вы будете перенаправлены на страницу логина.</p>
-        <button @click="closeModal">ОК</button>
-      </div>
-    </div>
+    <Notification :message="notificationMessage" :type="notificationType" @hide="hideNotification"/>
   </div>
 </template>
 
   
 <script>
 import { authApi } from '@/services/api';
-import Swal from 'sweetalert2';
+import Notification from "@/components/shared/Notification.vue";
 
 export default {
+  components: {Notification},
   data() {
     return {
       username: '',
       password: '',
       isError: false,
-      isSuccess: false  // Flag to control the modal visibility
+      notificationMessage: '',
+      notificationType: '' // 'success' или 'error'
     };
   },
   methods: {
@@ -44,31 +38,22 @@ export default {
           password: this.password,
           reCaptcha: recaptchaToken
         });
-        Swal.fire({
-                    title: 'Успешная регистрация',
-                    text: 'Через 3 секунды вы будете перенаправлены на страницу авторизации.',
-                    icon: 'success',
-                    confirmButtonText: 'ОК',
-                    timer: 3000
-                });
+        // Устанавливаем уведомление об успешной регистрации
+        this.notificationMessage = 'Регистрация прошла успешно! Через 3 секунды будете перенаправлены на страницу логина...';
+        this.notificationType = 'success';
         setTimeout(() => {
           this.$router.push('/login');  // Redirect after a short delay to show the modal
         }, 3000);  // Adjust delay as needed
       } catch (error) {
-        Swal.fire({
-                    title: 'Ошибка регистрации',
-                    text: 'Попробуйте ввести другие данные',
-                    icon: 'error',
-                    confirmButtonText: 'ОК',
-                    timer: 3000
-                });
+        this.notificationMessage = 'Ошибка регистрации. Попробуйте снова...';
+        this.notificationType = 'error';
         this.isError = true;
         console.error('Ошибка регистрации', error.response.data);
       }
     },
-    closeModal() {
-      this.isSuccess = false;
-      this.$router.push({name: 'Login'});  // Redirect to login page
+    hideNotification(){
+      this.notificationMessage = '';
+      this.notificationType = '';
     },
     goToLogin() {
       this.$router.push({name: 'Login'});

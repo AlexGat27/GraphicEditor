@@ -13,6 +13,8 @@
     </div>
   </div>
   <Sidenav v-if="isSidebarOpen" @close="toggleSidebar"/>
+  <Notification :message="notificationMessage" :type="notificationType"
+                @hide="notificationMessage = ''; notificationType = ''"/>
 </template>
 
 <script>
@@ -22,16 +24,19 @@ import Sidenav from '../shared/Sidenav.vue';
 import {useAuthStore} from '@/stores/authStore';
 import {scenarioApi} from '@/services/api';
 import {ActionParams} from '@/models/attributeEnums';
-import Swal from 'sweetalert2';
+import Notification from "@/components/shared/Notification.vue";
 
 export default {
   components: {
+    Notification,
     Sidenav
   },
   data() {
     return {
       isSidebarOpen: false,
-      scenarioBarMinWidth: 0 // Default value
+      scenarioBarMinWidth: 0,
+      notificationMessage: '',
+      notificationType: ''
     };
   },
   created() {
@@ -84,6 +89,8 @@ export default {
         const response = await scenarioApi.downloadScenario(this.store.selectedScenarioId);
         if (response.data.status === "error") {
           console.error('Возникла ошибка при выгрузке сценария: ', response.data.message);
+          this.notificationMessage = 'Ошибка выгрузки. Сценарий не сохранен';
+          this.notificationType = 'error';
           return;
         }
 
@@ -101,8 +108,13 @@ export default {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
+
+        this.notificationMessage = 'Успешная выгрузка сценария';
+        this.notificationType = 'success';
       } catch (error) {
         console.error('There has been a problem with your download operation:', error);
+        this.notificationMessage = 'Возникла ошибка при выгрузке сценария';
+        this.notificationType = 'error';
       }
     },
     async saveScenario() {
@@ -114,26 +126,12 @@ export default {
           container.conditionCases.forEach(attr => {
             if (attr.condition === '' || attr.value === '' || attr.countSignals === '' ||
                 attr.delay.type === '' || attr.delay.value === '') {
-              Swal.fire({
-                title: 'Ошибка',
-                text: 'Не все поля условия заполнены.',
-                icon: 'error',
-                confirmButtonText: 'ОК',
-                timer: 2000
-              });
               isNullValues = true;
               return;
             }
           })
           container.actionCases.forEach(attr => {
             if (attr.action === ActionParams.EMPTY || attr.power === '' || (attr.action === ActionParams.BLINK && (attr.interruption === '' || attr.workingPeriod === ''))) {
-              Swal.fire({
-                title: 'Ошибка',
-                text: 'Не все поля действия заполнены.',
-                icon: 'error',
-                confirmButtonText: 'ОК',
-                timer: 2000
-              });
               isNullValues = true;
               return;
             }
@@ -143,25 +141,19 @@ export default {
         compileModel.countContainers += contour.containers.length;
         if (isNullValues) return;
       });
-      if (isNullValues) return;
+      if (isNullValues) {
+        this.notificationMessage = 'Не все поля заполнены';
+        this.notificationType = 'error';
+        return;
+      }
       const requestData = {jsonData: compileModel};
       const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
       if (response.status === 200) {
-        Swal.fire({
-          title: 'Сохранение успешно',
-          text: 'Сценарий был успешно сохранен!',
-          icon: 'success',
-          confirmButtonText: 'ОК',
-          timer: 2000
-        });
+        this.notificationMessage = 'Успешное сохранение сценария';
+        this.notificationType = 'success';
       } else {
-        Swal.fire({
-          title: 'Ошибка',
-          text: 'Произошла ошибка при сохранении сценария.',
-          icon: 'error',
-          confirmButtonText: 'ОК',
-          timer: 2000
-        });
+        this.notificationMessage = 'Произошла непредвиденная ошибка при сохранении сценария';
+        this.notificationType = 'error';
       }
     },
     calculateScenarioBarMinWidth() {

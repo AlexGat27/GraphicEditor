@@ -85,6 +85,7 @@ export default {
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
 }
 
 .registration-form {

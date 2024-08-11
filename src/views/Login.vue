@@ -48,6 +48,7 @@ import { authApi } from '@/services/api';
   
   <style scoped>
   .login-container {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

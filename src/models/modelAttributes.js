@@ -46,7 +46,7 @@ export const modelData = {
         },
         {
             action: "Мигать",
-            interruptions: ["0 ms","100 ms","200 ms","300 ms","400 ms","500 ms","600 ms","700 ms","800 ms","900 ms","1000 ms"],
+            interruptions: ["0 ms", "10 ms", "25 ms", "50 ms", "75 ms", "100 ms","200 ms","300 ms","400 ms","500 ms","600 ms","700 ms","800 ms","900 ms","1000 ms"],
             workingPeriod: ["1 ms", "2 ms", "5 ms", "10 ms", "15 ms", "20 ms", "30 ms", "40 ms", "50 ms", "100 ms", "Нет"]
         },
     ]

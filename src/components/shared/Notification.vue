@@ -52,6 +52,7 @@ export default {
   bottom: 20px;
   left: 50%;
   width: fit-content;
+  max-width: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
   border-radius: 5px;

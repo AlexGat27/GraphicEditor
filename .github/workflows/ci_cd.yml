@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main # или другая ветка, на которую вы хотите запускать pipeline
+  pull_request:
+    branches:
+      - main # или другая ветка для PR
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Замените на вашу версию Node.js
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to remote server
+        uses: appleboy/sftp-action@v1.0.0
+        with:
+          host: vs15.primegate.io
+          username: sanyagataulin
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22
+          source: "./dist/*"
+          target: "/srv/www/motocan.sultanovlab.ru/htdocs/frontend/"
+          pre-command: "rm -rf /srv/www/motocan.sultanovlab.ru/htdocs/frontend/*"

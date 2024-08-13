@@ -27,12 +27,12 @@ jobs:
         run: npm run build
 
       - name: Deploy to remote server
-        uses: appleboy/sftp-action@v1.0.0
+        uses: Dylan700/sftp-upload-action@latest
         with:
           host: vs15.primegate.io
           username: sanyagataulin
           password: ${{ secrets.SFTP_PASSWORD }}
           port: 22
-          source: "./dist/*"
-          target: "/srv/www/motocan.sultanovlab.ru/htdocs/frontend/"
+          uploads: |
+            ./dist/* => /srv/www/motocan.sultanovlab.ru/htdocs/frontend/
           pre-command: "rm -rf /srv/www/motocan.sultanovlab.ru/htdocs/frontend/*"

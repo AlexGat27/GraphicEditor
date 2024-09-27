@@ -8,8 +8,7 @@
     <div class="rightPart fira-sans-regular" ref="rightPart">
       <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer">Добавить правило</button>
       <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario">Выгрузить сценарий</button>
-      <img src="@/assets/icons/download-yellow.png" style="margin: 0; margin-right: 20px; height: 30px; cursor: pointer;"
-           @click="downloadScenarioTXT">
+      <img src="@/assets/icons/download-yellow.png" style="margin: 0; margin-right: 20px; height: 30px; cursor: pointer;">
     </div>
   </div>
   <Sidenav v-if="isSidebarOpen" @close="toggleSidebar"/>
@@ -95,9 +94,9 @@ export default {
         }
 
         const hexData = response.data["hexData"];
-        const binaryData = hexData.match(/.{1,2}/g).map(byte => parseInt(byte, 16));
-        const byteArray = new Uint8Array(binaryData);
-        const blob = new Blob([byteArray], {type: 'text/plain'});
+        //const binaryData = hexData.match(/.{1,2}/g).map(byte => parseInt(byte, 16));
+        //const byteArray = new Uint8Array(binaryData);
+        const blob = new Blob([hexData], {type: 'text/plain'});
 
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

@@ -6,8 +6,10 @@
       <input type="text" v-model="searchIdQuery" placeholder="Поиск по идентификатору..." />
       <button @click="showAddCanCommandPanel = true">Добавить команду</button>
     </div>
-    <table>
-      <thead>
+
+    <div class="table-container">
+      <table>
+        <thead>
         <tr>
           <th style="width: 5%;">ID</th>
           <th>Название</th>
@@ -15,8 +17,8 @@
           <th v-for="byte in byteFields" :key="byte">{{ byte }}</th>
           <th style="width: 8%;"></th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr v-for="command in filteredCommands" :key="command.id">
           <td>{{ command.id }}</td>
           <td @dblclick="startEditing(command.id)" :class="{ selected: isEditing(command.id) }">
@@ -33,8 +35,10 @@
           </td>
           <td class="interactiveColumn" @click.stop="confirmDelete(command.id)">Удалить</td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+
     <div id="exitPage" @click="exitPage"></div>
     <div id="backButton" @click="goBack">←</div>
     <CreateCanCommand :action="'Добавить новую'" v-if="showAddCanCommandPanel" @close="showAddCanCommandPanel = false"
@@ -172,10 +176,27 @@ import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
   width: 150px;
   cursor: pointer;
 }
+.table-container {
+  max-height: 80%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+}
+.table-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border: 1px solid var(--contour-elements);
+  border-spacing: 0; /* Remove spacing between borders */
+}
+thead {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Ensure the header is above other content */
+  background-color: var(--background-toolbox-contourbar); /* Ensure background color is set */
 }
 th, td {
   border: 1px solid var(--contour-elements);

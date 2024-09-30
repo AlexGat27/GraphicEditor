@@ -3,8 +3,15 @@
 </template>
 
 <script>
+import ModelService from "@/services/model-service.js";
+
 export default {
-  name: 'App'
+  name: 'App',
+  provide() {
+    return {
+      modelService: ModelService
+    };
+  },
 }
 </script>
 

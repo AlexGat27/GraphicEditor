@@ -12,48 +12,26 @@
 
 <script>
 import ContourBtnBlock from '../../components/blocks/ContourBtnBlock.vue';
-import {useMainStore} from '../../../stores/modelStore.js';
 import { useAuthStore } from '@/stores/authStore.js';
 
 export default {
     components:{
         ContourBtnBlock
     },
-    data(){
-        return {
-            store: null
-        }
-    },
     created(){
-        this.store = useMainStore();
         this.authStore = useAuthStore();
     },
     computed:{
-        currentModel: {
-            get(){
-                return this.store.currentModel;
-            },
-            set(value){
-                this.store.setCurrentModel(value);
-            }
-        },
         isShowContours(){
-            return this.store.currentModel !== null && this.authStore.isAuthenticated;
+            return this.$modelService.getCurrentModel() !== null && this.authStore.isAuthenticated;
         }
     },
     methods: {
         updateModelName(value, index){
-            const currentModel = this.currentModel;
-            currentModel.contours[index].name = value;
-            this.currentModel = currentModel;
+            this.$modelService.updateModelName(value, index);
         },
         updateActiveContour(value, index){
-            const currentModel = this.currentModel;
-            currentModel.contours.forEach(contour => {
-                contour.selected = false;
-            });
-            currentModel.contours[index].selected = value;
-            this.currentModel = currentModel;
+            this.$modelService.updateActiveContour(value, index);
         }
     }
 }

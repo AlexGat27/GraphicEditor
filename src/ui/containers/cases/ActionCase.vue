@@ -23,10 +23,7 @@
 <script>
 import SelectBlock from "../../components/blocks/DropdownBlock.vue";
 import ConfirmModal from "../../components/alerts/ConfirmModal.vue";
-import { useMainStore } from "@/stores/modelStore.js";
-import { ActionParams } from "@/models/attributeEnums.js";
 import { modelData } from "@/models/modelAttributes.js";
-import { ActionCaseModel } from "@/models/compileModel.js";
 import Notification from "@/ui/components/alerts/Notification.vue";
 
 export default {
@@ -38,7 +35,6 @@ export default {
       title3: "Прерывание",
       title4: "Период работы (sec)",
       title5: "Мощность контура",
-      store: null,
       showConfirmModal: false,
       modelData: null,
       notificationMessage: '',
@@ -47,19 +43,10 @@ export default {
   },
   created() {
     this.modelData = modelData;
-    this.store = useMainStore();
   },
   computed: {
-    currentModel: {
-      get() {
-          return this.store.currentModel;
-      },
-      set(value) {
-        this.store.setCurrentModel(value);
-      }
-    },
     currentAction() {
-      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
+      return this.$modelService.getCurrentModel().contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
     },
     actionAttributes() {
       return modelData.actionAttributes;
@@ -70,9 +57,6 @@ export default {
     mapActions(){
       return this.actionAttributes.map(act => act.action);
     },
-    // workingPeriodUnit(){
-    //   return this.currentAction.action === ActionParams.BLINK ? ' ms' : this.currentAction.action === ActionParams.ON ? ' sec' : '';
-    // }
   },
   props: {
     caseID: {
@@ -85,25 +69,8 @@ export default {
     }
   },
   methods: {
-    updateAttribute(type, eventValue) {
-      let value = eventValue;
-      const currentModel = this.currentModel;
-      let currentCase = currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID];
-      if (type === "action"){ currentCase =  new ActionCaseModel()}
-      else if (type === "workingPeriod") {
-        if ([ActionParams.OFF, ActionParams.EMPTY, ActionParams.TOGGLE].includes(currentCase['action'])) {
-          this.notificationMessage = "Данное действие не включает параметр периода";
-          this.notificationType = 'error';
-          value = '';
-        }else if (value > 3600 || value < 1) {
-          this.notificationMessage = "Значение за пределами диапазона было приведено к ближайшему допустимому";
-          this.notificationType = 'error';
-          value = value > 3600 ? 3600 : 1;
-        }
-      }
-      currentCase[type] = value.toString();
-      currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases[this.caseID] = currentCase;
-      this.currentModel = currentModel;
+    updateAttribute(type, event) {
+      this.$modelService.updateAction(this.containerID, this.caseID, type, event);
     },
     hideNotification(){
       this.notificationMessage = '';

@@ -39,18 +39,14 @@ export default {
     };
   },
   created() {
-    this.store = useMainStore();
     this.authStore = useAuthStore();
   },
   mounted() {
-    // Compute initial width when component is mounted
     this.calculateScenarioBarMinWidth();
-    // Watch for changes in refs
     this.$refs.leftPart.addEventListener('resize', this.calculateScenarioBarMinWidth);
     this.$refs.rightPart.addEventListener('resize', this.calculateScenarioBarMinWidth);
   },
   beforeDestroy() {
-    // Clean up event listeners
     if (this.$refs.leftPart) {
       this.$refs.leftPart.removeEventListener('resize', this.calculateScenarioBarMinWidth);
     }
@@ -59,16 +55,11 @@ export default {
     }
   },
   computed: {
-    currentModel: {
-      get() {
-        return this.store.currentModel;
-      },
-      set(value) {
-        this.store.setCurrentModel(value);
-      }
-    },
     isAuthenticated() {
       return this.authStore.isAuthenticated;
+    },
+    currentModel(){
+      return this.$modelService.getCurrentModel();
     }
   },
   methods: {
@@ -76,84 +67,17 @@ export default {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
     addContainer() {
-      const currentModel = this.currentModel;
-      const potentialContour = currentModel.contours.find(contour => contour.selected && contour.name !== '');
-      if (potentialContour && potentialContour.containers.length < 5) {
-        potentialContour.containers.push(new ContainerModel());
-      }
-      this.currentModel = currentModel;
-    },
-    async downloadScenarioTXT() {
-      try {
-        const response = await scenarioApi.downloadScenario(this.store.selectedScenarioId);
-        if (response.data.status === "error") {
-          console.error('Возникла ошибка при выгрузке сценария: ', response.data.message);
-          this.notificationMessage = 'Ошибка выгрузки. Сценарий не сохранен';
-          this.notificationType = 'error';
-          return;
-        }
-
-        const hexData = response.data["hexData"];
-        //const binaryData = hexData.match(/.{1,2}/g).map(byte => parseInt(byte, 16));
-        //const byteArray = new Uint8Array(binaryData);
-        const blob = new Blob([hexData], {type: 'text/plain'});
-
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'scenario.txt';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-
-        this.notificationMessage = 'Успешная выгрузка сценария';
-        this.notificationType = 'success';
-      } catch (error) {
-        console.error('There has been a problem with your download operation:', error);
-        this.notificationMessage = 'Возникла ошибка при выгрузке сценария';
-        this.notificationType = 'error';
-      }
+      this.$modelService.addContainer();
     },
     async saveScenario() {
-      let isNullValues = false;
-      const compileModel = this.store.getFormattedCurrentModel();
-      compileModel.countContainers = 0;
-      compileModel.contours.forEach(contour => {
-        contour.containers.forEach(container => {
-          container.conditionCases.forEach(attr => {
-            if (attr.condition === '' || attr.value === '' || attr.countSignals === '' ||
-                attr.delay.type === '' || attr.delay.value === '') {
-              isNullValues = true;
-              return;
-            }
-          })
-          container.actionCases.forEach(attr => {
-            if (attr.action === ActionParams.EMPTY || attr.power === '' || (attr.action === ActionParams.BLINK && (attr.interruption === '' || attr.workingPeriod === ''))) {
-              isNullValues = true;
-              return;
-            }
-          })
-          if (isNullValues) return;
-        });
-        compileModel.countContainers += contour.containers.length;
-        if (isNullValues) return;
-      });
-      if (isNullValues) {
-        this.notificationMessage = 'Не все поля заполнены';
-        this.notificationType = 'error';
-        return;
-      }
-      const requestData = {jsonData: compileModel};
-      const response = await scenarioApi.updateScenario(compileModel.scenario_id, requestData);
-      if (response.status === 200) {
-        this.notificationMessage = 'Успешное сохранение сценария';
-        this.notificationType = 'success';
-      } else {
-        this.notificationMessage = 'Произошла непредвиденная ошибка при сохранении сценария';
-        this.notificationType = 'error';
-      }
+      const result = await this.$scenarioService.saveScenario();
+      this.notificationMessage = result.message;
+      this.notificationType = result.status === 'success' ? 'success' : 'error';
+    },
+    async downloadScenarioTXT() {
+      const result = await this.$scenarioService.downloadScenarioTXT();
+      this.notificationMessage = result.message;
+      this.notificationType = result.status === 'success' ? 'success' : 'error';
     },
     calculateScenarioBarMinWidth() {
       const leftPartWidth = this.$refs.leftPart ? this.$refs.leftPart.clientWidth : 0;

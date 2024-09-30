@@ -24,7 +24,7 @@ import ConfirmModal from '../../components/alerts/ConfirmModal.vue';
 import { useMainStore } from '@/stores/modelStore.js';
 import { ConditionCaseModel } from '@/models/compileModel.js';
 import { modelData } from '@/models/modelAttributes.js';
-import { ConditionParams } from '@/models/attributeEnums.js';
+import {ConditionParams, ModelAttributesType} from '@/models/attributeEnums.js';
 
 export default {
   components: { DropdownBlock, CompositeBlock, ConfirmModal },
@@ -44,19 +44,11 @@ export default {
     this.store = useMainStore(); // Используйте хранилище Pinia
   },
   computed:{
-    currentModel: {
-      get(){
-          return this.store.currentModel;
-      },
-      set(value){
-          this.store.setCurrentModel(value);
-      }
-    },
     conditionAttributes(){
       return modelData.conditionAttributes;
     },
     currentCondition(){
-      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
+      return this.$modelService.getCurrentModel().contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
     },
     filterCondition(){
       const condAttributes = this.conditionAttributes.find(cond => cond.condition === this.currentCondition[this.caseID].condition);
@@ -82,13 +74,7 @@ export default {
   },
   methods: {
     updateConditionParams(type, event){
-      const currentModel = this.currentModel;
-      if (type == 'condition'){
-        currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID] = new ConditionCaseModel(event);
-      } else {
-        currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases[this.caseID][type] = event;
-      }
-      this.currentModel = currentModel;
+      this.$modelService.updateCondition(this.containerID, this.caseID, type, event);
     },
     setShowConfirm(){
       const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
@@ -97,9 +83,7 @@ export default {
       }
     },
     removeCase(){
-      const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
-      conditionCases.splice(this.caseID, 1);
-      this.showConfirmModal = false;
+      this.$modelService.removeCase(this.containerID, this.caseID, ModelAttributesType.CONDITION);
     }
   }
 }

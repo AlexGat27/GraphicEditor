@@ -37,12 +37,8 @@ export default {
   },
   data() {
     return {
-      store: null,
       showConfirmModal: false
     };
-  },
-  created(){
-    this.store = useMainStore();
   },
   props: {
     containerID: {
@@ -51,36 +47,19 @@ export default {
     }
   },
   computed: {
-    currentModel: {
-      get(){
-          return this.store.currentModel;
-      },
-      set(value){
-          this.store.setCurrentModel(value);
-      }
-    },
     actionCases(){
-      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].actionCases;
+      return this.$modelService.getCurrentModel().contours.find(contour => contour.selected).containers[this.containerID].actionCases;
     },
     conditionCases(){
-      return this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
+      return this.$modelService.getCurrentModel().contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
     }
   },
   methods: {
     addCase(type){
-      const selectedContour = this.currentModel.contours.find(contour => contour.selected);
-      if (type === "actionAttributes" && selectedContour.containers[this.containerID].actionCases.length < 1) {
-        selectedContour.containers[this.containerID].actionCases.push(new ActionCaseModel());
-      } else if (type === "conditionAttributes" && selectedContour.containers[this.containerID].conditionCases.length < 3) {
-        selectedContour.containers[this.containerID].conditionCases.push(new ConditionCaseModel());
-      } else {
-        console.error("Превышено количество");
-      }
+      this.$modelService.addCase(this.containerID, type);
     },
     removeContainer(){
-      const selectedContour = this.currentModel.contours.find(contour => contour.selected);
-      selectedContour.containers.splice(this.containerID, 1);
-      this.showConfirmModal = false;
+      this.$modelService.removeContainer(this.containerID);
     }
   }
 };

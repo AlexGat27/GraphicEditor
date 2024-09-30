@@ -12,7 +12,7 @@
   </template>
   
   <script>
-import { authApi } from '@/services/api';
+import { authApi } from '@/services/api/index.js';
 
   export default {
     data() {

@@ -58,10 +58,10 @@
 
 
 <script>
-import ConfirmModal from '@/components/shared/ConfirmModal.vue';
-import { Roles } from '@/models/attributeEnums';
-import { UserResponse } from '@/models/responses';
-import api from '@/services/api/user';
+import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
+import { Roles } from '@/models/attributeEnums.js';
+import { UserResponse } from '@/models/responses.js';
+import api from '@/services/api/user.js';
 
 export default {
   data() {

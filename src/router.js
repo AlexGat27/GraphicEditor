@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from './views/Login.vue';
-import Register from './views/Register.vue';
-import MainEditor from './views/MainEditor.vue';
-import Scenarios from './views/Scenarios.vue';
+import Login from '@/ui/views/Login.vue';
+import Register from '@/ui/views/Register.vue';
+import MainEditor from '@/ui/views/MainEditor.vue';
+import Scenarios from '@/ui/views/Scenarios.vue';
 import { useAuthStore } from './stores/authStore';
-import UserList from './views/Admin/UserList.vue';
-import BrandList from './views/Admin/BrandList.vue';
-import ModelList from './views/Admin/ModelList.vue';
-import CanCommandList from './views/Admin/CanCommandList.vue';
+import UserList from '@/ui/views/Admin/UserList.vue';
+import BrandList from '@/ui/views/Admin/BrandList.vue';
+import ModelList from '@/ui/views/Admin/ModelList.vue';
+import CanCommandList from '@/ui/views/Admin/CanCommandList.vue';
 
 const routes = [
   {

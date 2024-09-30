@@ -43,10 +43,10 @@
 
 
 <script>
-import ConfirmModal from '@/components/shared/ConfirmModal.vue';
-import CreateModel from '@/components/shared/CreateModel.vue';
-import { ModelResponse } from '@/models/responses';
-import { modelApi } from '@/services/api';
+import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
+import CreateModel from '@/ui/components/forms/CreateModel.vue';
+import { ModelResponse } from '@/models/responses.js';
+import { modelApi } from '@/services/api/index.js';
 
 export default {
   data() {

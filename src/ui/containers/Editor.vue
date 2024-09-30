@@ -8,7 +8,7 @@
 
 <script>
 import CaseContainer from './CaseContainer.vue';
-import { useMainStore } from '@/stores/modelStore';
+import { useMainStore } from '@/stores/modelStore.js';
 
 export default {
   components: {

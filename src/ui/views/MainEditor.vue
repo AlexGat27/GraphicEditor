@@ -1,8 +1,8 @@
 <script>
-  import Toolbox from '@/components/Toolbox.vue';
-  import Editor from '@/components/Editor.vue';
-import { useAuthStore } from '@/stores/authStore';
-import { useMainStore } from '@/stores/modelStore';
+  import Toolbox from '@/ui/containers/Toolbox.vue';
+  import Editor from '@/ui/containers/Editor.vue';
+import { useAuthStore } from '@/stores/authStore.js';
+import { useMainStore } from '@/stores/modelStore.js';
 
   export default {
     name: 'MainEditor',

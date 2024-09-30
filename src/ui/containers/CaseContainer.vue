@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import ActionCase from './Cases/ActionCase.vue';
-import ConditionCase from './Cases/ConditionCase.vue';
-import ConfirmModal from './shared/ConfirmModal.vue';
-import { ActionCaseModel, ConditionCaseModel } from '../models/compileModel';
-import { useMainStore } from '@/stores/modelStore';
+import ActionCase from '@/ui/containers/cases/ActionCase.vue';
+import ConditionCase from '@/ui/containers/cases/ConditionCase.vue';
+import ConfirmModal from '../components/alerts/ConfirmModal.vue';
+import { ActionCaseModel, ConditionCaseModel } from '../../models/compileModel.js';
+import { useMainStore } from '@/stores/modelStore.js';
 
 export default {
   components: {

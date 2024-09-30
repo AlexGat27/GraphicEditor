@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import ContourBar from './bars/ContourBar.vue';
-import ScenarioBar from './bars/ScenarioBar.vue';
+import ContourBar from '@/ui/containers/bars/ContourBar.vue';
+import ScenarioBar from '@/ui/containers/bars/ScenarioBar.vue';
 
 export default {
   components: {

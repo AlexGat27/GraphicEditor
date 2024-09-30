@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import SelectBlock from "../blocks/DropdownBlock.vue";
-import ConfirmModal from "../shared/ConfirmModal.vue";
-import { useMainStore } from "@/stores/modelStore";
-import { ActionParams } from "@/models/attributeEnums";
-import { modelData } from "@/models/modelAttributes";
-import { ActionCaseModel } from "@/models/compileModel";
-import Notification from "@/components/shared/Notification.vue";
+import SelectBlock from "../../components/blocks/DropdownBlock.vue";
+import ConfirmModal from "../../components/alerts/ConfirmModal.vue";
+import { useMainStore } from "@/stores/modelStore.js";
+import { ActionParams } from "@/models/attributeEnums.js";
+import { modelData } from "@/models/modelAttributes.js";
+import { ActionCaseModel } from "@/models/compileModel.js";
+import Notification from "@/ui/components/alerts/Notification.vue";
 
 export default {
   components: {Notification, SelectBlock, ConfirmModal },

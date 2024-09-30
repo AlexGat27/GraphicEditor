@@ -7,7 +7,7 @@
           <h3 style="margin: 5px;">{{ scenario.name }}</h3>
           <p style="margin: 5px;">{{ scenario.model.name }}</p>
           <div id="deleteScenario" class="btnIcon" @click.stop="showConfirmModal = true; selectedScenario = scenario.id"></div>
-          <img id="editScenario" src="@/assets/icons/pencil.png" @click.stop="editScenario(scenario)" alt="Edit">
+          <img id="editScenario" src="../../assets/icons/pencil.png" @click.stop="editScenario(scenario)" alt="Edit">
         </li>
         <div class="circle" @click="showCreatePanel = true">+</div>
         
@@ -21,12 +21,12 @@
   </template>
   
   <script>
-import { scenarioApi } from '@/services/api';
-import CreateScenario from '../components/shared/CreateScenario.vue'
-import { useMainStore } from '@/stores/modelStore';
-import { CompileModel } from '@/models/compileModel';
-import { ScenarioResponse } from '@/models/responses';
-import ConfirmModal from '@/components/shared/ConfirmModal.vue';
+import { scenarioApi } from '@/services/api/index.js';
+import CreateScenario from '../components/forms/CreateScenario.vue'
+import { useMainStore } from '@/stores/modelStore.js';
+import { CompileModel } from '@/models/compileModel.js';
+import { ScenarioResponse } from '@/models/responses.js';
+import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
   export default {
     data() {
       return {

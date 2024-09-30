@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import DropdownBlock from '../blocks/DropdownBlock.vue';
-import CompositeBlock from '../blocks/CompositeBlock.vue';
-import ConfirmModal from '../shared/ConfirmModal.vue';
-import { useMainStore } from '@/stores/modelStore';
-import { ConditionCaseModel } from '@/models/compileModel';
-import { modelData } from '@/models/modelAttributes';
-import { ConditionParams } from '@/models/attributeEnums';
+import DropdownBlock from '../../components/blocks/DropdownBlock.vue';
+import CompositeBlock from '../../components/blocks/CompositeBlock.vue';
+import ConfirmModal from '../../components/alerts/ConfirmModal.vue';
+import { useMainStore } from '@/stores/modelStore.js';
+import { ConditionCaseModel } from '@/models/compileModel.js';
+import { modelData } from '@/models/modelAttributes.js';
+import { ConditionParams } from '@/models/attributeEnums.js';
 
 export default {
   components: { DropdownBlock, CompositeBlock, ConfirmModal },

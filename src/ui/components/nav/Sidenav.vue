@@ -13,8 +13,8 @@
   </template>
   
   <script>
-import { useAuthStore } from '@/stores/authStore';
-import { useMainStore } from '@/stores/modelStore';
+import { useAuthStore } from '@/stores/authStore.js';
+import { useMainStore } from '@/stores/modelStore.js';
 
   export default {
     created() {

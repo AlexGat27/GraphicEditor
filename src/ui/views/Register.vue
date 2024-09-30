@@ -14,8 +14,8 @@
 
   
 <script>
-import { authApi } from '@/services/api';
-import Notification from "@/components/shared/Notification.vue";
+import { authApi } from '@/services/api/index.js';
+import Notification from "@/ui/components/alerts/Notification.vue";
 
 export default {
   components: {Notification},

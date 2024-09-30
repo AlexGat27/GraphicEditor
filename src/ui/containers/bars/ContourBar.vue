@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import ContourBtnBlock from '../blocks/ContourBtnBlock.vue';
-import {useMainStore} from '../../stores/modelStore';
-import { useAuthStore } from '@/stores/authStore';
+import ContourBtnBlock from '../../components/blocks/ContourBtnBlock.vue';
+import {useMainStore} from '../../../stores/modelStore.js';
+import { useAuthStore } from '@/stores/authStore.js';
 
 export default {
     components:{

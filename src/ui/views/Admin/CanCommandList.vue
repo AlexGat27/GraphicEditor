@@ -49,10 +49,10 @@
 
   
   <script>
-  import ConfirmModal from '@/components/shared/ConfirmModal.vue';
-import CreateCanCommand from '@/components/shared/CreateCanCommand.vue';
-  import { CanCommandResponse } from '@/models/responses';
-  import canCommandsApi from '@/services/api/canCommand';
+  import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
+import CreateCanCommand from '@/ui/components/forms/CreateCanCommand.vue';
+  import { CanCommandResponse } from '@/models/responses.js';
+  import canCommandsApi from '@/services/api/canCommand.js';
   
   export default {
     data() {

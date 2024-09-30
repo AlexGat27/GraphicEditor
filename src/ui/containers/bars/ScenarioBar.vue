@@ -8,7 +8,7 @@
     <div class="rightPart fira-sans-regular" ref="rightPart">
       <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="addContainer">Добавить правило</button>
       <button :disabled="!isAuthenticated" class="fira-sans-regular" @click="saveScenario">Выгрузить сценарий</button>
-      <img src="@/assets/icons/download-yellow.png" style="margin: 0; margin-right: 20px; height: 30px; cursor: pointer;">
+      <img src="../../../assets/icons/download-yellow.png" style="margin: 0; margin-right: 20px; height: 30px; cursor: pointer;">
     </div>
   </div>
   <Sidenav v-if="isSidebarOpen" @close="toggleSidebar"/>
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import {ContainerModel} from '@/models/compileModel';
-import {useMainStore} from '@/stores/modelStore';
-import Sidenav from '../shared/Sidenav.vue';
-import {useAuthStore} from '@/stores/authStore';
-import {scenarioApi} from '@/services/api';
-import {ActionParams} from '@/models/attributeEnums';
-import Notification from "@/components/shared/Notification.vue";
+import {ContainerModel} from '@/models/compileModel.js';
+import {useMainStore} from '@/stores/modelStore.js';
+import Sidenav from '../../components/nav/Sidenav.vue';
+import {useAuthStore} from '@/stores/authStore.js';
+import {scenarioApi} from '@/services/api/index.js';
+import {ActionParams} from '@/models/attributeEnums.js';
+import Notification from "@/ui/components/alerts/Notification.vue";
 
 export default {
   components: {

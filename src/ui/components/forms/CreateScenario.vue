@@ -20,7 +20,7 @@
   </template>
   
   <script>
-import { modelApi } from '@/services/api';
+import { modelApi } from '@/services/api/index.js';
 
   export default {
     props:{

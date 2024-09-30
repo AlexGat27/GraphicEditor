@@ -1,8 +1,8 @@
 // stores/auth.js
 import { defineStore } from 'pinia';
-import api from '@/services/api/auth';
 import { UserResponse } from '@/models/responses';
 import { Roles } from '@/models/attributeEnums';
+import {authApi} from "@/services/api";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async checkAuth() {
             try {
-                const response = await api.checkAuth();
+                const response = await authApi.checkAuth();
                 if (response.data.status === 'authorized') {
                     this.isAuthenticated = true;
                     this.user = new UserResponse(response.data);
@@ -32,11 +32,52 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async logout() {
-            return api.logout().then(() => {
+            return authApi.logout().then(() => {
                 this.isAuthenticated = false;
                 this.user = null;
                 this.isAdmin = false;
             })
+        },
+        async login(username, password){
+            try{
+                await this.$recaptchaLoaded();
+                const recaptchaToken = await this.$recaptcha('login');
+                const response = await authApi.login({
+                    username: username,
+                    password: password,
+                    reCaptcha: recaptchaToken
+                })
+                console.log("Успешная авторизация", response);
+                return false;
+            }catch (error){
+                console.error("Ошибка авторизации", error);
+                return true;
+            }
+        },
+        async register(username, password){
+            try {
+                await this.$recaptchaLoaded();
+                const recaptchaToken = await this.$recaptcha('register');
+                const response = await authApi.register({
+                    username: username,
+                    password: password,
+                    reCaptcha: recaptchaToken
+                });
+                console.log(response);
+                return {
+                    notificationMessage: 'Регистрация прошла успешно! Через 3 секунды будете перенаправлены на страницу логина...',
+                    notificationType: 'success',
+                    isError: false
+                }
+            } catch (error) {
+                console.error('Ошибка регистрации', error.response.data);
+                return {
+                    notificationMessage: 'Ошибка регистрации. Попробуйте снова...',
+                    notificationType: 'error',
+                    isError: true
+                }
+            }
         }
+
     },
 });

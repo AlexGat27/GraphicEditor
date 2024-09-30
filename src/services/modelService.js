@@ -1,6 +1,6 @@
 // services/modelService.js
 import {ActionCaseModel, ConditionCaseModel, ContainerModel} from '../models/compileModel.js';
-import { useMainStore } from '@/stores/modelStore.js';
+import { useMainStore } from '@/stores/mainStore.js';
 import {ActionParams, ActionAttributesType, ConditionAttributesType, ModelAttributesType} from "@/models/attributeEnums.js";
 
 class ModelService {
@@ -91,6 +91,9 @@ class ModelService {
             currentModel.contours.find(contour => contour.selected).containers[containerID].conditionCases[caseID][type] = value;
         }
         this.setCurrentModel(currentModel);
+    }
+    setCanCommands(canCommands){
+       this.store.setCanCommands(canCommands);
     }
 }
 

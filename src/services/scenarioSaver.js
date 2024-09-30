@@ -1,9 +1,9 @@
-// services/ScenarioService.js
+// services/ScenarioSaver.js
 import {ActionParams} from "@/models/attributeEnums.js";
 import {scenarioApi} from "@/services/api/index.js";
-import { useMainStore } from '@/stores/modelStore.js';
+import { useMainStore } from '@/stores/mainStore.js';
 
-class ScenarioService {
+class ScenarioSaver {
     constructor() {
         this.store = useMainStore();
         this.notificationMessage = '';
@@ -89,4 +89,4 @@ class ScenarioService {
     }
 }
 
-export default new ScenarioService();
+export default new ScenarioSaver();

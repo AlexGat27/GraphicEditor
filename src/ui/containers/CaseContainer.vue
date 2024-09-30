@@ -27,7 +27,7 @@ import ActionCase from '@/ui/containers/cases/ActionCase.vue';
 import ConditionCase from '@/ui/containers/cases/ConditionCase.vue';
 import ConfirmModal from '../components/alerts/ConfirmModal.vue';
 import { ActionCaseModel, ConditionCaseModel } from '../../models/compileModel.js';
-import { useMainStore } from '@/stores/modelStore.js';
+import { useMainStore } from '@/stores/mainStore.js';
 
 export default {
   components: {

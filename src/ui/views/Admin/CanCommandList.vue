@@ -47,98 +47,70 @@
   </div>
 </template>
 
-  
-  <script>
-  import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
+<script>
+import { useCanCommandStore } from '@/stores/canCommandStore'; // Import the Pinia store
+import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
 import CreateCanCommand from '@/ui/components/forms/CreateCanCommand.vue';
-  import { CanCommandResponse } from '@/models/responses.js';
-  import canCommandsApi from '@/services/api/canCommand.js';
-  
-  export default {
-    data() {
-      return {
-        model_name: '',
-        model_id: null,
-        canCommands: [],
-        editingCommandId: null,
-        searchNameQuery: '',
-        searchIdQuery: '',
-        showAddCanCommandPanel: false,
-        showConfirmModal: false
-      };
+
+export default {
+  data() {
+    return {
+      model_name: '',
+      model_id: null,
+      editingCommandId: null,
+      searchNameQuery: '',
+      searchIdQuery: '',
+      showAddCanCommandPanel: false,
+      showConfirmModal: false,
+    };
+  },
+  components: { CreateCanCommand, ConfirmModal },
+  setup() {
+    const canCommandStore = useCanCommandStore(); // Initialize the store
+    return { canCommandStore };
+  },
+  async created() {
+    this.model_id = parseInt(this.$route.query.model_id);
+    this.model_name = this.$route.query.model_name;
+    await this.canCommandStore.fetchCommands(this.model_id);
+  },
+  computed: {
+    filteredCommands() {
+      return this.canCommandStore.filteredCommands(this.searchNameQuery, this.searchIdQuery);
     },
-    components: { CreateCanCommand, ConfirmModal },
-    async created() {
-      this.model_id = parseInt(this.$route.query.model_id);
-      this.model_name = this.$route.query.model_name;
-      await this.fetchCommands();
+    byteFields() {
+      return ['byte_1', 'byte_2', 'byte_3', 'byte_4', 'byte_5', 'byte_6', 'byte_7', 'byte_8'];
     },
-    computed: {
-      filteredCommands() {
-        return this.canCommands.filter(command => 
-          command.name.toLowerCase().includes(this.searchNameQuery.toLowerCase()) && 
-          command.command_id.toLowerCase().includes(this.searchIdQuery.toLowerCase())
-        );
-      },
-      byteFields() {
-        return ['byte_1', 'byte_2', 'byte_3', 'byte_4', 'byte_5', 'byte_6', 'byte_7', 'byte_8'];
-      }
+  },
+  methods: {
+    async deleteCommand() {
+      await this.canCommandStore.deleteCommand(this.editingCommandId);
+      this.editingCommandId = null;
+      this.showConfirmModal = false;
     },
-    methods: {
-      async fetchCommands() {
-        try {
-          const response = await canCommandsApi.getCanCommands(this.model_id);
-          this.canCommands = response.data.map(element => new CanCommandResponse(element));
-        } catch (error) {
-          console.error('Ошибка при загрузке команд:', error);
-        }
-      },
-      async deleteCommand() {
-        try {
-            await canCommandsApi.deleteModel(this.editingCommandId);
-            this.canCommands = this.canCommands.filter(command => command.id !== this.editingCommandId);
-            this.editingCommandId = null;
-            this.showConfirmModal = false;
-        } catch (error) {
-            console.error('Ошибка при удалении команды:', error);
-        }
-      },
-      async addCommand(value) {
-        try {
-          const response = await canCommandsApi.createModel(value);
-          const newCommand = new CanCommandResponse(response.data);
-          this.canCommands.push(newCommand);
-          this.showAddCanCommandPanel = false;
-        } catch (error) {
-          console.error('Ошибка при добавлении команды:', error);
-        }
-      },
-      async saveCommand(command) {
-        try {
-          const response = await canCommandsApi.updateModel(command.id, { ...command });
-          const updatedCommand = new CanCommandResponse(response.data);
-          const index = this.canCommands.findIndex(c => c.id === command.id);
-          this.canCommands.splice(index, 1, updatedCommand);
-          this.editingCommandId = null;
-        } catch (error) {
-          console.error('Ошибка при обновлении команды:', error);
-        }
-      },
-      startEditing(id) {
-        this.editingCommandId = id;
-      },
-      isEditing(id) {
-        return this.editingCommandId === id;
-      },
-      goBack() {
-            this.$router.go(-1);
-        },
-      exitPage() {
-        this.$router.push('/');
-      }
-    }
-  };
-  </script>
+    async addCommand(value) {
+      await this.canCommandStore.addCommand(value);
+      this.showAddCanCommandPanel = false;
+    },
+    async saveCommand(command) {
+      await this.canCommandStore.updateCommand(command);
+      this.editingCommandId = null;
+    },
+    startEditing(id) {
+      this.editingCommandId = id;
+    },
+    isEditing(id) {
+      return this.editingCommandId === id;
+    },
+    goBack() {
+      this.$router.go(-1);
+    },
+    exitPage() {
+      this.$router.push('/');
+    },
+  },
+};
+</script>
   
  <style scoped>
 .canCommandList-view {

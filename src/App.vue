@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ModelService from "@/services/model-service.js";
+import ModelService from "@/services/modelService.js";
 
 export default {
   name: 'App',

@@ -13,30 +13,25 @@
   
   <script>
 import { authApi } from '@/services/api/index.js';
+import {useAuthStore} from "@/stores/authStore.js";
 
   export default {
     data() {
       return {
         username: '',
         password: '',
-        isError: false
+        isAuthError: false,
+        authStore: null,
       };
+    },
+    created() {
+      this.authStore = useAuthStore();
     },
     methods: {
       async login() {
-        try{
-          await this.$recaptchaLoaded();
-          const recaptchaToken = await this.$recaptcha('login');
-          const response = await authApi.login({
-            username: this.username,
-            password: this.password,
-            reCaptcha: recaptchaToken
-          })
-          console.log("Успешная авторизация", response);
-          this.$router.push('/');
-        }catch (error){
-          this.isError = true;
-          console.error("Ошибка авторизации", error);
+        this.isAuthError = await this.authStore.login(this.username, this.password);
+        if (!this.isAuthError) {
+          this.$router.push({name: 'MainEditor'});
         }
       },
       goToRegister(){

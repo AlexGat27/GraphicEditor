@@ -14,7 +14,7 @@
   
   <script>
 import { useAuthStore } from '@/stores/authStore.js';
-import { useMainStore } from '@/stores/modelStore.js';
+import { useMainStore } from '@/stores/mainStore.js';
 
   export default {
     created() {

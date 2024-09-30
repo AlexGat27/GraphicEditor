@@ -4,8 +4,8 @@ import { createPinia } from 'pinia'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
 import App from './App.vue'
 import router from './router'
-import ModelService from "@/services/model-service.js";
-import ScenarioService from "@/services/scenario-service.js";
+import ModelService from "@/services/modelService.js";
+import ScenarioSaver from "@/services/scenarioSaver.js";
 
 const app = createApp(App);
 const pinia = createPinia(); // Создайте экземпляр Pinia
@@ -17,7 +17,7 @@ app.use(VueReCaptcha, {
   });
 
 app.config.globalProperties.$modelService = ModelService;
-app.config.globalProperties.$scenarioService = ScenarioService;
+app.config.globalProperties.$scenarioSaver = ScenarioSaver;
 
 app.mount('#app');
 

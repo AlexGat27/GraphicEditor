@@ -8,120 +8,121 @@
     <div class="table-container">
       <table>
         <thead class="table-header">
-          <tr>
-            <th style="width: 5%;">ID</th>
-            <th>Название</th>
-            <th style="width: 27%;">Перейти в список моделей</th>
-            <th style="width: 8%;"></th>
-          </tr>
+        <tr>
+          <th style="width: 5%;">ID</th>
+          <th>Название</th>
+          <th style="width: 27%;">Перейти в список моделей</th>
+          <th style="width: 8%;"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="brand in filteredBrands" :key="brand.id">
-            <td style="width: 5%;">{{ brand.id }}</td>
-            <td @dblclick="startEditing(brand.id)" :class="{ selected: isEditing(brand.id) }">
-              <input
+        <tr v-for="brand in filteredBrands" :key="brand.id">
+          <td style="width: 5%;">{{ brand.id }}</td>
+          <td @dblclick="startEditing(brand.id)" :class="{ selected: isEditing(brand.id) }">
+            <input
                 v-if="isEditing(brand.id)"
                 v-model="brand.name"
                 @blur="saveBrand(brand)"
                 @keyup.enter="saveBrand(brand)"
-              />
-              <span v-else>{{ brand.name }}</span>
-            </td>
-            <td style="width: 27%;" @click="goToModelsList(brand.id, brand.name)" class="interactiveColumn">Модели</td>
-            <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal = true; editingBrandId = brand.id">Удалить</td>
-          </tr>
+            />
+            <span v-else>{{ brand.name }}</span>
+          </td>
+          <td style="width: 27%;" @click="goToModelsList(brand.id, brand.name)" class="interactiveColumn">Модели</td>
+          <td style="width: 8%;" class="interactiveColumn" @click.stop="showConfirmModal(brand.id)">Удалить</td>
+        </tr>
         </tbody>
       </table>
-</div>
+    </div>
 
-    <div id="exitPage" @click="exitPage"></div>
-    <div id="backButton" @click="goBack">←</div>
+    <!-- Модальное окно для подтверждения удаления -->
+    <ConfirmModal
+        :message="'Точно хотите удалить марку?'"
+        :isVisible="confirmModalVisible"
+        @confirm="deleteBrand"
+        @cancel="hideConfirmModal"
+    />
+
+    <!-- Панель создания новой марки -->
     <CreateBrand v-if="showAddBrandPanel" @close="showAddBrandPanel = false" @create="addBrand" />
-    <ConfirmModal :message="'Точно хотите удалить марку?'" :isVisible="showConfirmModal"
-        @confirm="deleteBrand" @cancel="showConfirmModal = false" />
   </div>
 </template>
 
 <script>
-import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
-import CreateBrand from '@/ui/components/forms/CreateBrand.vue';
-import { BrandResponse } from '@/models/responses.js';
-import { modelApi } from '@/services/api/index.js';
+import { useBrandStore } from "@/stores/brandStore";
+import ConfirmModal from "@/ui/components/alerts/ConfirmModal.vue";
+import CreateBrand from "@/ui/components/forms/CreateBrand.vue";
 
 export default {
   data() {
     return {
-      brands: [],
-      editingBrandId: null,
-      searchQuery: '',
-      showAddBrandPanel: false,
-      showConfirmModal: false
+      searchQuery: '', // Поисковый запрос
+      editingBrandId: null, // ID редактируемой марки
+      showAddBrandPanel: false, // Флаг отображения панели добавления бренда
+      confirmModalVisible: false, // Флаг отображения модального окна
+      brandToDelete: null, // ID марки для удаления
     };
   },
-  components: { CreateBrand, ConfirmModal },
-  async created() {
-    await this.fetchBrands();
-  },
   computed: {
+    // Фильтрация брендов по поисковому запросу
     filteredBrands() {
-      return this.brands.filter((brand) => brand.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+      return this.brandStore.brands.filter(brand =>
+          brand.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
     },
   },
   methods: {
-    async fetchBrands() {
-      try {
-        const response = await modelApi.getBrands();
-        this.brands = response.data.map((element) => new BrandResponse(element));
-      } catch (error) {
-        console.error('Ошибка при загрузке марок:', error);
-      }
+    // Открытие модального окна удаления
+    showConfirmModal(brandId) {
+      this.brandToDelete = brandId;
+      this.confirmModalVisible = true;
     },
-    async deleteBrand() {
-      try {
-        await modelApi.deleteBrands(this.editingBrandId);
-        this.brands = this.brands.filter((brand) => brand.id !== this.editingBrandId);
-        this.editingBrandId = null;
-        this.showConfirmModal = false;
-      } catch (error) {
-        console.error('Ошибка при удалении марки:', error);
-      }
+    // Закрытие модального окна удаления
+    hideConfirmModal() {
+      this.confirmModalVisible = false;
+      this.brandToDelete = null;
     },
-    async addBrand(value) {
-      try {
-        const response = await modelApi.createBrand(value);
-        const newBrand = new BrandResponse(response.data);
-        this.brands.push(newBrand);
+    // Удаление марки через then
+    deleteBrand() {
+      this.brandStore.deleteBrand(this.brandToDelete).then(() => {
+        this.hideConfirmModal();
+      })
+    },
+    // Добавление новой марки через then
+    addBrand(brandData) {
+      this.brandStore.addBrand(brandData).then(() => {
         this.showAddBrandPanel = false;
-      } catch (error) {
-        console.error('Ошибка при добавлении марки:', error);
-      }
+      })
     },
-    async saveBrand(brand) {
-      try {
-        const response = await modelApi.updateBrand(brand.id, { name: brand.name });
-        const updatedBrand = new BrandResponse(response.data);
-        const index = this.brands.findIndex((b) => b.id === brand.id);
-        this.brands.splice(index, 1, updatedBrand);
+    // Сохранение изменений в названии бренда через then
+    saveBrand(brand) {
+      this.brandStore.updateBrand(brand).then(() => {
         this.editingBrandId = null;
-      } catch (error) {
-        console.error('Ошибка при обновлении марки:', error);
-      }
+      })
     },
+    // Начало редактирования бренда
     startEditing(id) {
       this.editingBrandId = id;
     },
+    // Проверка, редактируется ли бренд
     isEditing(id) {
       return this.editingBrandId === id;
     },
-    exitPage() {
-      this.$router.push('/');
-    },
-    goBack() {
-      this.$router.go(-1);
-    },
+    // Переход к списку моделей бренда
     goToModelsList(id, name) {
-      this.$router.push({ name: 'ModelList', query: { brand_id: `${id}`, brand_name: `${name}` } });
+      this.$router.push({name: "ModelList", query: {brand_id: id, brand_name: name}});
     },
+  },
+  created() {
+    this.brandStore = useBrandStore();
+
+    // Загрузка брендов через then
+    this.brandStore.fetchBrands().then(() => {
+      console.log("Марки успешно загружены");
+    })
+  },
+  components: {
+    ConfirmModal,
+    CreateBrand,
   },
 };
 </script>

@@ -17,12 +17,8 @@
 </template>
 
 <script>
-import {ContainerModel} from '@/models/compileModel.js';
-import {useMainStore} from '@/stores/modelStore.js';
 import Sidenav from '../../components/nav/Sidenav.vue';
 import {useAuthStore} from '@/stores/authStore.js';
-import {scenarioApi} from '@/services/api/index.js';
-import {ActionParams} from '@/models/attributeEnums.js';
 import Notification from "@/ui/components/alerts/Notification.vue";
 
 export default {
@@ -70,12 +66,12 @@ export default {
       this.$modelService.addContainer();
     },
     async saveScenario() {
-      const result = await this.$scenarioService.saveScenario();
+      const result = await this.$scenarioSaver.saveScenario();
       this.notificationMessage = result.message;
       this.notificationType = result.status === 'success' ? 'success' : 'error';
     },
     async downloadScenarioTXT() {
-      const result = await this.$scenarioService.downloadScenarioTXT();
+      const result = await this.$scenarioSaver.downloadScenarioTXT();
       this.notificationMessage = result.message;
       this.notificationType = result.status === 'success' ? 'success' : 'error';
     },

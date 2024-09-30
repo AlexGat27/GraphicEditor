@@ -60,69 +60,42 @@
 <script>
 import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
 import { Roles } from '@/models/attributeEnums.js';
-import { UserResponse } from '@/models/responses.js';
-import api from '@/services/api/user.js';
+import { useUserStore } from '@/stores/userStore'; // Импортируем userStore
 
 export default {
   data() {
     return {
-      users: [],
       roles: [Roles.ADMIN, Roles.USER, Roles.BANNED],
       nameSearch: '',
       roleSearch: '',
       showConfirmModal: false,
-      deleteUserId: null
+      deleteUserId: null,
     };
   },
-  components: {ConfirmModal},
+  components: { ConfirmModal },
   computed: {
     filteredUsers() {
-      return this.users.filter(user => {
+      return this.userStore.users.filter(user => {
         const nameMatches = user.username.toLowerCase().includes(this.nameSearch.toLowerCase());
         const roleMatches = this.roleSearch ? user.role === this.roleSearch : true;
         return nameMatches && roleMatches;
       });
-    }
+    },
   },
   methods: {
     async fetchUsers() {
-      try {
-        const response = await api.getUsers();
-        this.users = response.data.users.map(user => new UserResponse(user));
-        console.log(this.users)
-      } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error);
-      }
+      await this.userStore.fetchUsers(); // Используем метод из userStore
     },
     async blockUser(userId) {
-      try {
-        await api.assignRoleUser(userId, { roleName: Roles.BANNED });
-        const userToBlock = this.users.find(user => user.id === userId);
-        userToBlock.role = Roles.BANNED;
-        console.log(`User with ID ${userId} has been banned.`);
-      } catch (error) {
-        console.error('Error banned user:', error);
-      }
+      await this.userStore.blockUser(userId); // Используем метод из userStore
     },
     async unBlockUser(userId) {
-      try {
-        await api.assignRoleUser(userId, { roleName: Roles.USER });
-        const userToBlock = this.users.find(user => user.id === userId);
-        userToBlock.role = Roles.USER;
-        console.log(`User with ID ${userId} has been unbanned.`);
-      } catch (error) {
-        console.error('Error unbanned user:', error);
-      }
+      await this.userStore.unBlockUser(userId); // Используем метод из userStore
     },
     async deleteUser() {
-      try {
-        await api.deleteUser(this.deleteUserId);
-        this.users = this.users.filter(user => user.id !== this.deleteUserId);
-        this.deleteUserId = null;
-        this.showConfirmModal = false;
-      } catch (error) {
-        console.error('Error deleting user:', error);
-      }
+      await this.userStore.deleteUser(this.deleteUserId); // Используем метод из userStore
+      this.deleteUserId = null;
+      this.showConfirmModal = false;
     },
     editRole(user) {
       this.users.forEach(user => {
@@ -131,13 +104,8 @@ export default {
       user.editingRole = true;
     },
     async updateUserRole(user) {
-      try {
-        await api.assignRoleUser(user.id, { roleName: user.role });
-        user.editingRole = false;
-        console.log(`User with ID ${user.id} role has been changed to ${user.role}.`);
-      } catch (error) {
-        console.error('Error changing user role:', error);
-      }
+      await this.userStore.assignRoleUser(user.id, user.role); // Используем метод из userStore
+      user.editingRole = false;
     },
     formatDateTime(dateTimeStr) {
       return new Date(dateTimeStr).toLocaleString();
@@ -147,13 +115,15 @@ export default {
     },
     exitPage() {
       this.$router.push('/');
-    }
+    },
   },
   mounted() {
+    this.userStore = useUserStore(); // Инициализируем userStore
     this.fetchUsers();
-  }
+  },
 };
 </script>
+
 
 
 <style scoped>

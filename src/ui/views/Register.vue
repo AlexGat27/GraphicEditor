@@ -14,8 +14,8 @@
 
   
 <script>
-import { authApi } from '@/services/api/index.js';
 import Notification from "@/ui/components/alerts/Notification.vue";
+import {useAuthStore} from "@/stores/authStore.js";
 
 export default {
   components: {Notification},
@@ -23,32 +23,23 @@ export default {
     return {
       username: '',
       password: '',
+      authStore: null,
       isError: false,
       notificationMessage: '',
       notificationType: '' // 'success' или 'error'
     };
   },
+  created() {
+    this.authStore = useAuthStore();
+  },
   methods: {
     async register() {
-      try {
-        await this.$recaptchaLoaded();
-        const recaptchaToken = await this.$recaptcha('register');
-        const response = await authApi.register({
-          username: this.username,
-          password: this.password,
-          reCaptcha: recaptchaToken
-        });
-        // Устанавливаем уведомление об успешной регистрации
-        this.notificationMessage = 'Регистрация прошла успешно! Через 3 секунды будете перенаправлены на страницу логина...';
-        this.notificationType = 'success';
-        setTimeout(() => {
-          this.$router.push('/login');  // Redirect after a short delay to show the modal
-        }, 3000);  // Adjust delay as needed
-      } catch (error) {
-        this.notificationMessage = 'Ошибка регистрации. Попробуйте снова...';
-        this.notificationType = 'error';
-        this.isError = true;
-        console.error('Ошибка регистрации', error.response.data);
+      const result = await this.authStore.register(this.username, this.password);
+      this.notificationType = result.notificationType;
+      this.notificationMessage = result.notificationMessage;
+      this.isError = result.isError;
+      if (!this.isError) {
+        setTimeout(this.$router.push({name: 'Login'}),3000);
       }
     },
     hideNotification(){

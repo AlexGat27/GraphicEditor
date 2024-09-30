@@ -2,20 +2,18 @@
   import Toolbox from '@/ui/containers/Toolbox.vue';
   import Editor from '@/ui/containers/Editor.vue';
 import { useAuthStore } from '@/stores/authStore.js';
-import { useMainStore } from '@/stores/modelStore.js';
 
   export default {
     name: 'MainEditor',
     created(){
       this.authStore = useAuthStore();
-      this.modelStore = useMainStore();
     },
     computed: {
       isAuthenticated(){
         return this.authStore.isAuthenticated;
       },
       isScenarioChange(){
-        return this.modelStore.currentModel !== null;
+        return this.$modelService.getCurrentModel() !== null;
       }
     },
     components: {

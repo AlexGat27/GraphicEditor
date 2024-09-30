@@ -21,89 +21,74 @@
   </template>
   
   <script>
-import { scenarioApi } from '@/services/api/index.js';
 import CreateScenario from '../components/forms/CreateScenario.vue'
-import { useMainStore } from '@/stores/modelStore.js';
 import { CompileModel } from '@/models/compileModel.js';
-import { ScenarioResponse } from '@/models/responses.js';
 import ConfirmModal from '@/ui/components/alerts/ConfirmModal.vue';
+import {useScenarioStore} from "@/stores/scenarioStore.js";
   export default {
+    components: {CreateScenario, ConfirmModal},
     data() {
       return {
-        scenarios: [],
         showCreatePanel: false,
         showUpdatePanel: false,
         showConfirmModal: false,
-        selectedScenario: null
+        scenarioStore: null
       };
     },
-    async created(){
-      this.modelStore = useMainStore();
-      if (this.modelStore.currentModel) this.modelStore.setCurrentModel(null);
-      await this.fetchScenarios();
+    computed: {
+      scenarios(){
+        return this.scenarioStore.scenarios;
+      },
+      selectedScenario(){
+        return this.scenarioStore.selectedScenarioId;
+      }
     },
-    components: {CreateScenario, ConfirmModal},
+    async created(){
+      this.scenarioStore = useScenarioStore();
+      if (this.$modelService.getCurrentModel()) this.$modelService.setCurrentModel(null);
+      this.fetchScenarios();
+    },
     methods: {
-      async fetchScenarios() {
-        try {
-          const response = await scenarioApi.getScenarios();
-          response.data.forEach(element => {
-            this.scenarios.push(new ScenarioResponse(element))
-          });
-          console.log(this.scenarios)
-          if (this.modelStore.currentModel) this.selectedScenario = this.modelStore.currentModel.scenario_id;
-        } catch (error) {
-          console.error('Ошибка при загрузке сценариев:', error);
-        }
+      fetchScenarios() {
+        this.scenarioStore.fetchScenarios().then(() =>{
+          if (this.$modelService.getCurrentModel()) {
+            this.scenarioStore.selectScenario(this.$modelService.getCurrentModel().scenario_id);
+          }
+        });
       },
-      async deleteScenario() {
-        try {
-          await scenarioApi.deleteScenario(this.selectedScenario);
-          this.scenarios = this.scenarios.filter(scenario => scenario.id !== this.selectedScenario);
-          this.selectedScenario = null;
+      deleteScenario() {
+        this.scenarioStore.deleteScenario().then(() => {
+          this.scenarioStore.selectScenario(null);
           this.showConfirmModal = false;
-        } catch (error) {
-          console.error('Ошибка при удалении сценария:', error);
-        }
+        })
       },
-      async addScenario(scenario) {
-        try {
-          const response = await scenarioApi.addScenario(scenario);
-          this.scenarios.push(new ScenarioResponse(response.data));
+      addScenario(scenario) {
+        this.scenarioStore.addScenario(scenario).then(() => {
           this.showCreatePanel = false;
-        } catch (error) {
-          console.error('Ошибка при добавлении сценария:', error);
-        }
+        })
       },
       async updateScenario(scenarioData){
-        try {
-          const response = await scenarioApi.updateScenario(this.selectedScenario, scenarioData);
-          console.log(response.data)
-          const updatedScenario = new ScenarioResponse(response.data);
-          this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
-          this.scenarios.push(updatedScenario);
+        this.scenarioStore.updateScenario(scenarioData).then(() => {
           this.showUpdatePanel = false;
-        } catch (error) {
-          console.error('Ошибка при обновлении сценария:', error);
-        }
+        });
       },
-      async selectModel(scenario){
+      selectModel(scenario){
         console.log(scenario)
-        this.selectedScenario = scenario.id;
-        this.modelStore.setCanCommands(scenario.model.canCommands);
-        this.modelStore.selectScenario(this.selectedScenario);
-        if (scenario.jsonData){ this.modelStore.setCurrentModel(scenario.jsonData) }
-        else { 
-          console.log("set null")
-          this.modelStore.setCurrentModel(new CompileModel(scenario.id, scenario.name)) 
+        this.$modelService.setCanCommands(scenario.model.canCommands);
+        this.scenarioStore.selectScenario(scenario.id);
+        if (scenario.jsonData){
+          this.$modelService.setCurrentModel(scenario.jsonData)
+        }
+        else {
+          this.$modelService.setCurrentModel(new CompileModel(scenario.id, scenario.name))
         }
       },
       editScenario(scenario) {
-        this.selectedScenario = scenario.id;
+        this.scenarioStore.selectScenario(scenario.id);
         this.showUpdatePanel = true;
       },
       exitPage(){
-        this.$router.push('/');
+        this.$router.push({name: "MainPage"});
       }
     },
   };

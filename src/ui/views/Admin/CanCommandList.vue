@@ -33,7 +33,7 @@
             <input v-if="isEditing(command.id)" v-model="command[byte]" @blur="saveCommand(command)" @keyup.enter="saveCommand(command)" />
             <span v-else>{{ command[byte] }}</span>
           </td>
-          <td class="interactiveColumn" @click.stop="confirmDelete(command.id)">Удалить</td>
+          <td class="interactiveColumn" @click.stop="showConfirmModal = true; editingCommandId = command.id">Удалить</td>
         </tr>
         </tbody>
       </table>

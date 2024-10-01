@@ -58,8 +58,10 @@ export const useScenarioStore = defineStore('scenario', {
                 try {
                     const response = await scenarioApi.updateScenario(this.selectedScenarioId, scenarioData);
                     const updatedScenario = new ScenarioResponse(response.data);
-                    this.scenarios = this.scenarios.filter(scenario => scenario.id !== updatedScenario.id);
-                    this.scenarios.push(updatedScenario);
+                    const scenarioIndex = this.scenarios.findIndex(scenario => parseInt(scenario.id) === updatedScenario.id);
+                    if (scenarioIndex !== -1) {
+                        this.scenarios.splice(scenarioIndex, 1, updatedScenario);
+                    }
                     resolve();  // Сценарий успешно обновлен
                 } catch (error) {
                     console.error('Ошибка при обновлении сценария:', error);

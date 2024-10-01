@@ -3,7 +3,7 @@ import {ActionCaseModel, ConditionCaseModel, ContainerModel} from '../models/com
 import { useMainStore } from '@/stores/mainStore.js';
 import {ActionParams, ActionAttributesType, ConditionAttributesType, ModelAttributesType} from "@/models/attributeEnums.js";
 
-class ModelService {
+export default class ModelService {
     constructor() {
         this.store = useMainStore();
     }
@@ -42,6 +42,7 @@ class ModelService {
         }
     }
     removeCase(containerID, caseID, type){
+        console.log(this.getCurrentModel())
         const container = this.getCurrentModel().contours.find(contour => contour.selected).containers[containerID];
         if (type === ModelAttributesType.ACTION) {
             container.actionCases.splice(caseID, 1)
@@ -57,7 +58,7 @@ class ModelService {
         if (potentialContour && potentialContour.containers.length < 5) {
             potentialContour.containers.push(new ContainerModel());
         }
-        else{ console.log("Превышено допустимое количество контейнеров"); }
+        else{ console.error("Превышено допустимое количество контейнеров или не выбран контур"); }
     }
     removeContainer(containerID) {
         const selectedContour = this.getCurrentModel().contours.find(contour => contour.selected);
@@ -96,5 +97,3 @@ class ModelService {
        this.store.setCanCommands(canCommands);
     }
 }
-
-export default new ModelService();

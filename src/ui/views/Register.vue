@@ -34,7 +34,9 @@ export default {
   },
   methods: {
     async register() {
-      const result = await this.authStore.register(this.username, this.password);
+      await this.$recaptchaLoaded();
+      const recaptchaToken = await this.$recaptcha('register');
+      const result = await this.authStore.register(this.username, this.password, recaptchaToken);
       this.notificationType = result.notificationType;
       this.notificationMessage = result.notificationMessage;
       this.isError = result.isError;

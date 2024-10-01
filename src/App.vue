@@ -3,18 +3,7 @@
 </template>
 
 <script>
-import ModelService from "@/services/modelService.js";
-
 export default {
-  name: 'App',
-  provide() {
-    return {
-      modelService: ModelService
-    };
-  },
+  name: 'Motocan App',
 }
 </script>
-
-<style scoped>
-  
-</style>

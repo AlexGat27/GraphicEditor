@@ -38,10 +38,8 @@ export const useAuthStore = defineStore('auth', {
                 this.isAdmin = false;
             })
         },
-        async login(username, password){
+        async login(username, password, recaptchaToken){
             try{
-                await this.$recaptchaLoaded();
-                const recaptchaToken = await this.$recaptcha('login');
                 const response = await authApi.login({
                     username: username,
                     password: password,
@@ -54,10 +52,8 @@ export const useAuthStore = defineStore('auth', {
                 return true;
             }
         },
-        async register(username, password){
+        async register(username, password, recaptchaToken){
             try {
-                await this.$recaptchaLoaded();
-                const recaptchaToken = await this.$recaptcha('register');
                 const response = await authApi.register({
                     username: username,
                     password: password,
@@ -70,7 +66,7 @@ export const useAuthStore = defineStore('auth', {
                     isError: false
                 }
             } catch (error) {
-                console.error('Ошибка регистрации', error.response.data);
+                console.error('Ошибка регистрации', error);
                 return {
                     notificationMessage: 'Ошибка регистрации. Попробуйте снова...',
                     notificationType: 'error',

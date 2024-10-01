@@ -22,7 +22,7 @@ const modelApi = {
     getBrands(){
       return api.get('/brands');
     },
-    deleteBrands(id){
+    deleteBrand(id){
       return api.delete(`/brands/${id}`);
     },
     createBrand(body){

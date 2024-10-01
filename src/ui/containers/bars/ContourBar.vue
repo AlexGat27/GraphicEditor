@@ -24,7 +24,8 @@ export default {
     computed:{
         isShowContours(){
             return this.$modelService.getCurrentModel() !== null && this.authStore.isAuthenticated;
-        }
+        },
+      currentModel(){ return this.$modelService.getCurrentModel(); },
     },
     methods: {
         updateModelName(value, index){

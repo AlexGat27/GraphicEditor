@@ -24,6 +24,12 @@ export const useUserStore = defineStore('userStore', {
                 console.error('Ошибка при назначении роли пользователю:', error);
             }
         },
+        editRole(user) {
+            this.users.forEach(user => {
+                user.editingRole = false;
+            });
+            user.editingRole = true;
+        },
         async deleteUser(userId) {
             try {
                 await api.deleteUser(userId);

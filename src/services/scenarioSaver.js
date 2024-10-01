@@ -2,10 +2,12 @@
 import {ActionParams} from "@/models/attributeEnums.js";
 import {scenarioApi} from "@/services/api/index.js";
 import { useMainStore } from '@/stores/mainStore.js';
+import {useScenarioStore} from "@/stores/scenarioStore.js";
 
-class ScenarioSaver {
+export default class ScenarioSaver {
     constructor() {
         this.store = useMainStore();
+        this.scenarioStore = useScenarioStore();
         this.notificationMessage = '';
         this.notificationType = '';
     }
@@ -59,7 +61,7 @@ class ScenarioSaver {
 
     async downloadScenarioTXT() {
         try {
-            const response = await scenarioApi.downloadScenario(this.store.selectedScenarioId);
+            const response = await scenarioApi.downloadScenario(this.scenarioStore.selectedScenarioId);
             if (response.data.status === "error") {
                 this.notificationMessage = 'Ошибка выгрузки. Сценарий не сохранен';
                 this.notificationType = 'error';
@@ -88,5 +90,3 @@ class ScenarioSaver {
         }
     }
 }
-
-export default new ScenarioSaver();

@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="model in filteredModels(searchQuery)" :key="model.id">
+        <tr v-for="model in filteredModels" :key="model.id">
           <td style="width: 5%;">{{ model.id }}</td>
           <td @dblclick="startEditing(model.id)" :class="{ selected: isEditing(model.id) }">
             <input
@@ -55,16 +55,14 @@ export default {
       searchQuery: '',
       showAddModelPanel: false,
       showConfirmModal: false,
+      modelStore: null
     };
   },
   components: { CreateModel, ConfirmModal },
-  setup() {
-    const modelStore = useModelStore(); // Initialize the store
-    return { modelStore };
-  },
   async created() {
     this.brand_id = parseInt(this.$route.query.brand_id);
     this.brand_name = this.$route.query.brand_name;
+    this.modelStore = useModelStore();
     await this.modelStore.fetchModels(this.brand_id);
   },
   computed: {

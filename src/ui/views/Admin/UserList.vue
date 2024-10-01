@@ -73,6 +73,10 @@ export default {
     };
   },
   components: { ConfirmModal },
+  created() {
+    this.userStore = useUserStore(); // Инициализируем userStore
+    this.fetchUsers();
+  },
   computed: {
     filteredUsers() {
       return this.userStore.users.filter(user => {
@@ -98,10 +102,7 @@ export default {
       this.showConfirmModal = false;
     },
     editRole(user) {
-      this.users.forEach(user => {
-        user.editingRole = false;
-      });
-      user.editingRole = true;
+      this.userStore.editRole(user);
     },
     async updateUserRole(user) {
       await this.userStore.assignRoleUser(user.id, user.role); // Используем метод из userStore
@@ -116,10 +117,6 @@ export default {
     exitPage() {
       this.$router.push('/');
     },
-  },
-  mounted() {
-    this.userStore = useUserStore(); // Инициализируем userStore
-    this.fetchUsers();
   },
 };
 </script>

@@ -16,8 +16,8 @@ app.use(VueReCaptcha, {
     siteKey: '6LcjPgYqAAAAACr4ePwNSFNq-GKm-9xHl9ccqd-k', // замените YOUR_SITE_KEY на ваш ключ сайта
   });
 
-app.config.globalProperties.$modelService = ModelService;
-app.config.globalProperties.$scenarioSaver = ScenarioSaver;
+app.config.globalProperties.$modelService = new ModelService();
+app.config.globalProperties.$scenarioSaver = new ScenarioSaver();
 
 app.mount('#app');
 

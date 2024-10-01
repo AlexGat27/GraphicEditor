@@ -77,7 +77,7 @@ export default {
       this.$modelService.updateCondition(this.containerID, this.caseID, type, event);
     },
     setShowConfirm(){
-      const conditionCases = this.currentModel.contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
+      const conditionCases = this.$modelService.getCurrentModel().contours.find(contour => contour.selected).containers[this.containerID].conditionCases;
       if (conditionCases.length > 1){
         this.showConfirmModal = true;
       }

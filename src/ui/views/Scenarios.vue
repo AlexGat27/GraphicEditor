@@ -39,8 +39,13 @@ import {useScenarioStore} from "@/stores/scenarioStore.js";
       scenarios(){
         return this.scenarioStore.scenarios;
       },
-      selectedScenario(){
-        return this.scenarioStore.selectedScenarioId;
+      selectedScenario: {
+        get(){
+          return this.scenarioStore.selectedScenarioId;
+        },
+        set(value){
+          this.scenarioStore.selectScenario(value);
+        }
       }
     },
     async created(){
@@ -88,7 +93,7 @@ import {useScenarioStore} from "@/stores/scenarioStore.js";
         this.showUpdatePanel = true;
       },
       exitPage(){
-        this.$router.push({name: "MainPage"});
+        this.$router.push({name: "MainEditor"});
       }
     },
   };

@@ -5,7 +5,7 @@
         <input v-model="username" placeholder="Username" required class="login-input">
         <input v-model="password" type="password" placeholder="Password" required class="login-input">
         <button type="submit">Вход</button>
-        <span v-if="isError" class="errorMsg fira-sans-regular">Ошибка авторизации</span>
+        <span v-if="isAuthError" class="errorMsg fira-sans-regular">Ошибка авторизации</span>
       </form>
       <button @click="goToRegister">Регистрация</button>
     </div>
@@ -29,7 +29,9 @@ import {useAuthStore} from "@/stores/authStore.js";
     },
     methods: {
       async login() {
-        this.isAuthError = await this.authStore.login(this.username, this.password);
+        await this.$recaptchaLoaded();
+        const recaptchaToken = await this.$recaptcha('login');
+        this.isAuthError = await this.authStore.login(this.username, this.password, recaptchaToken);
         if (!this.isAuthError) {
           this.$router.push({name: 'MainEditor'});
         }

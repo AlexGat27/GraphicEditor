@@ -14,12 +14,12 @@
   
   <script>
 import { useAuthStore } from '@/stores/authStore.js';
-import { useMainStore } from '@/stores/mainStore.js';
+import {useScenarioStore} from "@/stores/scenarioStore.js";
 
   export default {
     created() {
       this.authStore = useAuthStore();
-      this.mainStore = useMainStore();
+      this.scenarioStore = useScenarioStore();
     },
     computed:{
       isAuthenticated(){
@@ -27,14 +27,6 @@ import { useMainStore } from '@/stores/mainStore.js';
       },
       isAdmin(){
         return this.authStore.isAdmin;
-      },  
-      currentModel: {
-        get(){
-          return this.mainStore.currentModel;
-        },
-        set(value){
-          this.mainStore.setCurrentModel(value);
-        }
       },
     },
     methods: {
@@ -63,8 +55,8 @@ import { useMainStore } from '@/stores/mainStore.js';
       },
       logout(){
         this.authStore.logout().then(() => {
-          this.currentModel = null;
-          this.mainStore.selectScenario(null);
+          this.$modelService.setCurrentModel(null);
+          this.scenarioStore.selectScenario(null);
         }).then(() => {
           this.goToLogin();
         });
